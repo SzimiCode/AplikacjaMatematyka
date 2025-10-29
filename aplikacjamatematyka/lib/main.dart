@@ -13,11 +13,31 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  int selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.purple))
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.purple
+          ),
+        ),
+        home: Scaffold(
+          bottomNavigationBar: NavigationBar(
+            destinations:  [
+              NavigationDestination(icon: Icon(Icons.book), label: ""),
+              NavigationDestination(icon: Icon(Icons.home), label: ""),
+              NavigationDestination(icon: Icon(Icons.chat_bubble), label: ""),
+              NavigationDestination(icon: Icon(Icons.calculate), label: ""),
+            ],
+            onDestinationSelected: (int value) {
+              setState(() {
+                selectedIndex = value;
+              });
+            },
+          ),
+        ),
     );
   }
 }

@@ -1,3 +1,4 @@
+import 'package:aplikacjamatematyka/features/navbar_widget_test.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -24,26 +25,7 @@ class _MyAppState extends State<MyApp> {
           ),
         ),
         home: Scaffold(
-          bottomNavigationBar: NavigationBarTheme(
-          data: const NavigationBarThemeData(
-            backgroundColor: Colors.deepPurple, 
-            iconTheme: WidgetStatePropertyAll(IconThemeData(color: Colors.black)), 
-          ),
-          child: NavigationBar(
-            selectedIndex: selectedIndex,
-            onDestinationSelected: (int value) {
-              setState(() {
-                selectedIndex = value;
-              });
-          },
-          destinations: const [
-            NavigationDestination(icon: Icon(Icons.book), label: ''),
-            NavigationDestination(icon: Icon(Icons.home), label: ''),
-            NavigationDestination(icon: Icon(Icons.chat_bubble), label: ''),
-            NavigationDestination(icon: Icon(Icons.calculate), label: ''),
-            ],
-            ),
-          ),
+          bottomNavigationBar: NavBarWidgetTEST()
         ),
     );
   }

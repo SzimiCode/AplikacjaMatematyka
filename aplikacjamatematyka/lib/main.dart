@@ -1,4 +1,5 @@
 import 'package:aplikacjamatematyka/features/navbar_widget_test.dart';
+import 'package:aplikacjamatematyka/widget_tree.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -24,9 +25,7 @@ class _MyAppState extends State<MyApp> {
           seedColor: Colors.purple
           ),
         ),
-        home: Scaffold(
-          bottomNavigationBar: NavBarWidgetTEST()
-        ),
+        home: WidgetTree()
     );
   }
 }

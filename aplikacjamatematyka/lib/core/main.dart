@@ -1,10 +1,11 @@
 import 'package:aplikacjamatematyka/core/theme/theme.dart';
-import 'package:aplikacjamatematyka/widget_tree.dart';
+import 'package:aplikacjamatematyka/core/widget_tree.dart';
 import 'package:flutter/material.dart';
 
 void main() {
   runApp(const MyApp());
 }
+
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});

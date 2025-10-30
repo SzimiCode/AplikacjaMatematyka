@@ -1,3 +1,4 @@
+import 'package:aplikacjamatematyka/features/home/view/widgets/navbar_widget.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
@@ -10,7 +11,7 @@ class HomePage extends StatelessWidget {
         child: 
         Text('HomePage')
       ),
-      //bottomNavigationBar: NavigationBar(),
+      bottomNavigationBar: const NavBarWidget(),
     );
   }
 }

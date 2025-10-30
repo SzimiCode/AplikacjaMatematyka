@@ -7,9 +7,20 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: const Center(
-        child: 
-        Text('HomePage')
+      body: Center(
+        child: Column( 
+          mainAxisAlignment: MainAxisAlignment.center, 
+          children: [
+            const Text('Strona Glowna'),
+            const SizedBox(height: 20), 
+            ElevatedButton(
+              onPressed: () {
+                
+              },
+              child: const Text('Testowy'),
+            ),
+          ],
+        ),
       ),
       bottomNavigationBar: const NavBarWidget(),
     );

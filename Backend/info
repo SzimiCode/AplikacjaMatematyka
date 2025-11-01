@@ -9,4 +9,6 @@ URUCHOMIENIE SERWERA:
 python manage.py runserver
 
 no i tyle. dodalem tez launch.json do vscode, zeby uruchamiac przez run&debug, to wyzej
-to jkaby nie dzialalo.
+to jkaby nie dzialalo. 
+
+w konsoli wyswietla sie link do serwera.

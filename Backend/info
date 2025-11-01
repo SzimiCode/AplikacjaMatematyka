@@ -1,0 +1,12 @@
+do uruchamiania serwera w terminalu wpisujemy najpierw:
+
+WEJSCIE W TRYB VENV:
+
+source venv/bin/activate
+
+URUCHOMIENIE SERWERA:
+
+python manage.py runserver
+
+no i tyle. dodalem tez launch.json do vscode, zeby uruchamiac przez run&debug, to wyzej
+to jkaby nie dzialalo.

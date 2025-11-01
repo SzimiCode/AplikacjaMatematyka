@@ -13,9 +13,19 @@ class _ChooseClassPageState extends State<ChooseClassPage> {
   Widget build(BuildContext context) {
      return Scaffold(
       body: Center(
-        child: ElevatedButton(
-          onPressed: widget.viewModel.onButtonPressed, 
-          child: const Text('Jestesmy choose class page'),
+        child: Column( 
+          mainAxisAlignment: MainAxisAlignment.center, 
+          children: [
+            ElevatedButton(
+              onPressed: widget.viewModel.onButtonPressed,
+              child: const Text('Jesteśmy choose class page'),
+            ),
+            const SizedBox(height: 20), 
+           ElevatedButton(
+            onPressed: widget.viewModel.onBackButtonPressed, 
+            child: const Text('Drugi przycisk'),
+            ),
+          ],
         ),
       ),
     );

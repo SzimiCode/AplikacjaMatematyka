@@ -37,8 +37,8 @@ class _NavBarWidgetState extends State<NavBarWidget> {
             ),
             child: NavigationBar( 
               destinations: [
-                 _buildAnimatedDestination(Icons.book, 'Kursy', 0, selectedPage),
-                _buildAnimatedDestination(Icons.home, 'Menu', 1, selectedPage),
+                _buildAnimatedDestination(Icons.home, 'Menu', 0, selectedPage),
+                 _buildAnimatedDestination(Icons.book, 'Kursy', 1, selectedPage),
                 _buildAnimatedDestination(Icons.chat_bubble, 'Czat', 2, selectedPage),
                 _buildAnimatedDestination(Icons.calculate, 'Kalkulator', 3, selectedPage),
               ],

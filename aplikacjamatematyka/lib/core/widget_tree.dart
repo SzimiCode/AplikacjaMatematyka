@@ -8,9 +8,8 @@ import 'package:aplikacjamatematyka/core/data/notifiers.dart';
 List<Widget>pages = [
   HomePage(),
   ChooseClassPage(),
-  CalculatorPage(),
   ChatPage(),
-  ChooseClassPage(),
+  CalculatorPage(),
 ];
 
 

@@ -15,9 +15,19 @@ class _ChatPageState extends State<ChatPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: ElevatedButton(
-          onPressed: widget.viewModel.onButtonPressed,
-          child: const Text('Jesteśmy na ChatPage'),
+        child: Column( 
+          mainAxisAlignment: MainAxisAlignment.center, 
+          children: [
+            ElevatedButton(
+              onPressed: widget.viewModel.onButtonPressed,
+              child: const Text('Jesteśmy chat page'),
+            ),
+            const SizedBox(height: 20), 
+           ElevatedButton(
+            onPressed: widget.viewModel.onBackButtonPressed, 
+            child: const Text('Drugi przycisk'),
+            ),
+          ],
         ),
       ),
     );

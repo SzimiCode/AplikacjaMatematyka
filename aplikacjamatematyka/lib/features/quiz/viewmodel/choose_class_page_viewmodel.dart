@@ -6,8 +6,6 @@ class ChooseClassPageViewmodel {
     debugPrint('Przycisk kliknięty!');
   }
   void onBackButtonPressed(){
-    if (selectedPageNotifier.value > 0) {
-    selectedPageNotifier.value -= 1;
-  }
+    selectedPageNotifier.value = 0;
   }
 }

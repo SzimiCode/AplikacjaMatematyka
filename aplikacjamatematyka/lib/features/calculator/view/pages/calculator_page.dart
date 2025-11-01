@@ -14,11 +14,20 @@ class _CalculatorPageState extends State<CalculatorPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Kalkulator')),
       body: Center(
-        child: ElevatedButton(
-          onPressed: widget.viewModel.onCalculatePressed, 
-          child: const Text('Jestemy na stronie z kalkulatorem'),
+        child: Column( 
+          mainAxisAlignment: MainAxisAlignment.center, 
+          children: [
+            ElevatedButton(
+              onPressed: widget.viewModel.onButtonPressed,
+              child: const Text('Jesteśmy calculator page'),
+            ),
+            const SizedBox(height: 20), 
+           ElevatedButton(
+            onPressed: widget.viewModel.onBackButtonPressed, 
+            child: const Text('Drugi przycisk'),
+            ),
+          ],
         ),
       ),
     );

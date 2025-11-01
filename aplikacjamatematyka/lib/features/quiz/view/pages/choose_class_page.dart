@@ -25,6 +25,11 @@ class _ChooseClassPageState extends State<ChooseClassPage> {
             onPressed: widget.viewModel.onBackButtonPressed, 
             child: const Text('Drugi przycisk'),
             ),
+          const SizedBox(height: 20), 
+           ElevatedButton(
+              onPressed: () => widget.viewModel.onTestButtonPressed(context),
+              child: const Text('Przejdź do testu dla Mateusza'),
+            ),
           ],
         ),
       ),

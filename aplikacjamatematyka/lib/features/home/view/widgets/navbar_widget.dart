@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:aplikacjamatematyka/core/theme/app_pallete.dart';
+import 'package:aplikacjamatematyka/core/data/notifiers.dart';
 
 class NavBarWidget extends StatefulWidget {
   const NavBarWidget({super.key});
@@ -12,39 +13,44 @@ class _NavBarWidgetState extends State<NavBarWidget> {
   int selectedIndex = 0;
    @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        border: Border(top: BorderSide(color: Pallete.purpleColor, width: 0.7)),
-      ),
-      child: NavigationBarTheme(
-        data: NavigationBarThemeData(
-          backgroundColor: Pallete.whiteColor,
-          indicatorColor: Pallete.purpleColor.withOpacity(0.1),
-          labelTextStyle: WidgetStateProperty.resolveWith<TextStyle>((
-            Set<WidgetState> states,
-          ) {
-            final bool selected = states.contains(WidgetState.selected);
-            return TextStyle(
-              color: selected
-                  ? Pallete.blackColor
-                  : Pallete.inactiveBottomBarItemColor,
-              fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
-            );
-          }),
-        ),
-        child: NavigationBar(
-          selectedIndex: selectedIndex,
-          onDestinationSelected: (int value) {
-            setState(() => selectedIndex = value);
-          },
-          destinations: [
-            _buildAnimatedDestination(Icons.book, 'Kursy', 0),
-            _buildAnimatedDestination(Icons.home, 'Menu', 1),
-            _buildAnimatedDestination(Icons.chat_bubble, 'Czat', 2),
-            _buildAnimatedDestination(Icons.calculate, 'Kalkulator', 3),
-          ],
-        ),
-      ),
+    return ValueListenableBuilder(
+      valueListenable: selectedPageNotifier,
+      builder: (context, selectedPage, child) {
+        return Container(
+          decoration: const BoxDecoration(
+            border: Border(top: BorderSide(color: Pallete.purpleColor, width: 0.7)),
+          ),
+          child: NavigationBarTheme(
+            data: NavigationBarThemeData(
+              backgroundColor: Pallete.whiteColor,
+              indicatorColor: Pallete.purpleColor.withOpacity(0.1),
+              labelTextStyle: WidgetStateProperty.resolveWith<TextStyle>((
+                Set<WidgetState> states,
+              ) {
+                final bool selected = states.contains(WidgetState.selected);
+                return TextStyle(
+                  color: selected
+                      ? Pallete.blackColor
+                      : Pallete.inactiveBottomBarItemColor,
+                  fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
+                );
+              }),
+            ),
+            child: NavigationBar( 
+              destinations: [
+                _buildAnimatedDestination(Icons.book, 'Kursy', 0),
+                _buildAnimatedDestination(Icons.home, 'Menu', 1),
+                _buildAnimatedDestination(Icons.chat_bubble, 'Czat', 2),
+                _buildAnimatedDestination(Icons.calculate, 'Kalkulator', 3),
+              ],
+              selectedIndex: selectedPage,
+              onDestinationSelected: (int value) {
+                setState(() => selectedIndex = value);
+              },
+            ),
+          ),
+        );
+      }
     );
   }
 

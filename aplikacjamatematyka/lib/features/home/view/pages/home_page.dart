@@ -8,7 +8,6 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       bottomNavigationBar: const NavBarWidget(),
       body: SafeArea(
         child: Padding(
@@ -41,7 +40,6 @@ class HomePage extends StatelessWidget {
                     ),
                   ),
 
-                  // Prawa strona: 2 ikony
                   Row(
                     children: [
                       IconButton(
@@ -125,7 +123,7 @@ class HomePage extends StatelessWidget {
                           '2',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: 24,
+                            fontSize: 28,
                           ),
                         ),
                       ],

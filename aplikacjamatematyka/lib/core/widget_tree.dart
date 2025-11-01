@@ -1,3 +1,5 @@
+import 'package:aplikacjamatematyka/features/calculator/view/pages/calculator_page.dart';
+import 'package:aplikacjamatematyka/features/chat/view/pages/chat_page.dart';
 import 'package:aplikacjamatematyka/features/home/view/pages/home_page.dart';
 import 'package:aplikacjamatematyka/features/quiz/view/pages/choose_class_page.dart';
 import 'package:flutter/material.dart';
@@ -5,6 +7,9 @@ import 'package:aplikacjamatematyka/core/data/notifiers.dart';
 
 List<Widget>pages = [
   HomePage(),
+  ChooseClassPage(),
+  CalculatorPage(),
+  ChatPage(),
   ChooseClassPage(),
 ];
 

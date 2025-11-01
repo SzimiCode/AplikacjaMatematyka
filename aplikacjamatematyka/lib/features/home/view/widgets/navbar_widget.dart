@@ -10,7 +10,6 @@ class NavBarWidget extends StatefulWidget {
 }
 
 class _NavBarWidgetState extends State<NavBarWidget> {
-  int selectedIndex = 0;
    @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
@@ -38,14 +37,14 @@ class _NavBarWidgetState extends State<NavBarWidget> {
             ),
             child: NavigationBar( 
               destinations: [
-                _buildAnimatedDestination(Icons.book, 'Kursy', 0),
-                _buildAnimatedDestination(Icons.home, 'Menu', 1),
-                _buildAnimatedDestination(Icons.chat_bubble, 'Czat', 2),
-                _buildAnimatedDestination(Icons.calculate, 'Kalkulator', 3),
+                 _buildAnimatedDestination(Icons.book, 'Kursy', 0, selectedPage),
+                _buildAnimatedDestination(Icons.home, 'Menu', 1, selectedPage),
+                _buildAnimatedDestination(Icons.chat_bubble, 'Czat', 2, selectedPage),
+                _buildAnimatedDestination(Icons.calculate, 'Kalkulator', 3, selectedPage),
               ],
               selectedIndex: selectedPage,
-              onDestinationSelected: (int value) {
-                setState(() => selectedIndex = value);
+             onDestinationSelected: (int value) {
+                selectedPageNotifier.value = value; 
               },
             ),
           ),
@@ -59,6 +58,7 @@ class _NavBarWidgetState extends State<NavBarWidget> {
     IconData icon,
     String label,
     int index,
+    int selectedIndex,
   ) {
     final bool isSelected = selectedIndex == index;
 

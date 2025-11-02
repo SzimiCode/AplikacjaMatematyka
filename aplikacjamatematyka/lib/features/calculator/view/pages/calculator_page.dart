@@ -1,37 +1,176 @@
+import 'package:aplikacjamatematyka/core/theme/app_pallete.dart';
+import 'package:aplikacjamatematyka/features/calculator/viewmodel/calculator_page_viewmodel.dart';
 import 'package:aplikacjamatematyka/features/home/view/widgets/navbar_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:aplikacjamatematyka/features/calculator/viewmodel/calculator_page_viewmodel.dart';
+import 'package:provider/provider.dart';
 
-class CalculatorPage extends StatefulWidget {
-  CalculatorPage({super.key});
+class CalculatorPage extends StatelessWidget {
+  const CalculatorPage({super.key});
 
-  final CalculatorPageViewmodel viewModel = CalculatorPageViewmodel();
-
-  @override
-  State<CalculatorPage> createState() => _CalculatorPageState();
-}
-
-class _CalculatorPageState extends State<CalculatorPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton(
-              onPressed: widget.viewModel.onButtonPressed,
-              child: const Text('Jesteśmy calculator page'),
+    return ChangeNotifierProvider(
+      create: (_) => CalculatorPageViewModel(),
+      child: Scaffold(
+        backgroundColor: Pallete.backgroundColor,
+        body: SafeArea(
+          child: Consumer<CalculatorPageViewModel>(
+            builder: (context, viewModel, _) => Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
+                    alignment: Alignment.bottomRight,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          viewModel.expression,
+                          style: const TextStyle(
+                            fontSize: 48,
+                            fontWeight: FontWeight.w700,
+                            color: Pallete.blackColor,
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          viewModel.result,
+                          style: const TextStyle(
+                            fontSize: 28,
+                            color: Pallete.greyColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Expanded(
+                  flex: 5,
+                  child: Container(
+                    padding: const EdgeInsets.all(12),
+                    child: GridView.count(
+                      crossAxisCount: 4,
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      mainAxisSpacing: 12,
+                      crossAxisSpacing: 12,
+                      children: [
+                        _buildButton(context, "AC", color: Pallete.errorColor),
+                        _buildButton(context, "()", color: Pallete.cyanColor),
+                        _buildButton(context, "%", color: Pallete.cyanColor),
+                        _buildButton(context, "/", color: Pallete.cyanColor),
+
+                        _buildButton(
+                          context,
+                          "7",
+                          color: Pallete.lightpurpleColor,
+                        ),
+                        _buildButton(
+                          context,
+                          "8",
+                          color: Pallete.lightpurpleColor,
+                        ),
+                        _buildButton(
+                          context,
+                          "9",
+                          color: Pallete.lightpurpleColor,
+                        ),
+                        _buildButton(context, "x", color: Pallete.cyanColor),
+
+                        _buildButton(
+                          context,
+                          "4",
+                          color: Pallete.lightpurpleColor,
+                        ),
+                        _buildButton(
+                          context,
+                          "5",
+                          color: Pallete.lightpurpleColor,
+                        ),
+                        _buildButton(
+                          context,
+                          "6",
+                          color: Pallete.lightpurpleColor,
+                        ),
+                        _buildButton(context, "-", color: Pallete.cyanColor),
+
+                        _buildButton(
+                          context,
+                          "1",
+                          color: Pallete.lightpurpleColor,
+                        ),
+                        _buildButton(
+                          context,
+                          "2",
+                          color: Pallete.lightpurpleColor,
+                        ),
+                        _buildButton(
+                          context,
+                          "3",
+                          color: Pallete.lightpurpleColor,
+                        ),
+                        _buildButton(context, "+", color: Pallete.cyanColor),
+
+                        _buildButton(
+                          context,
+                          "0",
+                          color: Pallete.lightpurpleColor,
+                        ),
+                        _buildButton(
+                          context,
+                          ".",
+                          color: Pallete.lightpurpleColor,
+                        ),
+                        _buildButton(
+                          context,
+                          "⌫",
+                          color: Pallete.lightpurpleColor,
+                        ),
+                        _buildButton(
+                          context,
+                          "=",
+                          color: Pallete.darkcyanColor,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: widget.viewModel.onBackButtonPressed,
-              child: const Text('Drugi przycisk'),
-            ),
-          ],
+          ),
+        ),
+        bottomNavigationBar: const NavBarWidget(),
+      ),
+    );
+  }
+
+  Widget _buildButton(BuildContext context, String text, {Color? color}) {
+    final viewModel = Provider.of<CalculatorPageViewModel>(
+      context,
+      listen: false,
+    );
+    return ElevatedButton(
+      onPressed: () => viewModel.onButtonPressed(text),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: color ?? Colors.grey.shade300,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        padding: const EdgeInsets.all(0),
+      ),
+      child: Text(
+        text,
+        style: const TextStyle(
+          fontSize: 40,
+          fontWeight: FontWeight.bold,
+          color: Pallete.whiteColor,
         ),
       ),
-      bottomNavigationBar: const NavBarWidget(),
     );
   }
 }

@@ -12,4 +12,7 @@ class Pallete {
   static const Color errorColor = Colors.redAccent;
   static const Color redColor = Colors.red;
   static const Color greenColor = Colors.green;
+  static const Color cyanColor = Color(0xFF0CC0DF);
+  static const Color lightpurpleColor = Color(0xFFC3BAFA);
+  static const Color darkcyanColor = Color.fromARGB(255, 9, 136, 158);
 }

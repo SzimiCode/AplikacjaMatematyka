@@ -21,7 +21,6 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightThemeMode,
       home: WidgetTree(),
-      //test
     );
   }
 }

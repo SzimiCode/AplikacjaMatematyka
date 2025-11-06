@@ -18,5 +18,18 @@ class ApiService {
       return null;  // jak exception to tez null
     }
   }
+  // pobiera wszystkie pytania (do testow)
+  Future<List<dynamic>?> fetchAllQuestions() async {
+  try {
+    final url = Uri.parse("$baseUrl/api/questions/");
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      return json.decode(response.body); // lista pytań
+    }
+    return null;
+  } catch (e) {
+    return null;
+  }
+}
   
 }

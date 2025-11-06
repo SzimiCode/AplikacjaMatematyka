@@ -18,11 +18,12 @@ from django.http import HttpResponse
 from django.urls import path, include
 from django.contrib import admin
 
+# prosta strona glowna - zwraca tekst powitalny
 def home(request):
     return HttpResponse("Witaj w MathDragon API!")
 
 urlpatterns = [
-    path('', home),  # <- domyślna strona startowa
-    path('admin/', admin.site.urls),
-    path('api/', include('api.urls')),
+    path('', home),  # strona startowa na http://127.0.0.1:8000/
+    path('admin/', admin.site.urls),  # panel administracyjny django
+    path('api/', include('api.urls')),  # wszystkie endpointy api pod /api/
 ]

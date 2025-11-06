@@ -1,10 +1,8 @@
 from django.contrib import admin
-
-# Register your models here.
-
-from django.contrib import admin
 from .models import Class, Category, Course, DifficultyLevel, Question, AnswerOption
 
+# rejestracja modeli zeby byly widoczne w panelu /admin
+# dzieki temu mozna dodawac/edytowac dane przez przegladarke
 admin.site.register(Class)
 admin.site.register(Category)
 admin.site.register(Course)

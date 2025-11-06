@@ -9,4 +9,11 @@ URUCHOMIENIE SERWERA:
 python manage.py runserver
 
 no i tyle. dodalem tez launch.json do vscode, zeby uruchamiac przez run&debug, to wyzej
-to jkaby nie dzialalo.
+to jkaby nie dzialalo. 
+
+w konsoli wyswietla sie link do serwera.
+
+teraz zaczelo dzialac api, konkretnie questions i podpiete odpowiedzi. 
+zeby modyfikowac baze danych nalezy wejsc pod adres serwera i /admin, np. http://127.0.0.1:8000/admin
+logowanie przez superusera np. mateuszrozdzinski i haslo 1234
+tam sie wyswietlaja modele baz danych i mozna juz je prosto modyfikowac

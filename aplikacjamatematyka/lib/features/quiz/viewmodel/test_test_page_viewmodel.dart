@@ -9,31 +9,7 @@ class TestTestPageViewmodel {
   ValueNotifier<bool> isLoading = ValueNotifier(true);  // czy laduje
   ValueNotifier<String?> feedback = ValueNotifier(null);  // komunikat dla usera
   
-  // // pobiera pytanie z django api
-  // Future<void> loadQuestion() async {
-  //   isLoading.value = true;
-  //   final url = Uri.parse('http://127.0.0.1:8000/api/questions/');
-    
-  //   try {
-  //     final response = await http.get(url);
-  //     if (response.statusCode == 200) {
-  //       final List<dynamic> questions = jsonDecode(response.body);
-  //       if (questions.isNotEmpty) {
-  //         questionData = questions[0];  // bierze pierwsze pytanie z listy
-  //         feedback.value = null;
-  //       } else {
-  //         feedback.value = "Brak pytań w bazie";
-  //       }
-  //     } else {
-  //       feedback.value = "Błąd: ${response.statusCode}";
-  //     }
-  //   } catch (e) {
-  //     feedback.value = "Exception: $e";  // jak sie wywali to pokazuje blad
-  //   }
-    
-  //   isLoading.value = false;
-  // }
-
+  // pobiera pytanie z django api
   Future<void> loadQuestion() async {
     isLoading.value = true;
 
@@ -43,7 +19,7 @@ class TestTestPageViewmodel {
       feedback.value = "Błąd pobierania pytania";
       questionData = null;
     } else {
-      questionData = data;  // <-- już poprawnie
+      questionData = data;
     }
 
     isLoading.value = false;

@@ -6,20 +6,17 @@ class CourseSerializer(serializers.ModelSerializer):
         model = Course
         fields = '__all__'
 
-
-class QuestionSerializer(serializers.ModelSerializer):
-    options = serializers.StringRelatedField(many=True)
-
-    class Meta:
-        model = Question
-        fields = '__all__'
-
-
 class AnswerOptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = AnswerOption
-        fields = '__all__'
+        fields = ['id', 'option_text', 'is_correct']  # tylko potrzebne pola
 
+class QuestionSerializer(serializers.ModelSerializer):
+    options = AnswerOptionSerializer(many=True, read_only=True)
+    
+    class Meta:
+        model = Question
+        fields = ['id', 'question_text', 'question_type', 'points', 'options']  # <- bez aliasu
 
 class UserCourseProgressSerializer(serializers.ModelSerializer):
     class Meta:

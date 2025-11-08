@@ -33,13 +33,6 @@ class SettingsPage extends StatelessWidget {
             },
           ),
           ListTile(
-            title: const Text('Zmień Język'),
-            trailing: const Icon(Icons.arrow_forward_ios),
-            onTap: () {
-            
-            },
-          ),
-          ListTile(
             title: const Text('Dark Mode'),
             trailing: Switch(
               value: viewModel.isDarkMode,

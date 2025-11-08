@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:aplikacjamatematyka/features/settings/viewmodel/settings_page_viewmodel.dart';
+import 'package:aplikacjamatematyka/core/data/notifiers.dart';
 
 class SettingsPage extends StatelessWidget {
  SettingsPage({super.key});
@@ -34,10 +35,15 @@ class SettingsPage extends StatelessWidget {
           ),
           ListTile(
             title: const Text('Dark Mode'),
-           trailing: Switch(
+           trailing:  ValueListenableBuilder(
+            valueListenable: isDarkModifier,
             //Switch wymaga value jakiegoś a onChanged wymaga boola, więc możemy dać losowe value, a w OnChange dac podłoge która oznacza nic
-              value: true,
-              onChanged: (_) => viewModel.toggleDarkMode(),
+             builder: (context, isDark, _) {
+                return Switch(
+                  value: isDark,
+                  onChanged: (_) => viewModel.toggleDarkMode(),
+                );
+              },
             ),
           ),
           ListTile(

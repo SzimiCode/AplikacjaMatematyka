@@ -1,9 +1,11 @@
 import 'package:aplikacjamatematyka/features/home/view/widgets/navbar_widget.dart';
 import 'package:aplikacjamatematyka/core/theme/app_pallete.dart';
 import 'package:flutter/material.dart';
+import 'package:aplikacjamatematyka/features/home/viewmodel/home_page_viewmodel.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  HomePage({super.key});
+  final HomePageViewModel viewModel= HomePageViewModel();
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +21,7 @@ class HomePage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   TextButton(
-                    onPressed: () {},
+                    onPressed: viewModel.goToSettingsButtonPressed,
                     style: TextButton.styleFrom(
                       backgroundColor: Pallete.purpleColor,
                       padding: const EdgeInsets.symmetric(
@@ -43,7 +45,8 @@ class HomePage extends StatelessWidget {
                   Row(
                     children: [
                       IconButton(
-                        onPressed: () {},
+                          onPressed: viewModel.goToSettingsButtonPressed
+                        ,
                         icon: Image.asset(
                           'assets/images/book1.png',
                           height: 35,

@@ -1,5 +1,6 @@
-import 'package:aplikacjamatematyka/core/theme/theme.dart';
+import 'package:aplikacjamatematyka/core/data/notifiers.dart';
 import 'package:aplikacjamatematyka/core/widget_tree.dart';
+import 'package:aplikacjamatematyka/core/theme/app_pallete.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -17,10 +18,20 @@ class _MyAppState extends State<MyApp> {
   int selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.lightThemeMode,
-      home: WidgetTree(),
+    return ValueListenableBuilder(
+      valueListenable: isDarkModifier,
+      builder: (context, isDarkMode, child) {
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: Pallete.backgroundColor,
+              brightness: isDarkMode ? Brightness.dark : Brightness.light,
+            ),
+          ),
+          home: WidgetTree(),
+        );
+      }
     );
   }
 }

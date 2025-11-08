@@ -34,11 +34,10 @@ class SettingsPage extends StatelessWidget {
           ),
           ListTile(
             title: const Text('Dark Mode'),
-            trailing: Switch(
-              value: viewModel.isDarkMode,
-              onChanged: (bool value) {
-                viewModel.toggleDarkMode(value);
-              },
+           trailing: Switch(
+            //Switch wymaga value jakiegoś a onChanged wymaga boola, więc możemy dać losowe value, a w OnChange dac podłoge która oznacza nic
+              value: true,
+              onChanged: (_) => viewModel.toggleDarkMode(),
             ),
           ),
           ListTile(

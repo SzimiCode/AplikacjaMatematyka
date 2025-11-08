@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:aplikacjamatematyka/core/data/notifiers.dart';
 
 class SettingsViewModel extends ChangeNotifier {
 
-  bool _isDarkMode = false;
   bool _isNotificationsEnabled = true;
-
-  bool get isDarkMode => _isDarkMode;
   bool get isNotificationsEnabled => _isNotificationsEnabled;
 
-  void toggleDarkMode(bool value) {
-    _isDarkMode = value;
+  void toggleDarkMode() {
+    isDarkModifier.value = !isDarkModifier.value;
     notifyListeners();  
   }
 

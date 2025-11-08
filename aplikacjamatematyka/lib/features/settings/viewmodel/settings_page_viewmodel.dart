@@ -11,4 +11,7 @@ class SettingsViewModel extends ChangeNotifier {
   void logout() {
 
   }
+   void onBackButtonPressed(){
+    selectedPageNotifier.value = 0;
+  }
 }

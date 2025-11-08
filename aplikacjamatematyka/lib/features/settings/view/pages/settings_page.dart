@@ -47,15 +47,6 @@ class SettingsPage extends StatelessWidget {
             ),
           ),
           ListTile(
-            title: const Text('Notifications'),
-            trailing: Switch(
-              value: viewModel.isNotificationsEnabled,
-              onChanged: (bool value) {
-                viewModel.toggleNotifications(value);
-              },
-            ),
-          ),
-          ListTile(
             title: const Text('Logout'),
             trailing: const Icon(Icons.exit_to_app),
             onTap: () {
@@ -63,6 +54,13 @@ class SettingsPage extends StatelessWidget {
             },
           ),
         ],
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.only(bottom: 20, left: 16, right: 16),
+        child: ElevatedButton(
+          onPressed: viewModel.onBackButtonPressed,
+          child: const Text('Cofnij do strony głównej'),
+        ),
       ),
     );
   }

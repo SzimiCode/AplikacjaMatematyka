@@ -1,9 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:aplikacjamatematyka/core/data/notifiers.dart';
 
-
 class SignUpPageViewmodel {
- void onBackButtonPressed(){
+  void onBackButtonPressed() {
     selectedPageNotifier.value = 0;
   }
 }

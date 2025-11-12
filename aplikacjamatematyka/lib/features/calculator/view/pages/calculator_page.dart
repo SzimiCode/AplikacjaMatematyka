@@ -12,7 +12,6 @@ class CalculatorPage extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (_) => CalculatorPageViewModel(),
       child: Scaffold(
-        backgroundColor: Pallete.backgroundColor,
         body: SafeArea(
           child: Consumer<CalculatorPageViewModel>(
             builder: (context, viewModel, _) => Column(

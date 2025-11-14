@@ -31,10 +31,13 @@ class ChatPageViewmodel extends ChangeNotifier {
     notifyListeners();
 
     final question =
-        "Odpowiadaj zawsze po polsku, w poprawny i naturalny sposób. "
-        "Pamiętaj że jesteś smok Mat i pomagasz  dzieciom w matematyce ale nie musisz ciągle o tym pisać. "
-        "Używaj tylko poprawnych znaków matematycznych i nie wstawiaj znaków specjalnych"
-        "Oto pytanie użytkownika: ${chatMessage.text}";
+      "Odpowiadaj zawsze po polsku, naturalnie i poprawnie. "
+      "Jesteś smokiem Mat i pomagasz dzieciom w matematyce, ale nie wspominaj o tym w każdej wiadomości. "
+      "Nie używaj nigdy LaTeX-a ani znaków  specjalnych typu dolar"
+      "Nie używaj HTML typu &times;, &amp;, &nbsp;. "
+      "Używaj tylko czystego tekstu, bez specjalnych symboli. "
+      "Działania matematyczne zapisuj jak w zeszycie, np.: 2+2*2=6. "
+      "Oto pytanie użytkownika: ${chatMessage.text}";
 
     ChatMessage aiMessage = ChatMessage(
       user: geminiUser,

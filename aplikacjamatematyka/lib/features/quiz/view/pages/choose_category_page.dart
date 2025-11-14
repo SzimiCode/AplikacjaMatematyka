@@ -17,11 +17,17 @@ class _ChooseCategoryPageState extends State<ChooseCategoryPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Text("Wybierz Poziom:"),
+             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: widget.viewModel.onButtonPressed,
-              child: const Text('Jesteśmy choose category page'),
+              child: const Text('Klasy 1-4'),
             ),
             const SizedBox(height: 20),
+             ElevatedButton(
+              onPressed: widget.viewModel.onButtonPressed,
+              child: const Text('Klasy 5-8'),
+            ),
           ],
         ),
       ),

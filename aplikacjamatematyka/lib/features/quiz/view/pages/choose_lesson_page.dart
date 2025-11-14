@@ -1,34 +1,32 @@
 import 'package:aplikacjamatematyka/features/home/view/widgets/navbar_widget.dart';
+import 'package:aplikacjamatematyka/features/quiz/view/widgets/appbar_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:aplikacjamatematyka/features/quiz/viewmodel/choose_category_page_viewmodel.dart';
+import 'package:aplikacjamatematyka/features/quiz/viewmodel/choose_lesson_page_viewmodel.dart';
 
-class ChooseCategoryPage extends StatefulWidget {
-  ChooseCategoryPage({super.key});
-  final ChooseCategoryPageViewmodel viewModel = ChooseCategoryPageViewmodel();
+class ChooseLessonPage extends StatefulWidget {
+  ChooseLessonPage({super.key});
+  final ChooseLessonPageViewmodel viewModel = ChooseLessonPageViewmodel();
   @override
-  State<ChooseCategoryPage> createState() => _ChooseCategoryPageState();
+  State<ChooseLessonPage> createState() => _ChooseLessonPageState();
 }
 
-class _ChooseCategoryPageState extends State<ChooseCategoryPage> {
+class _ChooseLessonPageState extends State<ChooseLessonPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+   return Scaffold(
+    appBar: AppbarWidget(),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text("Wybierz Poziom:"),
-             const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: widget.viewModel.onButtonPressed,
-              child: const Text('Klasy 1-4'),
-            ),
-            const SizedBox(height: 20),
-             ElevatedButton(
-              onPressed: widget.viewModel.onButtonPressed,
-              child: const Text('Klasy 5-8'),
-            ),
-          ],
+        child: ListView.builder(
+          //Tutaj do zmiany, żeby brało z bazy danych
+          itemCount: 7, 
+          itemBuilder: (context, index) {
+            return ElevatedButton(
+              onPressed: () {
+                
+              },
+              child: Text("Lekcja ${index + 1}"),
+            );
+          },
         ),
       ),
       bottomNavigationBar: const NavBarWidget(),

@@ -31,5 +31,28 @@ class ApiService {
     return null;
   }
 }
-  
+  Future<List<dynamic>?> fetchAllCategories() async {
+  try {
+    final url = Uri.parse("$baseUrl/api/categories/");
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      return json.decode(response.body); 
+    }
+    return null;
+  } catch (e) {
+    return null;
+  }
+}
+  Future<List<dynamic>?> fetchAllCourses() async {
+  try {
+    final url = Uri.parse("$baseUrl/api/courses/");
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      return json.decode(response.body); 
+    }
+    return null;
+  } catch (e) {
+    return null;
+  }
+}
 }

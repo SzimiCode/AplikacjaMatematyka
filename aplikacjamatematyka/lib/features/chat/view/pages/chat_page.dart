@@ -49,6 +49,7 @@ class ChatPage extends StatelessWidget {
               textColor: Pallete.blackColor,
               currentUserTextColor: Pallete.whiteColor,
             ),
+            
             inputOptions: InputOptions(
               inputDecoration: InputDecoration(
                 hintText: "Napisz wiadomość...",

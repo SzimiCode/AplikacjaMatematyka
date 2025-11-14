@@ -1,14 +1,14 @@
 import 'package:aplikacjamatematyka/features/calculator/view/pages/calculator_page.dart';
 import 'package:aplikacjamatematyka/features/chat/view/pages/chat_page.dart';
 import 'package:aplikacjamatematyka/features/home/view/pages/home_page.dart';
-import 'package:aplikacjamatematyka/features/quiz/view/pages/choose_category_page.dart';
+import 'package:aplikacjamatematyka/features/quiz/view/pages/choose_lesson_page.dart';
 import 'package:aplikacjamatematyka/features/settings/view/pages/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:aplikacjamatematyka/core/data/notifiers.dart';
 
 List<Widget>pages = [
   HomePage(),
-  ChooseCategoryPage(),
+  ChooseLessonPage(),
   ChatPage(),
   CalculatorPage(),
   SettingsPage(),

@@ -4,6 +4,7 @@ import 'package:aplikacjamatematyka/features/home/view/widgets/navbar_widget.dar
 import 'package:dash_chat_2/dash_chat_2.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:aplikacjamatematyka/features/chat/view/widgets/chat_appbar.dart';
 
 class ChatPage extends StatelessWidget {
   const ChatPage({super.key});
@@ -15,23 +16,7 @@ class ChatPage extends StatelessWidget {
       child: Consumer<ChatPageViewmodel>(
         builder: (context, viewModel, child) {
           return Scaffold(
-            appBar: AppBar(
-              centerTitle: true,
-              backgroundColor: Pallete.purpleColor,
-              shape: const RoundedRectangleBorder(
-                 borderRadius: BorderRadius.vertical(
-                  bottom: Radius.circular(20),
-                  ),
-              ),
-              title: const Text(
-                "Czat z Matem 🐉",
-                style: TextStyle(
-                  color: Pallete.whiteColor,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 25,
-                ),
-              ),
-            ),
+            appBar: const ChatAppbar(),
             body: _buildUI(context, viewModel),
             bottomNavigationBar: const NavBarWidget(),
           );

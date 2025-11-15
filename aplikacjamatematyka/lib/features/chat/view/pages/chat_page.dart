@@ -18,8 +18,13 @@ class ChatPage extends StatelessWidget {
             appBar: AppBar(
               centerTitle: true,
               backgroundColor: Pallete.purpleColor,
+              shape: const RoundedRectangleBorder(
+                 borderRadius: BorderRadius.vertical(
+                  bottom: Radius.circular(20),
+                  ),
+              ),
               title: const Text(
-                "Mat Chat",
+                "Czat z Matem 🐉",
                 style: TextStyle(
                   color: Pallete.whiteColor,
                   fontWeight: FontWeight.bold,

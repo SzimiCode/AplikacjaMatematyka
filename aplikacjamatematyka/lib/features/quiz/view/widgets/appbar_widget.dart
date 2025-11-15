@@ -10,18 +10,14 @@ class AppbarWidget extends StatelessWidget implements PreferredSizeWidget {
       toolbarHeight: 80,
       automaticallyImplyLeading: false,
       backgroundColor: const Color.fromARGB(255, 165, 12, 192),
-       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          bottom: Radius.circular(20),
-        ),
-      ),
+
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           ElevatedButton(
             onPressed: () {},
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.purple,
+              backgroundColor: const Color.fromARGB(255, 222, 133, 238),
               foregroundColor: Colors.white,
               padding: EdgeInsets.symmetric(
                 horizontal: 32,

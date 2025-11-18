@@ -1,4 +1,4 @@
-import 'package:aplikacjamatematyka/features/home/view/widgets/navbar_widget.dart';
+
 import 'package:aplikacjamatematyka/features/quiz/view/widgets/appbar_widget.dart';
 import 'package:aplikacjamatematyka/features/quiz/view/widgets/content_lesson_widget.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +34,6 @@ class _LessonContentPageState extends State<LessonContentPage> {
           ),
         ),
       ),
-      bottomNavigationBar: const NavBarWidget(),
     );
   }
 }

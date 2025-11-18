@@ -1,3 +1,4 @@
+import 'package:aplikacjamatematyka/features/auth/view/pages/register_page.dart';
 import 'package:aplikacjamatematyka/features/calculator/view/pages/calculator_page.dart';
 import 'package:aplikacjamatematyka/features/chat/view/pages/chat_page.dart';
 import 'package:aplikacjamatematyka/features/home/view/pages/home_page.dart';
@@ -16,6 +17,7 @@ List<Widget>pages = [
   SettingsPage(),
   QuizFirstTypePage(),
   LessonContentPage(),
+  RegisterPage()
 ];
 
 

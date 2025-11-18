@@ -16,6 +16,6 @@ class ChooseLessonPageViewmodel {
     );
   }
    void onLessonButtonPressed(){
-    selectedPageNotifier.value = 5;
+    selectedPageNotifier.value = 3;
   }
 }

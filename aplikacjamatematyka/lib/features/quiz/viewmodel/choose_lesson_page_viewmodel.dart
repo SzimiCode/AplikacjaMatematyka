@@ -15,4 +15,7 @@ class ChooseLessonPageViewmodel {
       MaterialPageRoute(builder: (context) => TestTestPage()),
     );
   }
+   void onLessonButtonPressed(){
+    selectedPageNotifier.value = 5;
+  }
 }

@@ -38,6 +38,7 @@ class _ChooseLessonPageState extends State<ChooseLessonPage> {
                 title: "Lekcja ${index + 1}",
                 time: "${20 + index * 5} min",
                 color: _getColor(index),
+                onTap: () => widget.viewModel.onLessonButtonPressed(), 
               );
             },
           ),

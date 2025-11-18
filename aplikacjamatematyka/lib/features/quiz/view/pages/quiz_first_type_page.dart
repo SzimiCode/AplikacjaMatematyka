@@ -9,6 +9,8 @@ class QuizFirstTypePage extends StatefulWidget {
 class _QuizFirstTypePageState extends State<QuizFirstTypePage> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Container(
+      child: Text("Quiz first type"),
+    );
   }
 }

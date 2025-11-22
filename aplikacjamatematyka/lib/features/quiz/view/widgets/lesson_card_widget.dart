@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 class LessonCard extends StatelessWidget {
   final int number;
   final String title;
-  final String time;
   final Color color;
   final VoidCallback? onTap;
 
@@ -11,7 +10,6 @@ class LessonCard extends StatelessWidget {
     super.key,
     required this.number,
     required this.title,
-    required this.time,
     required this.color,
     this.onTap,
   });
@@ -60,20 +58,6 @@ class LessonCard extends StatelessWidget {
               ),
             ),
 
-
-            Column(
-              children: [
-                Icon(Icons.timer, color: color),
-                Text(
-                  time,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: color,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
           ],
         ),
       ),

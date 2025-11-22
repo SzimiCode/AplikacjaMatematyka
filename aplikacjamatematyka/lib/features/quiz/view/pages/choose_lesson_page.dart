@@ -2,6 +2,7 @@ import 'package:aplikacjamatematyka/features/home/view/widgets/navbar_widget.dar
 import 'package:aplikacjamatematyka/features/quiz/view/widgets/appbar_widget.dart';
 import 'package:aplikacjamatematyka/features/quiz/view/widgets/lesson_card_widget.dart';
 import 'dart:math';
+import 'package:aplikacjamatematyka/features/quiz/model/tempLessons.dart';
 
 
 
@@ -33,11 +34,11 @@ class _ChooseLessonPageState extends State<ChooseLessonPage> {
           ),
           child: ListView.builder(
             padding: const EdgeInsets.only(top: 20),
-            itemCount: 9,
+            itemCount: lessons.length,
             itemBuilder: (context, index) {
               return LessonCard(
                 number: index + 1,
-                title: "Lekcja ${index + 1}",
+                title: lessons[index],     
                 color: _getColor(index),
                 flameCounter: Random().nextInt(5) + 1,
                 onTap: () => widget.viewModel.onLessonButtonPressed(), 
@@ -53,10 +54,7 @@ class _ChooseLessonPageState extends State<ChooseLessonPage> {
 
 Color _getColor(int index) {
   const colors = [
-    Colors.lightBlue,
-    Colors.orange,
     Colors.purple,
-    Colors.blue,
     Colors.purpleAccent,
   ];
   return colors[index % colors.length];

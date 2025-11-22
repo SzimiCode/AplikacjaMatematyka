@@ -11,48 +11,83 @@ class AppbarWidget extends StatelessWidget implements PreferredSizeWidget {
       automaticallyImplyLeading: false,
       backgroundColor: const Color.fromARGB(255, 165, 12, 192),
 
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          ElevatedButton(
-            onPressed: () {},
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color.fromARGB(255, 222, 133, 238),
-              foregroundColor: Colors.white,
-              padding: EdgeInsets.symmetric(
-                horizontal: 32,
-                vertical: 16,
-              ),
-              textStyle: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-            ),
-            //Do podstawienia z bazy danych które
-            child: Text("Klasy 1–4"),
-          ),
-          SizedBox(width: 30),
-          Row(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 4), 
-                  child: const Text(
-                    '5',
-                    style: TextStyle(
-                      color: Pallete.redColor,
-                      fontSize: 35,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+      title: Padding(
+        padding: const EdgeInsets.only(top: 22),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            ElevatedButton(
+              onPressed: () {},
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color.fromARGB(255, 222, 133, 238),
+                foregroundColor: Colors.white,
+                padding: EdgeInsets.symmetric(
+                  horizontal: 22,
+                  vertical: 11,
                 ),
-                const SizedBox(width: 6), 
-                Image.asset('assets/images/fire1.png', height: 55, width: 55),
-              ],
+                textStyle: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              //Do podstawienia z bazy danych które
+              child: Text("Klasy 1–4"),
             ),
-          ],
+            SizedBox(width: 8),
+            ElevatedButton(
+              onPressed: () {},
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color.fromARGB(255, 222, 133, 238),
+                foregroundColor: Colors.white,
+                            textStyle: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              //Do podstawienia z bazy danych które
+              child: Text("Liczby Naturalne"),
+            ),
+            
+            SizedBox(width: 6),
+              Container(
+                width: 90,
+                height: 43,
+                decoration: BoxDecoration(
+                  color: Color.fromARGB(255, 222, 133, 238),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+
+
+                    Text(
+                      '5',
+                      style: TextStyle(
+                        color: Pallete.whiteColor,
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+
+                    SizedBox(width: 3),
+                    Image.asset(
+                      'assets/images/fire1.png',
+                      height: 30,
+                      width: 35,
+                    ),
+                  ],
+                ),
+              )
+            ],
+        ),
       ),
     );
   }

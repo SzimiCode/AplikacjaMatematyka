@@ -1,6 +1,8 @@
 import 'package:aplikacjamatematyka/features/home/view/widgets/navbar_widget.dart';
 import 'package:aplikacjamatematyka/features/quiz/view/widgets/appbar_widget.dart';
 import 'package:aplikacjamatematyka/features/quiz/view/widgets/lesson_card_widget.dart';
+import 'dart:math';
+
 
 
 import 'package:flutter/material.dart';
@@ -36,8 +38,8 @@ class _ChooseLessonPageState extends State<ChooseLessonPage> {
               return LessonCard(
                 number: index + 1,
                 title: "Lekcja ${index + 1}",
-                time: "${20 + index * 5} min",
                 color: _getColor(index),
+                flameCounter: Random().nextInt(5) + 1,
                 onTap: () => widget.viewModel.onLessonButtonPressed(), 
               );
             },

@@ -5,6 +5,7 @@ class LessonCard extends StatelessWidget {
   final String title;
   final Color color;
   final VoidCallback? onTap;
+  final int flameCounter;
 
   const LessonCard({
     super.key,
@@ -12,6 +13,7 @@ class LessonCard extends StatelessWidget {
     required this.title,
     required this.color,
     this.onTap,
+    required this.flameCounter,
   });
 
   @override
@@ -57,9 +59,25 @@ class LessonCard extends StatelessWidget {
                 ),
               ),
             ),
+            const SizedBox(width: 16),
+            
+            Row(
+              children: List.generate(5, (index) {
+                bool isActive = index < flameCounter;
 
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  child: Image.asset(
+                    isActive ? 'assets/images/fire1.png' : 'assets/images/fire2.png',
+                    height: 17,
+                    width: 17,
+                  ),
+                );
+              }
+              ),
+            ),
           ],
-        ),
+      ),
       ),
     );
   }

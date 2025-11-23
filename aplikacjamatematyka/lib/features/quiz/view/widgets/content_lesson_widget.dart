@@ -12,7 +12,7 @@ class ContentLessonWidget extends StatelessWidget {
           children: [
 
             buildDotTrailRight(),
-
+            buildDotTrailLeft(),
   /*
             _buildRow(
               context,
@@ -73,30 +73,6 @@ class ContentLessonWidget extends StatelessWidget {
       ],
     );
   }
-
-  Widget _buildDotContainerRight() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: List.generate(
-          3,
-          (i) => Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 6),
-            child: Container(
-              width: 14,
-              height: 14,
-              decoration: BoxDecoration(
-                color: Colors.grey.shade400,
-                shape: BoxShape.circle,
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
       Widget buildDotTrailRight() {
       final positions = [
         const FractionalOffset(0.0, 0.0),
@@ -130,15 +106,14 @@ class ContentLessonWidget extends StatelessWidget {
     }
     Widget buildDotTrailLeft() {
       final positions = [
-        const FractionalOffset(0.0, 0.0),
-        const FractionalOffset(0.20, 0.30),
+        const FractionalOffset(0.0, 1.0),
+        const FractionalOffset(0.25, 0.70),
         const FractionalOffset(0.50, 0.50),
-        const FractionalOffset(0.70, 0.80),
-        const FractionalOffset(1.0, 1.0),
+        const FractionalOffset(0.74, 0.18),
+        const FractionalOffset(1.0, 0.0),
       ];
 
       return Container(
-        color: Colors.pink,
         child: SizedBox(
           width: 120,
           height: 120,
@@ -160,26 +135,4 @@ class ContentLessonWidget extends StatelessWidget {
         ),
       );
     }
-   Widget _buildDotContainerLeft() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: List.generate(
-          3,
-          (i) => Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 6),
-            child: Container(
-              width: 14,
-              height: 14,
-              decoration: BoxDecoration(
-                color: Colors.grey.shade400,
-                shape: BoxShape.circle,
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
 }

@@ -11,9 +11,9 @@ class ContentLessonWidget extends StatelessWidget {
         child: Column(
           children: [
 
-            _buildDotRow(),
+            buildDotTrail(),
 
-            
+
             _buildRow(
               context,
               icon: Icons.camera_alt,
@@ -21,7 +21,7 @@ class ContentLessonWidget extends StatelessWidget {
               onTap: () {},
             ),
 
-            _buildDotRow(),
+            _buildDotContainerRightMine(),
 
 
             _buildRow(
@@ -31,7 +31,7 @@ class ContentLessonWidget extends StatelessWidget {
               onTap: () {},
             ),
 
-            _buildDotRow(),
+            _buildDotContainerLeft(),
 
 
             _buildRow(
@@ -75,7 +75,61 @@ class ContentLessonWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildDotRow() {
+  Widget _buildDotContainerRight() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: List.generate(
+          3,
+          (i) => Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 6),
+            child: Container(
+              width: 14,
+              height: 14,
+              decoration: BoxDecoration(
+                color: Colors.grey.shade400,
+                shape: BoxShape.circle,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+    Widget buildDotTrail() {
+      
+      final List<int> flexValues = [1, 3, 5, 7, 9];
+
+      return SizedBox(
+        width: 200,
+        child: Column(
+          children: flexValues.map((flex) {
+            return Row(
+              children: [
+                Expanded(
+                  flex: flex,
+                  child: Container(
+                    width: 14,
+                    height: 14,
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade400,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  flex: 10 - flex,
+                  child: const SizedBox(),
+                ),
+              ],
+            );
+          }).toList(),
+        ),
+      );
+    }
+   Widget _buildDotContainerLeft() {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12),
       child: Row(

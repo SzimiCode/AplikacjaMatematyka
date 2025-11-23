@@ -3,3 +3,4 @@
 import 'package:flutter/material.dart';
 ValueNotifier<int> selectedPageNotifier = ValueNotifier(0);
 ValueNotifier<bool> isDarkModifier = ValueNotifier(false);
+ValueNotifier<String> tempLessonName = ValueNotifier("");

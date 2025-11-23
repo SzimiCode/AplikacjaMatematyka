@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:aplikacjamatematyka/core/data/notifiers.dart';
 import 'package:aplikacjamatematyka/features/quiz/view/pages/test_test_page.dart';
+import 'package:aplikacjamatematyka/features/quiz/model/tempLessons.dart';
 
 class ChooseLessonPageViewmodel {
   void onButtonPressed() {
@@ -13,9 +14,11 @@ class ChooseLessonPageViewmodel {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => TestTestPage()),
+
     );
   }
-   void onLessonButtonPressed(){
+   void onLessonButtonPressed(index){
+    tempLessonName.value = lessons[index];
     selectedPageNotifier.value = 6;
   }
 }

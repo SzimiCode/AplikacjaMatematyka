@@ -26,7 +26,12 @@ class RowRight extends StatelessWidget {
             width: 100,
             height: 100,
             decoration: const BoxDecoration(
-              color: Colors.purple,
+              gradient: LinearGradient(
+                colors: [
+                  Colors.purple,
+                  Color.fromARGB(255, 126, 30, 143),
+                ]
+              ),
               shape: BoxShape.circle,
             ),
             child: Icon(icon, size: 40, color: Colors.white),

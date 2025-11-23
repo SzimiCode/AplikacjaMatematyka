@@ -11,17 +11,15 @@ class ContentLessonWidget extends StatelessWidget {
         child: Column(
           children: [
 
-            buildDotTrail(),
+            buildDotTrailRight(),
 
-
+  /*
             _buildRow(
               context,
               icon: Icons.camera_alt,
               asset: 'assets/images/knight.png',
               onTap: () {},
             ),
-
-            _buildDotContainerRightMine(),
 
 
             _buildRow(
@@ -40,6 +38,7 @@ class ContentLessonWidget extends StatelessWidget {
               asset: 'assets/images/dragon1.png',
               onTap: () {},
             ),
+            */
           ],
         ),
       ),
@@ -98,34 +97,66 @@ class ContentLessonWidget extends StatelessWidget {
     );
   }
 
-    Widget buildDotTrail() {
-      
-      final List<int> flexValues = [1, 3, 5, 7, 9];
+      Widget buildDotTrailRight() {
+      final positions = [
+        const FractionalOffset(0.0, 0.0),
+        const FractionalOffset(0.20, 0.30),
+        const FractionalOffset(0.50, 0.50),
+        const FractionalOffset(0.70, 0.80),
+        const FractionalOffset(1.0, 1.0),
+      ];
 
-      return SizedBox(
-        width: 200,
-        child: Column(
-          children: flexValues.map((flex) {
-            return Row(
-              children: [
-                Expanded(
-                  flex: flex,
-                  child: Container(
-                    width: 14,
-                    height: 14,
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade400,
-                      shape: BoxShape.circle,
-                    ),
+      return Container(
+        child: SizedBox(
+          width: 120,
+          height: 120,
+          child: Stack(
+            children: positions.map((pos) {
+              return Align(
+                alignment: pos,
+                child: Container(
+                  width: 19,
+                  height: 19,
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade400,
+                    shape: BoxShape.circle,
                   ),
                 ),
-                Expanded(
-                  flex: 10 - flex,
-                  child: const SizedBox(),
+              );
+            }).toList(),
+          ),
+        ),
+      );
+    }
+    Widget buildDotTrailLeft() {
+      final positions = [
+        const FractionalOffset(0.0, 0.0),
+        const FractionalOffset(0.20, 0.30),
+        const FractionalOffset(0.50, 0.50),
+        const FractionalOffset(0.70, 0.80),
+        const FractionalOffset(1.0, 1.0),
+      ];
+
+      return Container(
+        color: Colors.pink,
+        child: SizedBox(
+          width: 120,
+          height: 120,
+          child: Stack(
+            children: positions.map((pos) {
+              return Align(
+                alignment: pos,
+                child: Container(
+                  width: 19,
+                  height: 19,
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade400,
+                    shape: BoxShape.circle,
+                  ),
                 ),
-              ],
-            );
-          }).toList(),
+              );
+            }).toList(),
+          ),
         ),
       );
     }

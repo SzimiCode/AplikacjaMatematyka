@@ -21,8 +21,8 @@ class RowLeft extends StatelessWidget {
           onTap: onTap,
           borderRadius: BorderRadius.circular(50),
           child: Container(
-            width: 85,
-            height: 85,
+            width: 100,
+            height: 100,
             decoration: const BoxDecoration(
               color: Colors.purple,
               shape: BoxShape.circle,
@@ -30,6 +30,7 @@ class RowLeft extends StatelessWidget {
             child: Icon(icon, size: 40, color: Colors.white),
           ),
         ),
+        SizedBox(width: 60),
         Image.asset(asset, height: 120, width: 120),
       ],
     );

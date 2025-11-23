@@ -14,8 +14,8 @@ class DotTrailRight extends StatelessWidget {
     ];
 
     return SizedBox(
-      width: 90,
-      height: 90,
+      width: 110,
+      height: 110,
       child: Stack(
         children: positions.map((pos) {
           return Align(

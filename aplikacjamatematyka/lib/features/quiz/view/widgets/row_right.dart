@@ -18,12 +18,13 @@ class RowRight extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         Image.asset(asset, height: 120, width: 120),
+        SizedBox(width: 60),
         InkWell(
           onTap: onTap,
           borderRadius: BorderRadius.circular(50),
           child: Container(
-            width: 85,
-            height: 85,
+            width: 100,
+            height: 100,
             decoration: const BoxDecoration(
               color: Colors.purple,
               shape: BoxShape.circle,

@@ -15,6 +15,12 @@ class ContentLessonWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       borderRadius: BorderRadius.circular(20), 
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+        ),
         child: Row(
           children: [
             Container(
@@ -30,6 +36,7 @@ class ContentLessonWidget extends StatelessWidget {
             )
           ],
         ),
+      ),
     );
   }
 }

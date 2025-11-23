@@ -3,9 +3,6 @@ import 'package:aplikacjamatematyka/features/quiz/view/widgets/appbar_widget.dar
 import 'package:aplikacjamatematyka/features/quiz/view/widgets/lesson_card_widget.dart';
 import 'dart:math';
 import 'package:aplikacjamatematyka/features/quiz/model/tempLessons.dart';
-
-
-
 import 'package:flutter/material.dart';
 import 'package:aplikacjamatematyka/features/quiz/viewmodel/choose_lesson_page_viewmodel.dart';
 

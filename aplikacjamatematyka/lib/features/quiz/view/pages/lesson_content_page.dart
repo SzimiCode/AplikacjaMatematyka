@@ -35,8 +35,6 @@ class _LessonContentPageState extends State<LessonContentPage> {
               child: const Padding(
                 padding: EdgeInsets.all(20.0),
                 child: ContentLessonWidget(
-                  number: 1,
-                  title: "Hsdad",
                 ),
               ),
             ),

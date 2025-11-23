@@ -11,41 +11,48 @@ class ContentLessonWidget extends StatelessWidget {
         child: Column(
           children: [
 
-            buildDotTrailRight(),
             buildDotTrailLeft(),
-  /*
-            _buildRow(
+            
+            SizedBox(height: 10),
+
+            _buildRowLeft(
               context,
               icon: Icons.camera_alt,
               asset: 'assets/images/knight.png',
               onTap: () {},
             ),
 
+             buildDotTrailRight(),
 
-            _buildRow(
+            SizedBox(height: 10),
+
+            _buildRowRight(
               context,
               icon: Icons.menu_book,
               asset: 'assets/images/treasurechest.png',
               onTap: () {},
             ),
 
-            _buildDotContainerLeft(),
+            SizedBox(height: 10),
+
+            buildDotTrailLeft(),
+
+            SizedBox(height: 10),
 
 
-            _buildRow(
+            _buildRowLeft(
               context,
               icon: Icons.emoji_events,
               asset: 'assets/images/dragon1.png',
               onTap: () {},
             ),
-            */
           ],
         ),
       ),
     );
   }
 
-  Widget _buildRow(BuildContext context,
+  Widget _buildRowLeft(BuildContext context,
       {required IconData icon,
       required String asset,
       required VoidCallback onTap}) {
@@ -69,7 +76,36 @@ class ContentLessonWidget extends StatelessWidget {
             ),
           ),
         ),
-        Image.asset(asset, height: 75, width: 75),
+        Image.asset(asset, height: 120, width: 120),
+      ],
+    );
+  }
+  Widget _buildRowRight(BuildContext context,
+      {required IconData icon,
+      required String asset,
+      required VoidCallback onTap}) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        Image.asset(asset, height: 120, width: 120),
+        InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(50),
+          child: Container(
+            width: 85,
+            height: 85,
+            decoration: BoxDecoration(
+              color: Colors.purple,
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              icon,
+              size: 40,
+              color: Colors.white,
+            ),
+          ),
+        ),
+        
       ],
     );
   }

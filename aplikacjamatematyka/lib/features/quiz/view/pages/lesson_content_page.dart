@@ -16,21 +16,20 @@ class _LessonContentPageState extends State<LessonContentPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 165, 12, 192),
-      body: Padding(
-        padding: const EdgeInsets.only(top: 20.0),
-        child: Container(
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.vertical(
-              top: Radius.circular(40), 
+      body: Column(
+          children: [
+            IconButton(
+              icon: Icon(Icons.arrow_back),
+               onPressed: () {
+                widget.viewModel.onBackButtonPressed();
+              },
             ),
-          ),
-          child: const ContentLessonWidget(
-            number: 1,
-            title: "Hsdad",
-          ),
+            const ContentLessonWidget(
+              number: 1,
+              title: "Hsdad",
+            ),
+          ],
         ),
-      ),
     );
   }
 }

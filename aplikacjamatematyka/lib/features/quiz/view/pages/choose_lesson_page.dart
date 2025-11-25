@@ -57,7 +57,6 @@ class _ChooseLessonPageState extends State<ChooseLessonPage> {
 
 Color _getColor(int index) {
   const colors = [
-    Colors.purple,
     Colors.purpleAccent,
   ];
   return colors[index % colors.length];

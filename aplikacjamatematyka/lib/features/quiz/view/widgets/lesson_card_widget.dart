@@ -54,19 +54,22 @@ class LessonCard extends StatelessWidget {
               child: Text(
                 title,
                 style: const TextStyle(
-                  fontSize: 18,
+                  fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
               ),
             ),
-            const SizedBox(width: 16),
+            const SizedBox(width: 4),
+    
+            const SizedBox(width: 4),
+            
             
             Row(
-              children: List.generate(5, (index) {
+              children: List.generate(4, (index) {
                 bool isActive = index < flameCounter;
 
                 return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  padding: const EdgeInsets.symmetric(horizontal: 2),
                   child: Image.asset(
                     isActive ? 'assets/images/fire1.png' : 'assets/images/fire2.png',
                     height: 17,

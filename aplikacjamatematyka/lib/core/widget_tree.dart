@@ -17,7 +17,8 @@ List<Widget>pages = [
   SettingsPage(),
   QuizFirstTypePage(),
   LessonContentPage(),
-  RegisterPage()
+  RegisterPage(),
+  QuizFirstTypePage()
 ];
 
 

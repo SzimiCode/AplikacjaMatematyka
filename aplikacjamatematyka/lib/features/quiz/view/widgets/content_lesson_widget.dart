@@ -3,6 +3,7 @@ import 'package:aplikacjamatematyka/features/quiz/view/widgets/row_right.dart';
 import 'package:aplikacjamatematyka/features/quiz/view/widgets/row_left.dart';
 import 'package:aplikacjamatematyka/features/quiz/view/widgets/dot_trail_left.dart';
 import 'package:aplikacjamatematyka/features/quiz/view/widgets/dot_trail_right.dart';
+import 'package:aplikacjamatematyka/core/data/notifiers.dart';
 
 class ContentLessonWidget extends StatelessWidget {
   const ContentLessonWidget({super.key});
@@ -19,7 +20,9 @@ class ContentLessonWidget extends StatelessWidget {
             RowLeft(
               icon: Icons.camera_alt,
               asset: 'assets/images/knight.png',
-              onTap: () {},
+              onTap: () {
+                selectedPageNotifier.value = 8;
+              },
             ),
 
             const DotTrailRight(),

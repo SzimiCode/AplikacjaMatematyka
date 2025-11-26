@@ -10,9 +10,18 @@ class QuizFirstTypePage extends StatefulWidget {
 }
 
 class _QuizFirstTypePageState extends State<QuizFirstTypePage> {
+
+  var currentQuestionIndex = 0;
+
+  void answerQuestion(){
+    setState(() {
+          currentQuestionIndex++;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    final currentQuestion = questions[0];
+    final currentQuestion = questions[currentQuestionIndex];
     return Scaffold(
           backgroundColor: const Color.fromARGB(255, 165, 12, 192),
           appBar: AppBarQuizFirstTypeWidget(),
@@ -36,6 +45,7 @@ class _QuizFirstTypePageState extends State<QuizFirstTypePage> {
                       style: const TextStyle(
                         fontSize: 18,
                         color: Colors.white,
+                        fontWeight: FontWeight.bold,
                       )
                       ),
                     const SizedBox(height: 30),
@@ -44,7 +54,7 @@ class _QuizFirstTypePageState extends State<QuizFirstTypePage> {
                     return AnswerButtonFirstType(
                     text: answer,
                     onTap: () {
-                      
+                      answerQuestion();
                     },
                   );
                 }).toList(),

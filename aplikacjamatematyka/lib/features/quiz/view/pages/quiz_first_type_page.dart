@@ -13,7 +13,7 @@ class _QuizFirstTypePageState extends State<QuizFirstTypePage> {
   Widget build(BuildContext context) {
     final currentQuestion = questions[0];
     return Container(
-      margin: EdgeInsets.all(6.0),
+      margin: EdgeInsets.all(35),
       child: Column(
        mainAxisAlignment: MainAxisAlignment.center,
        crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -21,7 +21,7 @@ class _QuizFirstTypePageState extends State<QuizFirstTypePage> {
           Text(currentQuestion.text),
           const SizedBox(height: 30),
           //musi być to list bo mapa potrzebuje, a 3 kropki to spread operator. Rozyspuje liste widgetow na zewnatrz do innej listy
-           ...currentQuestion.answers.map((answer) {
+           ...currentQuestion.getShuffledAnswersFirstType().map((answer) {
           return AnswerButtonFirstType(
           text: answer,
           onTap: () {

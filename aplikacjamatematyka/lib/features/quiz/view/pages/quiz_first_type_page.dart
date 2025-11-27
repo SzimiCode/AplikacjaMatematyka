@@ -13,14 +13,37 @@ class QuizFirstTypePage extends StatefulWidget {
 class _QuizFirstTypePageState extends State<QuizFirstTypePage> {
   var currentQuestionIndex = 0;
   String? selectedAnswer;
+  List<String> shuffledAnswers = [];
+
+  @override
+  void initState() {
+    super.initState();
+    shuffledAnswers = List.of(questions[currentQuestionIndex].answers)..shuffle();
+  }
 
   void answerQuestion() {
+    if (selectedAnswer == null) return; 
+
     setState(() {
-      selectedAnswer = null; 
+      selectedAnswer = null;
       currentQuestionIndex++;
+
+      if (currentQuestionIndex < questions.length) {
+        shuffledAnswers = List.of(questions[currentQuestionIndex].answers)..shuffle();
+      } else {
+
+      }
     });
   }
 
+  void confirmAnswer() {
+    if (selectedAnswer == null) return;
+
+    setState(() {
+      currentQuestionIndex++;
+      selectedAnswer = null;
+    });
+}
   @override
   Widget build(BuildContext context) {
     final currentQuestion = questions[currentQuestionIndex];
@@ -50,23 +73,18 @@ class _QuizFirstTypePageState extends State<QuizFirstTypePage> {
 
                     const SizedBox(height: 30),
 
-                    ...currentQuestion
-                        .getShuffledAnswersFirstType()
-                        .map(
-                          (answer) => Padding(
-                            padding: const EdgeInsets.only(bottom: 12),
-                            child: AnswerButtonFirstType(
-                              text: answer,
-                              isSelected: selectedAnswer == answer,  
-                             onTap: () {
-                                setState(() {
-                                  selectedAnswer = answer;           
-                                });
-                              },
-                            ),
-                          ),
-                        )
-                        .toList(),
+                    ...shuffledAnswers.map((answer) => Padding(
+                      padding: const EdgeInsets.only(bottom: 12),
+                      child: AnswerButtonFirstType(
+                        text: answer,
+                        isSelected: selectedAnswer == answer,
+                        onTap: () {
+                          setState(() {
+                            selectedAnswer = answer;
+                          });
+                        },
+                      ),
+                    )).toList(),
                   ],
                 ),
               ),
@@ -78,7 +96,7 @@ class _QuizFirstTypePageState extends State<QuizFirstTypePage> {
             child: SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: selectedAnswer == null ? null : answerQuestion,
+                onPressed: selectedAnswer == null ? null : confirmAnswer,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color.fromARGB(255, 6, 197, 70),
                   padding: const EdgeInsets.symmetric(vertical: 16),
@@ -86,7 +104,7 @@ class _QuizFirstTypePageState extends State<QuizFirstTypePage> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                child: const Text("Sprawdź", 
+                child: const Text("Dalej", 
                 style: TextStyle(
                     color: Colors.white,
                   ),

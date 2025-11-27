@@ -1,6 +1,6 @@
 import 'package:aplikacjamatematyka/features/quiz/model/tempQuizQuestionFirstType.dart';
 
-const questions = [
+final questions = [
   Tempquizquestionfirsttype(
     'Która z poniższych liczb jest liczbą naturalną?',
     ['5', '-3', '0.5', '-1'],

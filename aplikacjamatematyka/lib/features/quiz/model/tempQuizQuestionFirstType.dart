@@ -1,9 +1,9 @@
 class Tempquizquestionfirsttype {
 
-  const Tempquizquestionfirsttype(this.text, this.answers);
+  Tempquizquestionfirsttype(this.text, this.answers);
 
   final String text;
-  final List<String> answers;
+  late final List<String> answers;
   
   //metoda do mieszania pytań z quizu
   List<String> getShuffledAnswersFirstType() {

@@ -12,9 +12,11 @@ class QuizFirstTypePage extends StatefulWidget {
 
 class _QuizFirstTypePageState extends State<QuizFirstTypePage> {
   var currentQuestionIndex = 0;
+  String? selectedAnswer;
 
   void answerQuestion() {
     setState(() {
+      selectedAnswer = null; 
       currentQuestionIndex++;
     });
   }
@@ -55,7 +57,12 @@ class _QuizFirstTypePageState extends State<QuizFirstTypePage> {
                             padding: const EdgeInsets.only(bottom: 12),
                             child: AnswerButtonFirstType(
                               text: answer,
-                              onTap: answerQuestion,
+                              isSelected: selectedAnswer == answer,  
+                             onTap: () {
+                                setState(() {
+                                  selectedAnswer = answer;           
+                                });
+                              },
                             ),
                           ),
                         )
@@ -71,6 +78,7 @@ class _QuizFirstTypePageState extends State<QuizFirstTypePage> {
             child: SizedBox(
               width: double.infinity,
               child: ElevatedButton(
+                onPressed: selectedAnswer == null ? null : answerQuestion,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color.fromARGB(255, 6, 197, 70),
                   padding: const EdgeInsets.symmetric(vertical: 16),
@@ -78,7 +86,6 @@ class _QuizFirstTypePageState extends State<QuizFirstTypePage> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                onPressed: () {},
                 child: const Text("Sprawdź", 
                 style: TextStyle(
                     color: Colors.white,

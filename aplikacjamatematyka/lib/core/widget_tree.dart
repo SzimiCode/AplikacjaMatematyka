@@ -5,6 +5,7 @@ import 'package:aplikacjamatematyka/features/home/view/pages/home_page.dart';
 import 'package:aplikacjamatematyka/features/quiz/view/pages/choose_lesson_page.dart';
 import 'package:aplikacjamatematyka/features/quiz/view/pages/quiz_first_type_page.dart';
 import 'package:aplikacjamatematyka/features/quiz/view/pages/lesson_content_page.dart';
+import 'package:aplikacjamatematyka/features/quiz/view/pages/quiz_second_type_page.dart';
 import 'package:aplikacjamatematyka/features/settings/view/pages/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:aplikacjamatematyka/core/data/notifiers.dart';
@@ -18,7 +19,9 @@ List<Widget>pages = [
   QuizFirstTypePage(),
   LessonContentPage(),
   RegisterPage(),
-  QuizFirstTypePage()
+  QuizFirstTypePage(),
+  QuizSecondTypePage(),
+
 ];
 
 

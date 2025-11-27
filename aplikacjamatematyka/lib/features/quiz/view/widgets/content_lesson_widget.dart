@@ -30,7 +30,9 @@ class ContentLessonWidget extends StatelessWidget {
             RowRight(
               icon: Icons.menu_book,
               asset: 'assets/images/treasurechest.png',
-              onTap: () {},
+              onTap: () {
+                selectedPageNotifier.value = 9;
+              },
             ),
 
             const DotTrailLeft(),

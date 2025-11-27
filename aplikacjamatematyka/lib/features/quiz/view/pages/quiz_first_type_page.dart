@@ -2,6 +2,7 @@ import 'package:aplikacjamatematyka/features/quiz/data/questions.dart';
 import 'package:aplikacjamatematyka/features/quiz/view/widgets/answer_button_first_type.dart';
 import 'package:aplikacjamatematyka/features/quiz/view/widgets/app_bar_quiz_first_type_widget.dart';
 import 'package:flutter/material.dart';
+
 class QuizFirstTypePage extends StatefulWidget {
   const QuizFirstTypePage({super.key});
 
@@ -10,60 +11,84 @@ class QuizFirstTypePage extends StatefulWidget {
 }
 
 class _QuizFirstTypePageState extends State<QuizFirstTypePage> {
-
   var currentQuestionIndex = 0;
 
-  void answerQuestion(){
+  void answerQuestion() {
     setState(() {
-          currentQuestionIndex++;
+      currentQuestionIndex++;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final currentQuestion = questions[currentQuestionIndex];
+
     return Scaffold(
-          backgroundColor: const Color.fromARGB(255, 165, 12, 192),
-          appBar: AppBarQuizFirstTypeWidget(),
-          body: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                margin: const EdgeInsets.only(
-                  top: 0,
-                  left: 35,
-                  right: 35,
-                  bottom: 35,
-                ),
+      backgroundColor: Colors.white,
+      appBar: AppBarQuizFirstTypeWidget(),
+      body: Column(
+        children: [
+          Expanded(
+            child: Center(
+              child: Container(
+                margin: const EdgeInsets.symmetric(horizontal: 35),
                 child: Column(
-                  
-                crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Text(
-                      textAlign: TextAlign.center,
                       currentQuestion.text,
+                      textAlign: TextAlign.center,
                       style: const TextStyle(
                         fontSize: 18,
-                        color: Colors.white,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
-                      )
                       ),
+                    ),
+
                     const SizedBox(height: 30),
-                    //musi być to list bo mapa potrzebuje, a 3 kropki to spread operator. Rozyspuje liste widgetow na zewnatrz do innej listy
-                    ...currentQuestion.getShuffledAnswersFirstType().map((answer) {
-                    return AnswerButtonFirstType(
-                    text: answer,
-                    onTap: () {
-                      answerQuestion();
-                    },
-                  );
-                }).toList(),
-                ],
+
+                    ...currentQuestion
+                        .getShuffledAnswersFirstType()
+                        .map(
+                          (answer) => Padding(
+                            padding: const EdgeInsets.only(bottom: 12),
+                            child: AnswerButtonFirstType(
+                              text: answer,
+                              onTap: answerQuestion,
+                            ),
+                          ),
+                        )
+                        .toList(),
+                  ],
                 ),
               ),
-            ],
+            ),
           ),
+
+          Padding(
+            padding: const EdgeInsets.fromLTRB(35, 0, 35, 35),
+            child: SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(255, 6, 197, 70),
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                onPressed: () {},
+                child: const Text("Sprawdź", 
+                style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
-  
   }
 }

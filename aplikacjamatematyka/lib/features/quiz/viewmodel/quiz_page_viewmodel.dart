@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import '../data/questions.dart';
 
-class QuizFirstTypePageViewModel extends ChangeNotifier {
+class QuizPageViewModel extends ChangeNotifier {
   int currentQuestionIndex = 0;
   String? selectedAnswer;
   List<String> shuffledAnswers = [];
 
-  QuizFirstTypePageViewModel() {
+  QuizPageViewModel() {
     _shuffleCurrentQuestionAnswers();
   }
 

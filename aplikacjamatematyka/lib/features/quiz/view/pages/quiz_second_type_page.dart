@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:aplikacjamatematyka/features/quiz/viewmodel/quiz_second_type_page_viewmodel.dart';
+import 'package:aplikacjamatematyka/features/quiz/viewmodel/quiz_page_viewmodel.dart';
 import '../widgets/app_bar_quiz_first_type_widget.dart';
 
 class QuizSecondTypePage extends StatelessWidget {
@@ -9,8 +9,8 @@ class QuizSecondTypePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => QuizSecondTypePageViewModel(),
-      child: Consumer<QuizSecondTypePageViewModel>(
+      create: (_) => QuizPageViewModel(),
+      child: Consumer<QuizPageViewModel>(
         builder: (context, vm, child) {
           if (vm.isQuizFinished) {
             return const Scaffold(
@@ -73,4 +73,4 @@ class QuizSecondTypePage extends StatelessWidget {
     );
   }
   }
-}
+

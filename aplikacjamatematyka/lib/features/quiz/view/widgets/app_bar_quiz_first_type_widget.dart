@@ -8,7 +8,7 @@ class AppBarQuizFirstTypeWidget extends StatelessWidget implements PreferredSize
     return AppBar(
       toolbarHeight: 80,
       automaticallyImplyLeading: false,
-      backgroundColor: const Color.fromARGB(255, 169, 143, 173),
+      backgroundColor: Colors.white,
 
       title: Padding(
         padding: const EdgeInsets.only(top: 22),
@@ -20,31 +20,7 @@ class AppBarQuizFirstTypeWidget extends StatelessWidget implements PreferredSize
                   //Tutaj będzie wyskakujace okno czy rezygnować
               },
              ),
-             Container(
-                clipBehavior: Clip.hardEdge,
-                margin: const EdgeInsets.symmetric(horizontal: 20.0),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
-                height: 80.0,
-                width: double.infinity,
-                child: Stack(
-                  alignment: Alignment.centerLeft,
-                  children: [
-                    Positioned.fill(
-                      child: LinearProgressIndicator(
-                        value: 0.7,
-                        color: Colors.blue.withAlpha(100),
-                        backgroundColor: Colors.blue.withAlpha(50),
-                      ),
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10.0),
-                      child: Text('Hello world'),
-                    )
-                  ],
-                ),
-              ),
+      
           ],
         )
       ),
@@ -52,5 +28,5 @@ class AppBarQuizFirstTypeWidget extends StatelessWidget implements PreferredSize
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(40);
+  Size get preferredSize => const Size.fromHeight(80);
 }

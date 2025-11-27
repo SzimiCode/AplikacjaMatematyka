@@ -40,7 +40,7 @@ class _QuizFirstTypePageState extends State<QuizFirstTypePage> {
                       currentQuestion.text,
                       textAlign: TextAlign.center,
                       style: const TextStyle(
-                        fontSize: 18,
+                        fontSize: 20,
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
                       ),

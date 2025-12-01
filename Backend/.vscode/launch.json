@@ -6,11 +6,9 @@
             "type": "python",
             "request": "launch",
             "program": "${workspaceFolder}/manage.py",
-            "args": [
-                "runserver"
-            ],
-            "python": "${workspaceFolder}/venv/bin/python",
-            "django": true
+            "args": ["runserver"],
+            "django": true,
+            "console": "integratedTerminal"
         }
     ]
 }

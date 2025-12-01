@@ -1,4 +1,14 @@
-do uruchamiania serwera w terminalu wpisujemy najpierw:
+Instalcja:
+w terminalu w vs code
+python -m venv venv
+
+potem wchodzimy w tym terminalu .\venv\Scripts\Activate.ps1
+a potem pip install -r requirements.txt
+
+Dzialanie
+do uruchamiania serwera w terminalu wpisujemy najpierw (WEJSCIE W TRYB VENV):
+
+.\venv\Scripts\Activate.ps1
 
 WEJSCIE W TRYB VENV:
 

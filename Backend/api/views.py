@@ -1,43 +1,126 @@
 from django.shortcuts import render
-from rest_framework import viewsets
-from .models import Course, Question, AnswerOption, UserCourseProgress
-from .serializers import CourseSerializer, QuestionSerializer, AnswerOptionSerializer, UserCourseProgressSerializer
-from rest_framework.decorators import api_view
+from rest_framework import viewsets, status
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework_simplejwt.tokens import RefreshToken
+from django.contrib.auth import authenticate
 import random
 
-# endpoint do testowania - zwraca losowe pytanie z bazy
-@api_view(['GET'])
-def get_question(request):
-    questions = Question.objects.all()  # bierze wszystkie pytania
-    if not questions.exists():
-        return Response({"error": "Brak pytań"}, status=404)
+from .models import Course, Question, AnswerOption, UserCourseProgress, User
+from .serializers import (
+    CourseSerializer, QuestionSerializer, AnswerOptionSerializer,
+    UserCourseProgressSerializer, RegisterSerializer, UserSerializer, LoginSerializer
+)
+
+# ========== AUTHENTICATION ENDPOINTS ==========
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def register(request):
+    """Endpoint do rejestracji nowego użytkownika"""
+    serializer = RegisterSerializer(data=request.data)
+    if serializer.is_valid():
+        user = serializer.save()
+        
+        # Tworzenie JWT tokenów
+        refresh = RefreshToken.for_user(user)
+        
+        return Response({
+            'user': UserSerializer(user).data,
+            'refresh': str(refresh),
+            'access': str(refresh.access_token),
+            'message': 'Rejestracja zakończona sukcesem!'
+        }, status=status.HTTP_201_CREATED)
     
-    question = random.choice(questions)  # losuje jedno pytanie
-    serializer = QuestionSerializer(question)  # konwertuje na json
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def login(request):
+    """Endpoint do logowania użytkownika"""
+    serializer = LoginSerializer(data=request.data)
+    
+    if not serializer.is_valid():
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    email = serializer.validated_data['email']
+    password = serializer.validated_data['password']
+    
+    # Próba znalezienia użytkownika
+    try:
+        user = User.objects.get(email=email)
+    except User.DoesNotExist:
+        return Response({
+            'error': 'Nieprawidłowy email lub hasło'
+        }, status=status.HTTP_401_UNAUTHORIZED)
+    
+    # Sprawdzanie hasła
+    if not user.check_password(password):
+        return Response({
+            'error': 'Nieprawidłowy email lub hasło'
+        }, status=status.HTTP_401_UNAUTHORIZED)
+    
+    # Tworzenie JWT tokenów
+    refresh = RefreshToken.for_user(user)
+    
+    return Response({
+        'user': UserSerializer(user).data,
+        'refresh': str(refresh),
+        'access': str(refresh.access_token),
+        'message': 'Logowanie zakończone sukcesem!'
+    }, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_user_profile(request):
+    """Endpoint do pobierania profilu zalogowanego użytkownika"""
+    serializer = UserSerializer(request.user)
     return Response(serializer.data)
 
-# prosty endpoint do sprawdzenia czy api dziala
+
+# ========== EXISTING ENDPOINTS ==========
+
+@api_view(['GET'])
+def get_question(request):
+    """Endpoint testowy - zwraca losowe pytanie"""
+    questions = Question.objects.all()
+    if not questions.exists():
+        return Response({"error": "Brak pytań"}, status=404)
+    question = random.choice(questions)
+    serializer = QuestionSerializer(question)
+    return Response(serializer.data)
+
+
 @api_view(['GET'])
 def ping(request):
+    """Endpoint do sprawdzenia czy API działa"""
     return Response({"status": "ok", "message": "Django API działa"})
 
-# viewset dla kursow - obsluguje get, post, put, delete automatycznie
+
+# ViewSets
 class CourseViewSet(viewsets.ModelViewSet):
-    queryset = Course.objects.all()  # wszystkie kursy
+    queryset = Course.objects.all()
     serializer_class = CourseSerializer
 
-# viewset dla pytan - zwraca pytania z opcjami odpowiedzi
+
 class QuestionViewSet(viewsets.ModelViewSet):
     queryset = Question.objects.all()
     serializer_class = QuestionSerializer
 
-# viewset dla opcji odpowiedzi (raczej nie uzywany osobno, bo laczy sie przez questions)
+
 class AnswerOptionViewSet(viewsets.ModelViewSet):
     queryset = AnswerOption.objects.all()
     serializer_class = AnswerOptionSerializer
 
-# viewset dla postepu uzytkownika w kursach
+
 class UserCourseProgressViewSet(viewsets.ModelViewSet):
     queryset = UserCourseProgress.objects.all()
     serializer_class = UserCourseProgressSerializer
+    permission_classes = [IsAuthenticated]
+    
+    def get_queryset(self):
+        # Zwraca tylko postęp zalogowanego użytkownika
+        return UserCourseProgress.objects.filter(user=self.request.user)

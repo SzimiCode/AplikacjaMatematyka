@@ -1,5 +1,9 @@
 from django.contrib import admin
-from .models import Class, Category, Course, DifficultyLevel, Question, AnswerOption
+from .models import (
+    User, Class, Category, Course, DifficultyLevel,
+    Question, AnswerOption, UserCourseProgress,
+    UserAnswer, Achievement, UserAchievement
+)
 
 # rejestracja modeli zeby byly widoczne w panelu /admin
 # dzieki temu mozna dodawac/edytowac dane przez przegladarke
@@ -9,3 +13,8 @@ admin.site.register(Course)
 admin.site.register(DifficultyLevel)
 admin.site.register(Question)
 admin.site.register(AnswerOption)
+admin.site.register(User)
+admin.site.register(UserCourseProgress)
+admin.site.register(UserAnswer)
+admin.site.register(Achievement)
+admin.site.register(UserAchievement)

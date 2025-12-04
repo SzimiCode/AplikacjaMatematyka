@@ -3,9 +3,33 @@ import 'package:aplikacjamatematyka/core/theme/app_pallete.dart';
 import 'package:flutter/material.dart';
 import 'package:aplikacjamatematyka/features/home/viewmodel/home_page_viewmodel.dart';
 
-class HomePage extends StatelessWidget {
-  HomePage({super.key});
-  final HomePageViewModel viewModel= HomePageViewModel();
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  final HomePageViewModel viewModel = HomePageViewModel();
+
+  @override
+  void initState() {
+    super.initState();
+    // Pobierz dane użytkownika przy starcie
+    viewModel.fetchUserData();
+    viewModel.addListener(_onViewModelChange);
+  }
+
+  @override
+  void dispose() {
+    viewModel.removeListener(_onViewModelChange);
+    super.dispose();
+  }
+
+  void _onViewModelChange() {
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,21 +56,28 @@ class HomePage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                    child: const Text(
-                      "User2131514",
-                      style: TextStyle(
-                        color: Pallete.whiteColor,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15,
-                      ),
-                    ),
+                    child: viewModel.isLoading
+                        ? const SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(
+                              color: Pallete.whiteColor,
+                              strokeWidth: 2,
+                            ),
+                          )
+                        : Text(
+                            viewModel.userName,
+                            style: const TextStyle(
+                              color: Pallete.whiteColor,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
+                            ),
+                          ),
                   ),
-
                   Row(
                     children: [
                       IconButton(
-                          onPressed: viewModel.goToSettingsButtonPressed
-                        ,
+                        onPressed: viewModel.goToSettingsButtonPressed,
                         icon: Image.asset(
                           'assets/images/book1.png',
                           height: 35,
@@ -65,18 +96,17 @@ class HomePage extends StatelessWidget {
                   ),
                 ],
               ),
-
               const SizedBox(height: 20),
-
+              // OGNIE - pokazują total_points
               Row(
                 children: [
                   Image.asset('assets/images/fire1.png', height: 55, width: 55),
                   const SizedBox(width: 3),
                   Padding(
                     padding: const EdgeInsets.only(top: 19.0),
-                    child: const Text(
-                      '5',
-                      style: TextStyle(
+                    child: Text(
+                      '${viewModel.totalPoints}',  // ZMIENIONE - wyświetla total_points
+                      style: const TextStyle(
                         color: Pallete.redColor,
                         fontSize: 35,
                         fontWeight: FontWeight.bold,
@@ -85,19 +115,16 @@ class HomePage extends StatelessWidget {
                   ),
                 ],
               ),
-
               const SizedBox(height: 10),
-
-              const Text(
-                'Dragon',
+              Text(
+                viewModel.dragonName,
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   color: Pallete.errorColor,
                   fontSize: 35,
                   fontWeight: FontWeight.w800,
                 ),
               ),
-
               Expanded(
                 child: Center(
                   child: Image.asset(
@@ -107,45 +134,52 @@ class HomePage extends StatelessWidget {
                   ),
                 ),
               ),
-
               Padding(
-                padding: const EdgeInsets.only(bottom: 20.0),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
-                        Text(
-                          'Poziom',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 24,
-                          ),
+              padding: const EdgeInsets.only(bottom: 20.0),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Poziom',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 24,
                         ),
-                        Text(
-                          '2',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 28,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 6),
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: LinearProgressIndicator(
-                        value: 0.2,
-                        backgroundColor: Colors.grey.shade300,
-                        valueColor: const AlwaysStoppedAnimation<Color>(
-                          Pallete.greenColor,
-                        ),
-                        minHeight: 12,
                       ),
+                      Text(
+                        '${viewModel.userLevel}',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 28,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 6),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: LinearProgressIndicator(
+                      value: viewModel.levelProgress,  // ZMIENIONE - używa gettera
+                      backgroundColor: Colors.grey.shade300,
+                      valueColor: const AlwaysStoppedAnimation<Color>(
+                        Pallete.greenColor,
+                      ),
+                      minHeight: 12,
                     ),
-                  ],
-                ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    '${viewModel.pointsInCurrentLevel}/${viewModel.pointsToNextLevel} punktów do poziomu ${viewModel.userLevel + 1}',
+                    style: TextStyle(
+                      color: Colors.grey.shade600,
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
               ),
+            ),
             ],
           ),
         ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:aplikacjamatematyka/core/theme/app_pallete.dart';
+import 'package:aplikacjamatematyka/features/quiz/view/widgets/topic_picker_button.dart';
 
 class AppbarWidget extends StatelessWidget implements PreferredSizeWidget {
   const AppbarWidget({super.key});
@@ -37,22 +38,7 @@ class AppbarWidget extends StatelessWidget implements PreferredSizeWidget {
               child: Text("Klasy 1–4"),
             ),
             SizedBox(width: 8),
-            ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color.fromARGB(255, 222, 133, 238),
-                foregroundColor: Colors.white,
-                            textStyle: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-              //Do podstawienia z bazy danych które
-              child: Text("Liczby Naturalne"),
-            ),
+          TopicPickerButton(),
             
             SizedBox(width: 6),
               Container(

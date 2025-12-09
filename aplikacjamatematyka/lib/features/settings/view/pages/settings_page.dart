@@ -50,7 +50,26 @@ class SettingsPage extends StatelessWidget {
             title: const Text('Logout'),
             trailing: const Icon(Icons.exit_to_app),
             onTap: () {
-              viewModel.logout();
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: const Text('Wylogowanie'),
+                  content: const Text('Czy na pewno chcesz się wylogować?'),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text('Anuluj'),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        viewModel.logout(context);
+                      },
+                      child: const Text('Wyloguj', style: TextStyle(color: Colors.red)),
+                    ),
+                  ],
+                ),
+              );
             },
           ),
         ],

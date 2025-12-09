@@ -1,1 +1,3 @@
-const String GEMINI_API_KEY = "AIzaSyCsj5egCZ_uIV-6oOtVvscRD-KRmcLunbY";
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+final String geminiApiKey = dotenv.env['GEMINI_API_KEY']!;

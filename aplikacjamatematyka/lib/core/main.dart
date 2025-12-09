@@ -3,10 +3,17 @@ import 'package:aplikacjamatematyka/core/widget_tree.dart';
 import 'package:aplikacjamatematyka/services/google_api.dart';
 import 'package:aplikacjamatematyka/core/theme/app_pallete.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_gemini/flutter_gemini.dart';
 
-void main() {
-  Gemini.init(apiKey: GEMINI_API_KEY);
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+
+  await dotenv.load();
+
+   Gemini.init(apiKey: geminiApiKey);
+
   runApp(const MyApp());
 }
 
@@ -19,6 +26,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   int selectedIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
@@ -32,10 +40,9 @@ class _MyAppState extends State<MyApp> {
               brightness: isDarkMode ? Brightness.dark : Brightness.light,
             ),
           ),
-          
           home: WidgetTree(),
         );
-      }
+      },
     );
   }
 }

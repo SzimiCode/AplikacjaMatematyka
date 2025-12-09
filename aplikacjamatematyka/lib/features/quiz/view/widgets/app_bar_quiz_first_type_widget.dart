@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:aplikacjamatematyka/features/quiz/viewmodel/quiz_page_viewmodel.dart';
 import 'package:aplikacjamatematyka/features/quiz/data/questions.dart';
+import 'package:aplikacjamatematyka/core/data/notifiers.dart';
 
 
 class AppBarQuizFirstTypeWidget extends StatelessWidget implements PreferredSizeWidget {
@@ -22,11 +23,64 @@ class AppBarQuizFirstTypeWidget extends StatelessWidget implements PreferredSize
               children: [
                 IconButton(
                   icon: const Icon(Icons.close),
-                  onPressed: () {
-                    // Tutaj można dodać okno potwierdzenia
-                  },
+                 onPressed: () {
+  showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: const Text(
+          "Czy na pewno chcesz wyjść?",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        content: const Text("Zostaniesz przeniesiony do menu."),
+        actionsPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        actions: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.pop(context); 
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.red,
+                            foregroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          child: const Text("Nie"),
+                        ),
+                      ),
+
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.pop(context); 
+                            selectedPageNotifier.value = 0; 
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.green,
+                            foregroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          child: const Text("Tak"),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              );
+            },
+          );
+},
+
                 ),
-                const SizedBox(width: 8),
+
               ],
             ),
             const SizedBox(height: 8),

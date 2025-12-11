@@ -1,11 +1,16 @@
-class QuizQuestionThirdType {
-  final List<String> left;
-  final List<String> right;
-  final Map<String, String> correct;
+import 'package:aplikacjamatematyka/features/quiz/model/QuizQuestion.dart';
 
-  QuizQuestionThirdType({
-    required this.left,
-    required this.right,
+class QuizQuestionFirstType extends QuizQuestion {
+  final String question;
+  final List<String> answers;
+  final String correct;
+
+  QuizQuestionFirstType({
+    required this.question,
+    required this.answers,
     required this.correct,
   });
+
+  @override
+  QuizType get type => QuizType.single;
 }

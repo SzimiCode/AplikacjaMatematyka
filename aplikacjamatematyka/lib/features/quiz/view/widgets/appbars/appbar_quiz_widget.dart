@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:aplikacjamatematyka/core/data/notifiers.dart';
+
 
 class QuizAppBar extends StatelessWidget implements PreferredSizeWidget {
   final double progress;   
@@ -63,7 +65,7 @@ class QuizAppBar extends StatelessWidget implements PreferredSizeWidget {
                                 child: ElevatedButton(
                                   onPressed: () {
                                     Navigator.pop(context);
-                                    Navigator.pop(context); 
+                                    selectedPageNotifier.value = 0;
                                   },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.green,

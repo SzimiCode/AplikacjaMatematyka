@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:aplikacjamatematyka/features/quiz/viewmodel/quiz_page_viewmodel.dart';
-import '../widgets/app_bar_quiz_first_type_widget.dart';
+import '../widgets/appbars/app_bar_quiz_first_type_widget.dart';
 
 class QuizSecondTypePage extends StatelessWidget {
   const QuizSecondTypePage({super.key});

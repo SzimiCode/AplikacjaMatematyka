@@ -1,7 +1,7 @@
-import 'package:aplikacjamatematyka/features/quiz/view/widgets/content_lesson_widget.dart';
+import 'package:aplikacjamatematyka/features/quiz/view/widgets/contents/content_lesson_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:aplikacjamatematyka/features/quiz/viewmodel/lesson_content_page.dart';
-import 'package:aplikacjamatematyka/features/quiz/view/widgets/appbar_lesson_widget.dart';
+import 'package:aplikacjamatematyka/features/quiz/view/widgets/appbars/appbar_lesson_widget.dart';
 
 class LessonContentPage extends StatefulWidget {
   LessonContentPage({super.key});

@@ -1,6 +1,6 @@
 import 'package:aplikacjamatematyka/features/home/view/widgets/navbar_widget.dart';
-import 'package:aplikacjamatematyka/features/quiz/view/widgets/appbar_widget.dart';
-import 'package:aplikacjamatematyka/features/quiz/view/widgets/lesson_card_widget.dart';
+import 'package:aplikacjamatematyka/features/quiz/view/widgets/appbars/appbar_widget.dart';
+import 'package:aplikacjamatematyka/features/quiz/view/widgets/contents/lesson_card_widget.dart';
 import 'dart:math';
 import 'package:aplikacjamatematyka/features/quiz/model/tempLessons.dart';
 import 'package:flutter/material.dart';

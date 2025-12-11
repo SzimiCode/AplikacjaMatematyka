@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:aplikacjamatematyka/core/theme/app_pallete.dart';
-import 'package:aplikacjamatematyka/features/quiz/view/widgets/topic_picker_button.dart';
+import 'package:aplikacjamatematyka/features/quiz/view/widgets/buttons/topic_picker_button.dart';
 
 class AppbarWidget extends StatelessWidget implements PreferredSizeWidget {
   const AppbarWidget({super.key});

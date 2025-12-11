@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:aplikacjamatematyka/features/quiz/viewmodel/quiz_page_viewmodel.dart';
-import '../widgets/answer_button_first_type.dart';
-import '../widgets/app_bar_quiz_first_type_widget.dart';
+import 'package:aplikacjamatematyka/features/quiz/viewmodel/quiz_page_first_type_viewmodel.dart';
+import '../widgets/buttons/answer_button_first_type.dart';
+import '../widgets/appbars/appbar_quiz_widget.dart';
+import 'package:aplikacjamatematyka/features/quiz/data/questions.dart';
 
 class QuizFirstTypePage extends StatelessWidget {
   const QuizFirstTypePage({super.key});
@@ -10,8 +11,8 @@ class QuizFirstTypePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => QuizPageViewModel(),
-      child: Consumer<QuizPageViewModel>(
+      create: (_) => QuizPageFirstTypeViewModel(),
+      child: Consumer<QuizPageFirstTypeViewModel>(
         builder: (context, vm, child) {
           if (vm.isQuizFinished) {
             return const Scaffold(
@@ -21,7 +22,10 @@ class QuizFirstTypePage extends StatelessWidget {
 
           return Scaffold(
             backgroundColor: Colors.white,
-            appBar: AppBarQuizFirstTypeWidget(),
+            appBar: QuizAppBar(
+              progress: vm.currentQuestionIndex / questions.length,
+              isFinished: vm.isQuizFinished,
+            ),
             body: Column(
               children: [
                 Expanded(

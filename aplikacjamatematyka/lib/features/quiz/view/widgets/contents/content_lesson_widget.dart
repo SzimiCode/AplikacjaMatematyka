@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:aplikacjamatematyka/features/quiz/view/widgets/row_right.dart';
-import 'package:aplikacjamatematyka/features/quiz/view/widgets/row_left.dart';
-import 'package:aplikacjamatematyka/features/quiz/view/widgets/dot_trail_left.dart';
-import 'package:aplikacjamatematyka/features/quiz/view/widgets/dot_trail_right.dart';
+import 'package:aplikacjamatematyka/features/quiz/view/widgets/help_widgets_weird_ones/row_right.dart';
+import 'package:aplikacjamatematyka/features/quiz/view/widgets/help_widgets_weird_ones/row_left.dart';
+import 'package:aplikacjamatematyka/features/quiz/view/widgets/help_widgets_weird_ones/dot_trail_left.dart';
+import 'package:aplikacjamatematyka/features/quiz/view/widgets/help_widgets_weird_ones/dot_trail_right.dart';
 import 'package:aplikacjamatematyka/core/data/notifiers.dart';
 
 class ContentLessonWidget extends StatelessWidget {
@@ -40,7 +40,9 @@ class ContentLessonWidget extends StatelessWidget {
             RowLeft(
               icon: Icons.emoji_events,
               asset: 'assets/images/dragon1.png',
-              onTap: () {},
+              onTap: () {
+                selectedPageNotifier.value = 10;
+              },
             ),
           ],
         ),

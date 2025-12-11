@@ -44,10 +44,16 @@ class QuizThirdTypePage extends StatelessWidget {
                               Expanded(
                                 child: Column(
                                   children: vm.leftColumn.map((item) {
-                                    return AnswerButtonFirstType(
-                                      text: item,
-                                      isSelected: vm.selectedLeft == item,
-                                      onTap: () => vm.onLeftTap(item),
+                                    return Padding(
+                                      padding: const EdgeInsets.only(bottom: 10),
+                                      child: SizedBox(
+                                        width: double.infinity,
+                                        child: AnswerButtonFirstType(
+                                          text: item,
+                                          isSelected: vm.selectedLeft == item,
+                                          onTap: () => vm.onLeftTap(item),
+                                        ),
+                                      ),
                                     );
                                   }).toList(),
                                 ),
@@ -58,10 +64,16 @@ class QuizThirdTypePage extends StatelessWidget {
                               Expanded(
                                 child: Column(
                                   children: vm.rightColumn.map((item) {
-                                    return AnswerButtonFirstType(
-                                      text: item,
-                                      isSelected: vm.selectedRight == item,
-                                      onTap: () => vm.onRightTap(item),
+                                    return Padding(
+                                      padding: const EdgeInsets.only(bottom: 10),
+                                      child: SizedBox(
+                                        width: double.infinity,
+                                        child: AnswerButtonFirstType(
+                                          text: item,
+                                          isSelected: vm.selectedRight == item,
+                                          onTap: () => vm.onRightTap(item),
+                                        ),
+                                      ),
                                     );
                                   }).toList(),
                                 ),

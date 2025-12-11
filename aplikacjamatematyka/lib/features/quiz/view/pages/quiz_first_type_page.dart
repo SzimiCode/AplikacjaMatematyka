@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:aplikacjamatematyka/features/quiz/viewmodel/quiz_page_viewmodel.dart';
+import 'package:aplikacjamatematyka/features/quiz/viewmodel/quiz_page_first_type_viewmodel.dart';
 import '../widgets/buttons/answer_button_first_type.dart';
-import '../widgets/appbars/app_bar_quiz_first_type_widget.dart';
+import '../widgets/appbars/appbar_quiz_widget.dart';
 
 class QuizFirstTypePage extends StatelessWidget {
   const QuizFirstTypePage({super.key});
@@ -10,8 +10,8 @@ class QuizFirstTypePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => QuizPageViewModel(),
-      child: Consumer<QuizPageViewModel>(
+      create: (_) => QuizPageFirstTypeViewModel(),
+      child: Consumer<QuizPageFirstTypeViewModel>(
         builder: (context, vm, child) {
           if (vm.isQuizFinished) {
             return const Scaffold(

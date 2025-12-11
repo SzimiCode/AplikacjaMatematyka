@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:aplikacjamatematyka/features/quiz/viewmodel/quiz_page_viewmodel.dart';
+import 'package:aplikacjamatematyka/features/quiz/viewmodel/quiz_page_first_type_viewmodel.dart';
 import 'package:aplikacjamatematyka/features/quiz/data/questions.dart';
 import 'package:aplikacjamatematyka/core/data/notifiers.dart';
 
@@ -84,7 +84,7 @@ class AppBarQuizFirstTypeWidget extends StatelessWidget implements PreferredSize
               ],
             ),
             const SizedBox(height: 8),
-            Consumer<QuizPageViewModel>(
+            Consumer<QuizPageFirstTypeViewModel>(
               builder: (context, vm, child) {
                 final progress = (vm.currentQuestionIndex / questions.length).clamp(0.0, 1.0);
                 final isFinished = vm.isQuizFinished;

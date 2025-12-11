@@ -40,7 +40,9 @@ class ContentLessonWidget extends StatelessWidget {
             RowLeft(
               icon: Icons.emoji_events,
               asset: 'assets/images/dragon1.png',
-              onTap: () {},
+              onTap: () {
+                selectedPageNotifier.value = 10;
+              },
             ),
           ],
         ),

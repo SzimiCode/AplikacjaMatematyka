@@ -32,7 +32,7 @@ class QuizPageThirdTypeViewModel extends ChangeNotifier {
   }
 
   String get currentQuestionText =>
-      "Dopasuj elementy"; // ← bo Twój model NIE MA question.text
+      "Dopasuj elementy"; 
 
   void onLeftTap(String item) {
     selectedLeft = item;

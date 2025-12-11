@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../data/questionsThird.dart';
 
+enum AnswerState { normal, selected, correct, wrong, disabled }
+
 class QuizPageThirdTypeViewModel extends ChangeNotifier {
   int currentQuestionIndex = 0;
 
@@ -11,7 +13,7 @@ class QuizPageThirdTypeViewModel extends ChangeNotifier {
   String? selectedLeft;
   String? selectedRight;
 
-  List<String> matched = [];
+  Map<String, AnswerState> answerStates = {};
 
   QuizPageThirdTypeViewModel() {
     _loadCurrentQuestion();
@@ -24,35 +26,66 @@ class QuizPageThirdTypeViewModel extends ChangeNotifier {
     rightColumn = List.of(question.right)..shuffle();
     correctPairs = Map.of(question.correct);
 
+    answerStates = {
+      for (var item in [...leftColumn, ...rightColumn])
+        item: AnswerState.normal
+    };
+
     selectedLeft = null;
     selectedRight = null;
-    matched = [];
 
     notifyListeners();
   }
 
-  String get currentQuestionText =>
-      "Dopasuj elementy"; 
-
   void onLeftTap(String item) {
+    if (answerStates[item] == AnswerState.disabled ||
+        answerStates[item] == AnswerState.correct) return;
+
     selectedLeft = item;
+    answerStates[item] = AnswerState.selected;
+
     notifyListeners();
     _checkPair();
   }
 
   void onRightTap(String item) {
+    if (answerStates[item] == AnswerState.disabled ||
+        answerStates[item] == AnswerState.correct) return;
+
     selectedRight = item;
+    answerStates[item] = AnswerState.selected;
+
     notifyListeners();
     _checkPair();
   }
 
-  void _checkPair() {
+  void _checkPair() async {
     if (selectedLeft == null || selectedRight == null) return;
 
-    final isMatch = correctPairs[selectedLeft] == selectedRight;
+    final left = selectedLeft!;
+    final right = selectedRight!;
+
+    final isMatch = correctPairs[left] == right;
 
     if (isMatch) {
-      matched.add(selectedLeft!);
+      // poprawna para → zielone i blokada
+      answerStates[left] = AnswerState.correct;
+      answerStates[right] = AnswerState.correct;
+
+      await Future.delayed(const Duration(milliseconds: 300));
+
+      answerStates[left] = AnswerState.disabled;
+      answerStates[right] = AnswerState.disabled;
+    } else {
+
+      answerStates[left] = AnswerState.wrong;
+      answerStates[right] = AnswerState.wrong;
+
+      notifyListeners();
+      await Future.delayed(const Duration(seconds: 1));
+
+      answerStates[left] = AnswerState.normal;
+      answerStates[right] = AnswerState.normal;
     }
 
     selectedLeft = null;
@@ -61,11 +94,11 @@ class QuizPageThirdTypeViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool get canConfirm => matched.length == leftColumn.length;
+  bool get canConfirm =>
+      answerStates.values.where((s) => s == AnswerState.disabled).length ==
+      leftColumn.length * 2;
 
   void confirmAnswer() {
-    if (!canConfirm) return;
-
     currentQuestionIndex++;
 
     if (currentQuestionIndex < questionsThird.length) {

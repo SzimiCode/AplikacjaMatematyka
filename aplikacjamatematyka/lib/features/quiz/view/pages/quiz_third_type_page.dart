@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:aplikacjamatematyka/features/quiz/viewmodel/quiz_page_third_type_viewmodel.dart';
-import '../widgets/buttons/answer_button_first_type.dart';
+import '../widgets/buttons/answer_button_third_type.dart';
 import '../widgets/appbars/appbar_quiz_widget.dart';
 import 'package:aplikacjamatematyka/features/quiz/data/questionsThird.dart';
 
@@ -48,11 +48,14 @@ class QuizThirdTypePage extends StatelessWidget {
                                       padding: const EdgeInsets.only(bottom: 10),
                                       child: SizedBox(
                                         width: double.infinity,
-                                        child: AnswerButtonFirstType(
-                                          text: item,
-                                          isSelected: vm.selectedLeft == item,
-                                          onTap: () => vm.onLeftTap(item),
-                                        ),
+                                        child: AnswerButtonThirdType(
+                                                  text: item,
+                                                  onTap: () => vm.onLeftTap(item),
+                                                  isSelected: vm.answerStates[item] == AnswerState.selected,
+                                                  isMatched: vm.answerStates[item] == AnswerState.correct ||
+                                                            vm.answerStates[item] == AnswerState.disabled,
+                                                  isWrong: vm.answerStates[item] == AnswerState.wrong,
+                                                ),
                                       ),
                                     );
                                   }).toList(),
@@ -68,10 +71,13 @@ class QuizThirdTypePage extends StatelessWidget {
                                       padding: const EdgeInsets.only(bottom: 10),
                                       child: SizedBox(
                                         width: double.infinity,
-                                        child: AnswerButtonFirstType(
+                                        child: AnswerButtonThirdType(
                                           text: item,
-                                          isSelected: vm.selectedRight == item,
                                           onTap: () => vm.onRightTap(item),
+                                          isSelected: vm.answerStates[item] == AnswerState.selected,
+                                          isMatched: vm.answerStates[item] == AnswerState.correct ||
+                                                    vm.answerStates[item] == AnswerState.disabled,
+                                          isWrong: vm.answerStates[item] == AnswerState.wrong,
                                         ),
                                       ),
                                     );

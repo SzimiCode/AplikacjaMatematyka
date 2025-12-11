@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:aplikacjamatematyka/features/quiz/viewmodel/quiz_page_first_type_viewmodel.dart';
 import '../widgets/appbars/appbar_quiz_widget.dart';
+import 'package:aplikacjamatematyka/features/quiz/data/questionsSecond.dart';
 
 class QuizSecondTypePage extends StatelessWidget {
   const QuizSecondTypePage({super.key});
@@ -20,7 +21,10 @@ class QuizSecondTypePage extends StatelessWidget {
 
           return Scaffold(
             backgroundColor: Colors.white,
-            appBar: AppBarQuizFirstTypeWidget(),
+             appBar: QuizAppBar(
+              progress: vm.currentQuestionIndex / questionsSecond.length,
+              isFinished: vm.isQuizFinished,
+            ),
             body: Column(
               children: [
                 Expanded(

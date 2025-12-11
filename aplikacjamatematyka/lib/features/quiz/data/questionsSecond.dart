@@ -1,12 +1,12 @@
-import 'package:aplikacjamatematyka/features/quiz/model/tempQuizQuestionFirstType.dart';
+import 'package:aplikacjamatematyka/features/quiz/model/QuizQuestionSecondType.dart';
 
 final questionsSecond = [
-  Tempquizquestionfirsttype(
-    'Czy liczba 4 jest liczbą naturalna? Wpisz tak lub nie.',
-    ['tak'],
+  QuizQuestionSecondType(
+    text: 'Czy liczba 4 jest liczbą naturalna? Wpisz tak lub nie.',
+    answer: 'tak',
   ),
-  Tempquizquestionfirsttype(
-    'Jaką najmniejszą liczbą naturalną jest:',
-    ['tak'],
+  QuizQuestionSecondType(
+    text:'Jaką najmniejszą liczbą naturalną jest:',
+    answer: 'tak',
   ),
 ];

@@ -32,7 +32,7 @@ class AppBarQuizFirstTypeWidget extends StatelessWidget implements PreferredSize
           "Czy na pewno chcesz wyjść?",
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        content: const Text("Zostaniesz przeniesiony do menu."),
+        content: const Text("Zostaniesz przeniesiony do menu i utracisz postęp."),
         actionsPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         actions: [
                   Row(

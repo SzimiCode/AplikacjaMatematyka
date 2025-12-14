@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:aplikacjamatematyka/features/quiz/viewmodel/finish_quiz_page_viewmodel.dart';
 import 'package:aplikacjamatematyka/features/quiz/view/widgets/appbars/appbar_lesson_widget.dart';
+import 'package:aplikacjamatematyka/core/theme/app_pallete.dart';
 
 class FinishQuizPage extends StatefulWidget {
   FinishQuizPage({super.key});
@@ -21,7 +22,35 @@ class _FinishQuizPageState extends State<FinishQuizPage> {
       ),
 
       body: Column(
-        children: [],
+        children: [
+          Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 30),
+                  padding: const EdgeInsets.all(22),
+                  decoration: BoxDecoration(
+                    color: Pallete.whiteColor,
+                    borderRadius: BorderRadius.circular(24),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Pallete.blackColor.withOpacity(0.1),
+                        blurRadius: 20,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: 
+                  Container(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        
+                      }, 
+                      child: 
+                      Text("Gratulacje Quizu"),
+            
+                    ),
+                  
+                  ),
+                ),
+        ],
 
       ),
     );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:aplikacjamatematyka/core/theme/app_pallete.dart';
 import 'package:aplikacjamatematyka/services/api_service.dart';
 import 'package:aplikacjamatematyka/core/data/notifiers.dart';
 
@@ -61,7 +62,9 @@ class _SignUpPageState extends State<SignUpPage> {
         // Sukces - pokaż wiadomość
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(result['data']['message'] ?? 'Rejestracja zakończona!'),
+            content: Text(
+              result['data']['message'] ?? 'Rejestracja zakończona!',
+            ),
             backgroundColor: Colors.green,
           ),
         );
@@ -111,7 +114,11 @@ class _SignUpPageState extends State<SignUpPage> {
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color(0xFF6A5AE0), Color(0xFF826AFB)],
+            colors: [
+              Pallete.purpleColor,
+              Pallete.purplemidColor,
+              Pallete.whiteColor,
+            ],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -120,31 +127,36 @@ class _SignUpPageState extends State<SignUpPage> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                const SizedBox(height: 40),
-                const Text(
-                  "Sign Up",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
+                ShaderMask(
+                  shaderCallback: (bounds) => const LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [Pallete.whiteColor, Pallete.whiteColor],
+                  ).createShader(bounds),
+                  child: Text(
+                    "DragonMath",
+                    style: TextStyle(
+                      fontSize: 50,
+                      fontWeight: FontWeight.bold,
+                      shadows: [
+                        Shadow(blurRadius: 20, color: Pallete.blackColor),
+                      ],
+                      color: Pallete.whiteColor,
+                    ),
                   ),
                 ),
-                const Text(
-                  "Stwórz nowe konto",
-                  style: TextStyle(color: Colors.white70),
-                ),
-                const SizedBox(height: 30),
+                const SizedBox(height: 20),
 
                 Container(
                   margin: const EdgeInsets.symmetric(horizontal: 30),
                   padding: const EdgeInsets.all(22),
                   decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(18),
+                    color: Pallete.whiteColor,
+                    borderRadius: BorderRadius.circular(24),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
-                        blurRadius: 10,
+                        color: Pallete.blackColor.withOpacity(0.1),
+                        blurRadius: 20,
                         offset: const Offset(0, 4),
                       ),
                     ],
@@ -157,15 +169,15 @@ class _SignUpPageState extends State<SignUpPage> {
                         TextFormField(
                           controller: _fullNameController,
                           decoration: InputDecoration(
-                            hintText: "Imię i Nazwisko",
+                            hintText: "Nazwa użytkownika",
                             prefixIcon: const Icon(Icons.person_outline),
                             border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
+                              borderRadius: BorderRadius.circular(15),
                             ),
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Podaj imię i nazwisko';
+                              return 'Podaj nazwę użytkownika';
                             }
                             return null;
                           },
@@ -177,10 +189,10 @@ class _SignUpPageState extends State<SignUpPage> {
                           controller: _emailController,
                           keyboardType: TextInputType.emailAddress,
                           decoration: InputDecoration(
-                            hintText: "E-mail adres",
+                            hintText: "E-mail",
                             prefixIcon: const Icon(Icons.email_outlined),
                             border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
+                              borderRadius: BorderRadius.circular(15),
                             ),
                           ),
                           validator: (value) {
@@ -195,26 +207,6 @@ class _SignUpPageState extends State<SignUpPage> {
                         ),
                         const SizedBox(height: 15),
 
-                        // Telefon
-                        TextFormField(
-                          controller: _phoneController,
-                          keyboardType: TextInputType.phone,
-                          decoration: InputDecoration(
-                            hintText: "Numer telefonu",
-                            prefixIcon: const Icon(Icons.phone_outlined),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                          ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Podaj numer telefonu';
-                            }
-                            return null;
-                          },
-                        ),
-                        const SizedBox(height: 15),
-
                         // Hasło
                         TextFormField(
                           controller: _passwordController,
@@ -223,7 +215,7 @@ class _SignUpPageState extends State<SignUpPage> {
                             hintText: "Nowe hasło",
                             prefixIcon: const Icon(Icons.lock_outline),
                             border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
+                              borderRadius: BorderRadius.circular(15),
                             ),
                           ),
                           validator: (value) {
@@ -246,7 +238,7 @@ class _SignUpPageState extends State<SignUpPage> {
                             hintText: "Potwierdź hasło",
                             prefixIcon: const Icon(Icons.lock_outline),
                             border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
+                              borderRadius: BorderRadius.circular(15),
                             ),
                           ),
                           validator: (value) {
@@ -271,24 +263,31 @@ class _SignUpPageState extends State<SignUpPage> {
                             ),
                             child: Row(
                               children: [
-                                const Icon(Icons.error_outline, color: Colors.red, size: 20),
+                                const Icon(
+                                  Icons.error_outline,
+                                  color: Pallete.redColor,
+                                  size: 20,
+                                ),
                                 const SizedBox(width: 8),
                                 Expanded(
                                   child: Text(
                                     _errorMessage!,
-                                    style: const TextStyle(color: Colors.red, fontSize: 13),
+                                    style: const TextStyle(
+                                      color: Pallete.redColor,
+                                      fontSize: 13,
+                                    ),
                                   ),
                                 ),
                               ],
                             ),
                           ),
-                        const SizedBox(height: 25),
+                        const SizedBox(height: 15),
 
                         // Register button
                         ElevatedButton(
                           onPressed: _isLoading ? null : _handleRegister,
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF6A5AE0),
+                            backgroundColor: Pallete.purpleColor,
                             minimumSize: const Size(double.infinity, 50),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
@@ -299,31 +298,37 @@ class _SignUpPageState extends State<SignUpPage> {
                                   height: 20,
                                   width: 20,
                                   child: CircularProgressIndicator(
-                                    color: Colors.white,
+                                    color: Pallete.whiteColor,
                                     strokeWidth: 2,
                                   ),
                                 )
-                              : const Text("Zarejestruj"),
+                              : const Text(
+                                  "Zarejestruj się",
+                                  style: TextStyle(
+                                    color: Pallete.whiteColor,
+                                    fontSize: 20,
+                                  ),
+                                ),
                         ),
                       ],
                     ),
                   ),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 10),
 
                 GestureDetector(
                   onTap: () {
                     Navigator.pop(context);
                   },
                   child: const Text(
-                    "Already have an account? Sign in Now!",
+                    "Masz już konto? Zaloguj się!",
                     style: TextStyle(
-                      color: Colors.white,
+                      color: Pallete.blackColor,
                       decoration: TextDecoration.underline,
                     ),
                   ),
                 ),
-                const SizedBox(height: 30),
+                const SizedBox(height: 10),
               ],
             ),
           ),

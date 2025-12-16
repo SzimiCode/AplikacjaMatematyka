@@ -9,10 +9,9 @@ import 'package:flutter_gemini/flutter_gemini.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  await dotenv.load(fileName: "assets/.env");
 
-  await dotenv.load();
-
-   Gemini.init(apiKey: geminiApiKey);
+  Gemini.init(apiKey: geminiApiKey);
 
   runApp(const MyApp());
 }

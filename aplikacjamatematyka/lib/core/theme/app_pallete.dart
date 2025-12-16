@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class Pallete {
   static const purpleColor = Colors.purple;
+  static const purplemidColor = Color.fromARGB(255, 214, 166, 219);
   static const inactiveBottomBarItemColor = Color(0xffababab);
 
   static const Color backgroundColor = Color.fromARGB(255, 243, 237, 245);

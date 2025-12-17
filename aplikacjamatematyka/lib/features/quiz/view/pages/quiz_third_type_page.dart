@@ -14,11 +14,11 @@ class QuizThirdTypePage extends StatelessWidget {
       create: (_) => QuizPageThirdTypeViewModel(),
       child: Consumer<QuizPageThirdTypeViewModel>(
         builder: (context, vm, child) {
-          if (vm.isQuizFinished) {
-            return const Scaffold(
-              body: Center(child: Text("Koniec quizu")),
-            );
-          }
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (vm.isQuizFinished) {
+              vm.goToFinishQuiz();
+            }
+          });
 
           return Scaffold(
             backgroundColor: Colors.white,

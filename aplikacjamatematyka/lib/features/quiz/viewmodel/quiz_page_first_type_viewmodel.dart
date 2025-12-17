@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../data/questions.dart';
+import 'package:aplikacjamatematyka/core/data/notifiers.dart';
 
 class QuizPageFirstTypeViewModel extends ChangeNotifier {
   int currentQuestionIndex = 0;
@@ -21,6 +22,10 @@ class QuizPageFirstTypeViewModel extends ChangeNotifier {
   void selectAnswer(String answer) {
     selectedAnswer = answer;
     notifyListeners();
+  }
+
+  void goToFinishQuiz(){
+    selectedPageNotifier.value = 12;
   }
 
   bool get canConfirm => selectedAnswer != null;

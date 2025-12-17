@@ -15,9 +15,7 @@ class QuizThirdTypePage extends StatelessWidget {
       child: Consumer<QuizPageThirdTypeViewModel>(
         builder: (context, vm, child) {
           if (vm.isQuizFinished) {
-            return const Scaffold(
-              body: Center(child: Text("Koniec quizu")),
-            );
+           vm.goToFinishQuiz();
           }
 
           return Scaffold(

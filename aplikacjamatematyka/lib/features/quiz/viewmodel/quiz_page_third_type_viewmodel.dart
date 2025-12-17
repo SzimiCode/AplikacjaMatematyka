@@ -1,3 +1,4 @@
+import 'package:aplikacjamatematyka/core/data/notifiers.dart';
 import 'package:flutter/material.dart';
 import '../data/questionsThird.dart';
 
@@ -17,6 +18,10 @@ class QuizPageThirdTypeViewModel extends ChangeNotifier {
 
   QuizPageThirdTypeViewModel() {
     _loadCurrentQuestion();
+  }
+
+  void goToFinishQuiz(){
+    selectedPageNotifier.value = 12;
   }
 
   void _loadCurrentQuestion() {
@@ -68,7 +73,7 @@ class QuizPageThirdTypeViewModel extends ChangeNotifier {
     final isMatch = correctPairs[left] == right;
 
     if (isMatch) {
-      // poprawna para → zielone i blokada
+
       answerStates[left] = AnswerState.correct;
       answerStates[right] = AnswerState.correct;
 

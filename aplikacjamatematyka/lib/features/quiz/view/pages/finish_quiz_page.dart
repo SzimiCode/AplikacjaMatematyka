@@ -142,7 +142,8 @@ class _FinishQuizPageState extends State<FinishQuizPage> {
                 child: SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                    },
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size(200, 58),
                       backgroundColor: Pallete.purpleColor,

@@ -1,5 +1,6 @@
 import 'package:aplikacjamatematyka/features/quiz/data/questionsSecond.dart';
 import 'package:flutter/material.dart';
+import 'package:aplikacjamatematyka/core/data/notifiers.dart';
 
 enum AnswerState { normal, correct, wrong }
 
@@ -13,6 +14,10 @@ class QuizPageSecondTypeViewModel extends ChangeNotifier {
     answerController.addListener(() {
       notifyListeners(); 
     });
+  }
+
+  void goToFinishQuiz(){
+    selectedPageNotifier.value = 12;
   }
 
   String get currentQuestionText =>

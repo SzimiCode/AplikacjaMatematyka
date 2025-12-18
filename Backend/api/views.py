@@ -7,10 +7,11 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import authenticate
 import random
 
-from .models import Course, Question, AnswerOption, UserCourseProgress, User
+from .models import Course, MatchOption, Question, AnswerOption, UserCourseProgress, User
 from .serializers import (
     CourseSerializer, QuestionSerializer, AnswerOptionSerializer,
-    UserCourseProgressSerializer, RegisterSerializer, UserSerializer, LoginSerializer
+    UserCourseProgressSerializer, RegisterSerializer, UserSerializer, LoginSerializer,
+    MatchOptionSerializer
 )
 
 # ========== AUTHENTICATION ENDPOINTS ==========
@@ -114,6 +115,10 @@ class QuestionViewSet(viewsets.ModelViewSet):
 class AnswerOptionViewSet(viewsets.ModelViewSet):
     queryset = AnswerOption.objects.all()
     serializer_class = AnswerOptionSerializer
+
+class MatchOptionViewSet(viewsets.ModelViewSet):
+    queryset = MatchOption.objects.all()
+    serializer_class = MatchOptionSerializer
 
 
 class UserCourseProgressViewSet(viewsets.ModelViewSet):

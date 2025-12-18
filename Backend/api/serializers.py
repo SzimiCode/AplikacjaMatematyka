@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Course, Question, AnswerOption, UserCourseProgress, User
+from .models import Course, Question, AnswerOption, UserCourseProgress, User, MatchOption
 from django.contrib.auth.password_validation import validate_password
 
 # Serializer do rejestracji
@@ -58,6 +58,14 @@ class QuestionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Question
         fields = ['id', 'question_text', 'question_type', 'points', 'options']
+
+# serializer dla pytań
+class MatchOptionSerializer(serializers.ModelSerializer):
+    options = AnswerOptionSerializer(many=True, read_only=True)
+    
+    class Meta:
+        model = MatchOption
+        fields = ['id', 'question', 'left_text', 'right_text']
 
 # serializer dla postępu użytkownika
 class UserCourseProgressSerializer(serializers.ModelSerializer):

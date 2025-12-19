@@ -31,6 +31,9 @@ class _ChooseLessonPageState extends State<ChooseLessonPage> {
         onClassToggle: () {
           widget.viewModel.toggleClass();
         },
+        onCategorySelected: (category) {
+          widget.viewModel.selectCategory(category);
+        },
       ),
       body: Padding(
         padding: const EdgeInsets.only(top: 20.0),

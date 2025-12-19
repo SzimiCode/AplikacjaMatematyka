@@ -1,35 +1,28 @@
+// lib/core/api/api_service.dart
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiService {
-  // Zmień na swój adres IP jeśli testujesz na fizycznym urządzeniu
-  // Na emulatorze Androida: http://10.0.2.2:8000
-  // Na iOS simulator: http://127.0.0.1:8000
-  // Na fizycznym urządzeniu: http://TWOJE_IP:8000
   final String baseUrl = "http://127.0.0.1:8000";
 
   // ========== TOKEN MANAGEMENT ==========
   
-  // Zapisz token
   Future<void> saveToken(String token) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('access_token', token);
   }
 
-  // Pobierz token
   Future<String?> getToken() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('access_token');
   }
 
-  // Usuń token (logout)
   Future<void> removeToken() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('access_token');
   }
 
-  // Headers z tokenem
   Future<Map<String, String>> getHeaders() async {
     final token = await getToken();
     return {
@@ -40,7 +33,6 @@ class ApiService {
 
   // ========== AUTH ENDPOINTS ==========
 
-  // REJESTRACJA
   Future<Map<String, dynamic>> register({
     required String email,
     required String nick,
@@ -66,7 +58,6 @@ class ApiService {
       final data = jsonDecode(response.body);
 
       if (response.statusCode == 201) {
-        // Zapisz token
         await saveToken(data['access']);
         return {'success': true, 'data': data};
       } else {
@@ -77,7 +68,6 @@ class ApiService {
     }
   }
 
-  // LOGOWANIE
   Future<Map<String, dynamic>> login({
     required String email,
     required String password,
@@ -95,7 +85,6 @@ class ApiService {
       final data = jsonDecode(response.body);
 
       if (response.statusCode == 200) {
-        // Zapisz token
         await saveToken(data['access']);
         return {'success': true, 'data': data};
       } else {
@@ -106,7 +95,6 @@ class ApiService {
     }
   }
 
-  // POBIERZ PROFIL
   Future<Map<String, dynamic>> getUserProfile() async {
     try {
       final headers = await getHeaders();
@@ -127,14 +115,112 @@ class ApiService {
     }
   }
 
-  // WYLOGUJ
   Future<void> logout() async {
     await removeToken();
   }
 
+  // ========== CLASS, CATEGORY, COURSE ENDPOINTS ==========
+
+  // Pobierz wszystkie klasy (1-4, 5-8)
+  Future<List<dynamic>?> fetchClasses() async {
+    try {
+      print('🌐 API: Fetching classes from $baseUrl/api/classes/');
+      final response = await http.get(Uri.parse('$baseUrl/api/classes/'));
+      print('📡 API Response status: ${response.statusCode}');
+      print('📡 API Response body: ${response.body}');
+      
+      if (response.statusCode == 200) {
+        final decoded = json.decode(response.body);
+        print('✅ API: Successfully decoded ${decoded.length} classes');
+        return decoded;
+      }
+      print('❌ API: Status code not 200');
+      return null;
+    } catch (e) {
+      print('❌ API Error fetching classes: $e');
+      return null;
+    }
+  }
+
+  // Pobierz kategorie dla danej klasy
+  Future<List<dynamic>?> fetchCategories({int? classId}) async {
+    try {
+      String url = '$baseUrl/api/categories/';
+      if (classId != null) {
+        url += '?class_id=$classId';
+      }
+      
+      final response = await http.get(Uri.parse(url));
+      if (response.statusCode == 200) {
+        return json.decode(response.body);
+      }
+      return null;
+    } catch (e) {
+      print('Error fetching categories: $e');
+      return null;
+    }
+  }
+
+  // Pobierz kursy dla danej kategorii
+  Future<List<dynamic>?> fetchCourses({int? categoryId}) async {
+    try {
+      String url = '$baseUrl/api/courses/';
+      if (categoryId != null) {
+        url += '?category_id=$categoryId';
+      }
+      
+      final response = await http.get(Uri.parse(url));
+      if (response.statusCode == 200) {
+        return json.decode(response.body);
+      }
+      return null;
+    } catch (e) {
+      print('Error fetching courses: $e');
+      return null;
+    }
+  }
+
+  // Pobierz szczegóły kursu
+  Future<Map<String, dynamic>?> fetchCourseDetail(int courseId) async {
+    try {
+      final response = await http.get(Uri.parse('$baseUrl/api/courses/$courseId/'));
+      if (response.statusCode == 200) {
+        return json.decode(response.body);
+      }
+      return null;
+    } catch (e) {
+      print('Error fetching course detail: $e');
+      return null;
+    }
+  }
+
+  Future<List<dynamic>?> fetchQuestions({
+    required int courseId,
+    String? questionType,
+    int? difficultyId,
+  }) async {
+    try {
+      String url = '$baseUrl/api/courses/$courseId/questions/';
+      
+      List<String> params = [];
+      if (questionType != null) params.add('type=$questionType');
+      if (difficultyId != null) params.add('difficulty=$difficultyId');
+      
+      if (params.isNotEmpty) url += '?${params.join('&')}';
+      
+      final response = await http.get(Uri.parse(url));
+      if (response.statusCode == 200) {
+        return json.decode(response.body);
+      }
+      return null;
+    } catch (e) {
+      print('Error fetching questions: $e');
+      return null;
+    }
+  }
+
   // ========== EXISTING ENDPOINTS ==========
 
-  // funkcja testowa - zwraca losowe pytanie
   Future<Map<String, dynamic>?> fetchRandomQuestion() async {
     try {
       final response = await http.get(Uri.parse('$baseUrl/api/get-question/'));
@@ -148,7 +234,6 @@ class ApiService {
     }
   }
 
-  // pobiera wszystkie pytania
   Future<List<dynamic>?> fetchAllQuestions() async {
     try {
       final url = Uri.parse("$baseUrl/api/questions/");
@@ -162,7 +247,6 @@ class ApiService {
     }
   }
 
-  // pobiera wszystkie kategorie
   Future<List<dynamic>?> fetchAllCategories() async {
     try {
       final url = Uri.parse("$baseUrl/api/categories/");
@@ -176,7 +260,6 @@ class ApiService {
     }
   }
 
-  // pobiera wszystkie kursy
   Future<List<dynamic>?> fetchAllCourses() async {
     try {
       final url = Uri.parse("$baseUrl/api/courses/");

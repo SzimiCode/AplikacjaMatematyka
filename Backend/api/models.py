@@ -90,9 +90,10 @@ class DifficultyLevel(models.Model):
 # pytanie w kursie
 class Question(models.Model):
     QUESTION_TYPES = [
-        ('open', 'Open'),
+        ('yesno', 'Yes/No'),
         ('closed', 'Closed'),
-        ('multiple_choice', 'Multiple Choice'),
+        ('enter', 'Enter'),
+        ('match', 'Match'),    
     ]
     
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='questions')
@@ -117,6 +118,12 @@ class AnswerOption(models.Model):
     def __str__(self):
         return self.option_text
 
+class MatchOption(models.Model):
+    question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='match_options')
+    left_text = models.CharField(max_length=255)   # element po lewej
+    right_text = models.CharField(max_length=255)  # prawidłowe dopasowanie po prawej
+    display_order = models.PositiveIntegerField(default=0)
+
 # postęp użytkownika w kursie
 class UserCourseProgress(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='progress')
@@ -140,22 +147,3 @@ class UserAnswer(models.Model):
     points_earned = models.IntegerField(default=0)
     time_spent = models.PositiveIntegerField(default=0)
     answered_at = models.DateTimeField(auto_now_add=True)
-
-# osiągnięcie do zdobycia
-class Achievement(models.Model):
-    achievement_name = models.CharField(max_length=100)
-    description = models.TextField(blank=True)
-    icon_url = models.URLField(blank=True)
-    points_reward = models.IntegerField(default=0)
-    requirement_type = models.CharField(max_length=50)
-    requirement_value = models.IntegerField(default=0)
-    created_at = models.DateTimeField(auto_now_add=True)
-    
-    def __str__(self):
-        return self.achievement_name
-
-# odblokowane osiągnięcia użytkownika
-class UserAchievement(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    achievement = models.ForeignKey(Achievement, on_delete=models.CASCADE)
-    unlocked_at = models.DateTimeField(auto_now_add=True)

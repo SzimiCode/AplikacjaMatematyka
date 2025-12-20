@@ -1,68 +1,174 @@
 import 'package:flutter/material.dart';
+import 'package:aplikacjamatematyka/core/data/notifiers.dart';
+import 'package:aplikacjamatematyka/features/quiz/model/category_model.dart';
 
-class TopicPickerButton extends StatefulWidget {
-  @override
-  _TopicPickerButtonState createState() => _TopicPickerButtonState();
-}
+class TopicPickerButton extends StatelessWidget {
+  final Function(CategoryModel)? onCategorySelected;
 
-class _TopicPickerButtonState extends State<TopicPickerButton> {
-  String? selectedTopic;
-
-  // lista dla mnie, zmien mateusza na backend
-  final List<String> topics = [
-    "Liczby naturalne",
-    "Ułamki zwykłe",
-    "Mnożenie",
-  ];
+  const TopicPickerButton({
+    super.key,
+    this.onCategorySelected,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: () {
-        showModalBottomSheet(
-          context: context,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+    return ValueListenableBuilder(
+      valueListenable: selectedCategoryNotifier,
+      builder: (context, selectedCategory, child) {
+        return ElevatedButton(
+          onPressed: () {
+            _showCategoryPicker(context);
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Color.fromARGB(255, 222, 133, 238),
+            foregroundColor: Colors.white,
+            textStyle: TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.bold,
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
           ),
-          isScrollControlled: true,
-          builder: (context) {
-            return Container(
-              padding: EdgeInsets.all(16),
-              height: MediaQuery.of(context).size.height * 0.6,
-              child: ListView.builder(
-                itemCount: topics.length,
-                itemBuilder: (context, index) {
-                  return Card(
-                    child: ListTile(
-                      title: Text(topics[index], style: TextStyle(fontSize: 18)),
-                      onTap: () {
-                        setState(() {
-                          selectedTopic = topics[index];
-                        });
-                        Navigator.pop(context);
-                      },
+          child: Text(
+            selectedCategory?.categoryName ?? "Wybierz temat"
+          ),
+        );
+      },
+    );
+  }
+
+  void _showCategoryPicker(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      isScrollControlled: true,
+      builder: (context) {
+        return ValueListenableBuilder(
+          valueListenable: categoriesNotifier,
+          builder: (context, categories, child) {
+            // Loading state
+            return ValueListenableBuilder(
+              valueListenable: isLoadingCategories,
+              builder: (context, isLoading, child) {
+                if (isLoading) {
+                  return Container(
+                    padding: EdgeInsets.all(16),
+                    height: MediaQuery.of(context).size.height * 0.6,
+                    child: Center(
+                      child: CircularProgressIndicator(),
                     ),
                   );
-                },
-              ),
+                }
+
+                // Empty state
+                if (categories.isEmpty) {
+                  return Container(
+                    padding: EdgeInsets.all(16),
+                    height: MediaQuery.of(context).size.height * 0.6,
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.category_outlined,
+                            size: 64,
+                            color: Colors.grey,
+                          ),
+                          SizedBox(height: 16),
+                          Text(
+                            'Brak kategorii',
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                }
+
+                // Category list
+                return Container(
+                  padding: EdgeInsets.all(16),
+                  height: MediaQuery.of(context).size.height * 0.6,
+                  child: Column(
+                    children: [
+                      // Header
+                      Text(
+                        'Wybierz kategorię',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 16),
+                      
+                      // Category list
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: categories.length,
+                          itemBuilder: (context, index) {
+                            final category = categories[index];
+                            final isSelected = selectedCategoryNotifier.value?.id == category.id;
+                            
+                            return Card(
+                              color: isSelected 
+                                ? Color.fromARGB(255, 222, 133, 238).withOpacity(0.2)
+                                : null,
+                              child: ListTile(
+                                leading: category.iconUrl.isNotEmpty
+                                  ? Image.network(
+                                      category.iconUrl,
+                                      width: 40,
+                                      height: 40,
+                                      errorBuilder: (context, error, stackTrace) {
+                                        return Icon(Icons.category);
+                                      },
+                                    )
+                                  : Icon(Icons.category),
+                                title: Text(
+                                  category.categoryName,
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                                  ),
+                                ),
+                                subtitle: category.description.isNotEmpty
+                                  ? Text(
+                                      category.description,
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                    )
+                                  : null,
+                                trailing: isSelected
+                                  ? Icon(
+                                      Icons.check_circle,
+                                      color: Color.fromARGB(255, 165, 12, 192),
+                                    )
+                                  : null,
+                                onTap: () {
+                                  if (onCategorySelected != null) {
+                                    onCategorySelected!(category);
+                                  }
+                                  Navigator.pop(context);
+                                },
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
             );
           },
         );
       },
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Color.fromARGB(255, 222, 133, 238),
-        foregroundColor: Colors.white,
-        textStyle: TextStyle(
-          fontSize: 15,
-          fontWeight: FontWeight.bold,
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-      ),
-
-      
-      child: Text(selectedTopic ?? "Wybierz temat"),
     );
   }
 }

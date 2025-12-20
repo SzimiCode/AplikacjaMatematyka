@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:aplikacjamatematyka/features/quiz/viewmodel/quiz_page_second_type_viewmodel.dart';
 import '../widgets/appbars/appbar_quiz_widget.dart';
+import 'package:aplikacjamatematyka/core/data/notifiers.dart';
 
 class QuizSecondTypePage extends StatelessWidget {
   const QuizSecondTypePage({super.key});
@@ -30,13 +31,9 @@ class QuizSecondTypePage extends StatelessWidget {
           if (vm.errorMessage != null) {
             return Scaffold(
               backgroundColor: Colors.white,
-              appBar: AppBar(
-                title: const Text('Błąd'),
-                backgroundColor: Colors.white,
-                leading: IconButton(
-                  icon: const Icon(Icons.arrow_back),
-                  onPressed: () => Navigator.pop(context),
-                ),
+              appBar: QuizAppBar(  // ✅ UŻYWAJ TEGO SAMEGO AppBar co w działającym quizie
+                progress: 0.0,
+                isFinished: false,
               ),
               body: Center(
                 child: Padding(
@@ -57,7 +54,9 @@ class QuizSecondTypePage extends StatelessWidget {
                       ),
                       const SizedBox(height: 24),
                       ElevatedButton(
-                        onPressed: () => Navigator.pop(context),
+                        onPressed: () {
+                          selectedPageNotifier.value = 6;  // ✅ LUB jakakolwiek strona poprzednia
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color.fromARGB(255, 6, 197, 70),
                           padding: const EdgeInsets.symmetric(

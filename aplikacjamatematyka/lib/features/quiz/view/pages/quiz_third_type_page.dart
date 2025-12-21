@@ -77,117 +77,18 @@ class QuizThirdTypePage extends StatelessWidget {
             );
           }
 
-          // Stan ukończenia quizu
-          if (vm.isQuizFinished) {
-            return Scaffold(
+           // Stan ukończenia quizu
+         if (vm.isQuizFinished) {
+            // Wywołaj nawigację PO zakończeniu budowania widgetu
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              vm.goToFinishQuiz();
+            });
+            
+            // Zwróć prosty ekran ładowania podczas przekierowania
+            return const Scaffold(
               backgroundColor: Colors.white,
-              appBar: AppBar(
-                title: const Text('Wyniki'),
-                backgroundColor: Colors.white,
-                leading: IconButton(
-                  icon: const Icon(Icons.arrow_back),
-                  onPressed: () => Navigator.pop(context),
-                ),
-              ),
               body: Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(35),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(
-                        Icons.emoji_events,
-                        size: 80,
-                        color: Color.fromARGB(255, 6, 197, 70),
-                      ),
-                      const SizedBox(height: 24),
-                      const Text(
-                        'Quiz ukończony!',
-                        style: TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      Text(
-                        'Zdobyte punkty: ${vm.correctAnswersCount.toStringAsFixed(1)}',
-                        style: const TextStyle(
-                          fontSize: 20,
-                          color: Colors.black87,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        'Liczba prób: ${vm.totalAnswers}',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.grey.shade600,
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      Text(
-                        '${vm.scorePercentage.toStringAsFixed(0)}%',
-                        style: const TextStyle(
-                          fontSize: 48,
-                          fontWeight: FontWeight.bold,
-                          color: Color.fromARGB(255, 6, 197, 70),
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        'efektywności',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey.shade600,
-                        ),
-                      ),
-                      const SizedBox(height: 40),
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: () => vm.restartQuiz(),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color.fromARGB(255, 6, 197, 70),
-                            padding: const EdgeInsets.symmetric(vertical: 16),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                          ),
-                          child: const Text(
-                            'Spróbuj ponownie',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      SizedBox(
-                        width: double.infinity,
-                        child: OutlinedButton(
-                          onPressed: () => Navigator.pop(context),
-                          style: OutlinedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(vertical: 16),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            side: const BorderSide(
-                              color: Color.fromARGB(255, 6, 197, 70),
-                            ),
-                          ),
-                          child: const Text(
-                            'Wróć do kursu',
-                            style: TextStyle(
-                              color: Color.fromARGB(255, 6, 197, 70),
-                              fontSize: 16,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                child: CircularProgressIndicator(),
               ),
             );
           }
@@ -319,44 +220,7 @@ class QuizThirdTypePage extends StatelessWidget {
                     ),
                   ),
                 ),
-                
-                // Punktacja
-                Container(
-                  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 35),
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade100,
-                    border: Border(
-                      top: BorderSide(color: Colors.grey.shade300),
-                    ),
-                  ),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Icon(Icons.star, color: Colors.amber, size: 20),
-                          const SizedBox(width: 8),
-                          Text(
-                            'Punkty: ${vm.correctAnswersCount.toStringAsFixed(1)}',
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        'Pozostało par: ${vm.remainingPairsInCurrentQuestion}',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey.shade600,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                
+
                 // Przycisk "Dalej"
                 Padding(
                   padding: const EdgeInsets.fromLTRB(35, 12, 35, 35),

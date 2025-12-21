@@ -145,7 +145,7 @@ class ChooseLessonPageViewmodel {
       print('🎯 Selected course: ${selectedCourse.courseName}');
       print('🎯 Course ID: ${selectedCourse.id}');
       
-      // Nawiguj do LessonContentPage (index 6 w pages)
+
       selectedPageNotifier.value = 6;
     }
   }

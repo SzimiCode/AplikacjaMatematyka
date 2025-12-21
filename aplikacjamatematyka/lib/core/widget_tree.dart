@@ -12,21 +12,23 @@ import 'package:aplikacjamatematyka/features/quiz/view/pages/quiz_third_type_pag
 import 'package:aplikacjamatematyka/features/settings/view/pages/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:aplikacjamatematyka/core/data/notifiers.dart';
+import 'package:aplikacjamatematyka/features/quiz/view/pages/final_learning_page.dart';
 
 List<Widget>pages = [
-  HomePage(),
-  ChooseLessonPage(),
-  ChatPage(),
+  HomePage(), //0
+  ChooseLessonPage(),//1
+  ChatPage(), //2
   CalculatorPage(),
-  SettingsPage(),
+  SettingsPage(), //4
   QuizFirstTypePage(),
-  LessonContentPage(),
+  LessonContentPage(), //6
   SignInPage(),
-  QuizFirstTypePage(),
+  QuizFirstTypePage(), //8
   QuizSecondTypePage(),
-  QuizThirdTypePage(),
+  QuizThirdTypePage(), //10
   SignUpPage(),
-  FinishQuizPage(),
+  FinishQuizPage(), //12
+  FinalLearningPage(), //13
 ];
 
 

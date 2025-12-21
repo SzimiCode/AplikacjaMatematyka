@@ -16,5 +16,4 @@ class Pallete {
   static const Color cyanColor = Color(0xFF0CC0DF);
   static const Color lightpurpleColor = Color(0xFFC3BAFA);
   static const Color darkcyanColor = Color.fromARGB(255, 9, 136, 158);
-  static const purplemidColor = Color.fromARGB(255, 214, 166, 219);
 }

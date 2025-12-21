@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:aplikacjamatematyka/features/quiz/viewmodel/quiz_page_second_type_viewmodel.dart';
 import '../widgets/appbars/appbar_quiz_widget.dart';
-import 'package:aplikacjamatematyka/features/quiz/data/questionsSecond.dart';
 
 class QuizSecondTypePage extends StatelessWidget {
   const QuizSecondTypePage({super.key});
@@ -21,8 +20,10 @@ class QuizSecondTypePage extends StatelessWidget {
 
           return Scaffold(
             backgroundColor: Colors.white,
-             appBar: QuizAppBar(
-              progress: vm.currentQuestionIndex / questionsSecond.length,
+            appBar: QuizAppBar(
+              progress: vm.allQuestions.isEmpty 
+                  ? 0.0 
+                  : vm.currentQuestionIndex / vm.allQuestions.length,
               isFinished: vm.isQuizFinished,
             ),
             body: Column(
@@ -49,27 +50,26 @@ class QuizSecondTypePage extends StatelessWidget {
                     ),
                   ),
                 ),
-
-                          Padding(
-                            padding: const EdgeInsets.all(12.0),
-                            child: TextField(
-                              controller: vm.answerController,
-                              minLines: 4,         
-                              maxLines: null,      
-                              keyboardType: TextInputType.multiline,
-                              decoration: InputDecoration(
-                                contentPadding: const EdgeInsets.symmetric(
-                                  vertical: 20,
-                                  horizontal: 16,
-                                ),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                hintText: "Wpisz swoją odpowiedź...",
-                              ),
-                            ),
-                          ),
-                                          const SizedBox(height: 90),
+                Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: TextField(
+                    controller: vm.answerController,
+                    minLines: 4,         
+                    maxLines: null,      
+                    keyboardType: TextInputType.multiline,
+                    decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.symmetric(
+                        vertical: 20,
+                        horizontal: 16,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      hintText: "Wpisz swoją odpowiedź...",
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 90),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(35, 0, 35, 35),
                   child: SizedBox(
@@ -97,5 +97,4 @@ class QuizSecondTypePage extends StatelessWidget {
       ),
     );
   }
-  }
-
+}

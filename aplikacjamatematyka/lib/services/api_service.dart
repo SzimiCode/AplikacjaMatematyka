@@ -3,33 +3,25 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiService {
-  // Zmień na swój adres IP jeśli testujesz na fizycznym urządzeniu
-  // Na emulatorze Androida: http://10.0.2.2:8000
-  // Na iOS simulator: http://127.0.0.1:8000
-  // Na fizycznym urządzeniu: http://TWOJE_IP:8000
   final String baseUrl = "http://127.0.0.1:8000";
 
-  // ========== TOKEN MANAGEMENT ==========
+  // zarzadzanie tokenem uwierzytelniajacym
   
-  // Zapisz token
   Future<void> saveToken(String token) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('access_token', token);
   }
 
-  // Pobierz token
   Future<String?> getToken() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('access_token');
   }
 
-  // Usuń token (logout)
   Future<void> removeToken() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('access_token');
   }
 
-  // Headers z tokenem
   Future<Map<String, String>> getHeaders() async {
     final token = await getToken();
     return {
@@ -38,9 +30,8 @@ class ApiService {
     };
   }
 
-  // ========== AUTH ENDPOINTS ==========
+  // endopinty uwierzytelniania
 
-  // REJESTRACJA
   Future<Map<String, dynamic>> register({
     required String email,
     required String nick,
@@ -48,7 +39,7 @@ class ApiService {
     required String phoneNumber,
     required String password,
     required String password2,
-  }) async {
+    }) async {
     try {
       final response = await http.post(
         Uri.parse('$baseUrl/api/register/'),
@@ -66,7 +57,6 @@ class ApiService {
       final data = jsonDecode(response.body);
 
       if (response.statusCode == 201) {
-        // Zapisz token
         await saveToken(data['access']);
         return {'success': true, 'data': data};
       } else {
@@ -77,7 +67,6 @@ class ApiService {
     }
   }
 
-  // LOGOWANIE
   Future<Map<String, dynamic>> login({
     required String email,
     required String password,
@@ -95,7 +84,6 @@ class ApiService {
       final data = jsonDecode(response.body);
 
       if (response.statusCode == 200) {
-        // Zapisz token
         await saveToken(data['access']);
         return {'success': true, 'data': data};
       } else {
@@ -106,7 +94,6 @@ class ApiService {
     }
   }
 
-  // POBIERZ PROFIL
   Future<Map<String, dynamic>> getUserProfile() async {
     try {
       final headers = await getHeaders();
@@ -127,46 +114,37 @@ class ApiService {
     }
   }
 
-  // WYLOGUJ
   Future<void> logout() async {
     await removeToken();
   }
 
-  // ========== EXISTING ENDPOINTS ==========
+  // endpointy klas, kategorii, kursow
 
-  // funkcja testowa - zwraca losowe pytanie
-  Future<Map<String, dynamic>?> fetchRandomQuestion() async {
+  // pobieranie klas szkolnych z bazy danych
+  Future<List<dynamic>?> fetchClasses() async {
     try {
-      final response = await http.get(Uri.parse('$baseUrl/api/get-question/'));
+      final response = await http.get(Uri.parse('$baseUrl/api/classes/'));
+      
       if (response.statusCode == 200) {
-        return json.decode(response.body);
-      } else {
-        return null;
+        final decoded = json.decode(response.body);
+        return decoded;
       }
-    } catch (e) {
-      return null;
-    }
-  }
 
-  // pobiera wszystkie pytania
-  Future<List<dynamic>?> fetchAllQuestions() async {
-    try {
-      final url = Uri.parse("$baseUrl/api/questions/");
-      final response = await http.get(url);
-      if (response.statusCode == 200) {
-        return json.decode(response.body);
-      }
       return null;
     } catch (e) {
       return null;
     }
   }
 
-  // pobiera wszystkie kategorie
-  Future<List<dynamic>?> fetchAllCategories() async {
+  // pobieanie kategorii dla danej klasy
+  Future<List<dynamic>?> fetchCategories({int? classId}) async {
     try {
-      final url = Uri.parse("$baseUrl/api/categories/");
-      final response = await http.get(url);
+      String url = '$baseUrl/api/categories/';
+      if (classId != null) {
+        url += '?class_id=$classId';
+      }
+      
+      final response = await http.get(Uri.parse(url));
       if (response.statusCode == 200) {
         return json.decode(response.body);
       }
@@ -176,16 +154,59 @@ class ApiService {
     }
   }
 
-  // pobiera wszystkie kursy
-  Future<List<dynamic>?> fetchAllCourses() async {
+  // pobieranie kursow dla danej kategorii
+  Future<List<dynamic>?> fetchCourses({int? categoryId}) async {
     try {
-      final url = Uri.parse("$baseUrl/api/courses/");
-      final response = await http.get(url);
+      String url = '$baseUrl/api/courses/';
+      if (categoryId != null) {
+        url += '?category_id=$categoryId';
+      }
+      
+      final response = await http.get(Uri.parse(url));
       if (response.statusCode == 200) {
         return json.decode(response.body);
       }
       return null;
     } catch (e) {
+      return null;
+    }
+  }
+
+  // pobieranie szczegolow kursu
+  Future<Map<String, dynamic>?> fetchCourseDetail(int courseId) async {
+    try {
+      final response = await http.get(Uri.parse('$baseUrl/api/courses/$courseId/'));
+      if (response.statusCode == 200) {
+        return json.decode(response.body);
+      }
+      return null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  // pobieranie pytan z bazy danych
+  Future<List<dynamic>?> fetchQuestions({
+    required int courseId,
+    String? questionType,
+    int? difficultyId,
+  }) async {
+    try {
+      String url = '$baseUrl/api/courses/$courseId/questions/';
+      
+      List<String> params = [];
+      if (questionType != null) params.add('type=$questionType');
+      if (difficultyId != null) params.add('difficulty=$difficultyId');
+      
+      if (params.isNotEmpty) url += '?${params.join('&')}';
+      
+      final response = await http.get(Uri.parse(url));
+      if (response.statusCode == 200) {
+        return json.decode(response.body);
+      }
+      return null;
+    } catch (e) {
+      print('Error fetching questions: $e');
       return null;
     }
   }

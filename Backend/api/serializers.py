@@ -1,8 +1,12 @@
 from rest_framework import serializers
-from .models import Course, Question, AnswerOption, UserCourseProgress, User
+from .models import (
+    Course, Question, AnswerOption, UserCourseProgress, User, 
+    MatchOption, Class, Category, DifficultyLevel
+)
 from django.contrib.auth.password_validation import validate_password
 
-# Serializer do rejestracji
+# ========== AUTH SERIALIZERS ==========
+
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
     password2 = serializers.CharField(write_only=True, required=True, label="Potwierdź hasło")
@@ -27,40 +31,85 @@ class RegisterSerializer(serializers.ModelSerializer):
         )
         return user
 
-# Serializer użytkownika (do zwracania danych po logowaniu)
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'email', 'nick', 'full_name', 'phone_number', 'dragon_name', 'total_points', 'created_at']
         read_only_fields = ['id', 'created_at']
 
-# Serializer do logowania
 class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField(write_only=True)
 
-# podstawowy serializer dla kursów
+# serializer dla klas szkolnych
+class ClassSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Class
+        fields = ['id', 'class_name', 'description', 'display_order']
+
+# serializer dla kategorii
+class CategorySerializer(serializers.ModelSerializer):
+    class_name = serializers.CharField(source='class_fk.class_name', read_only=True)
+    
+    class Meta:
+        model = Category
+        fields = ['id', 'class_fk', 'class_name', 'category_name', 'description', 'icon_url', 'display_order']
+
+# serializer dla poziomu trudności
+class DifficultyLevelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DifficultyLevel
+        fields = ['id', 'level_name', 'level_code', 'display_order']
+
+# serializer dla kursu
 class CourseSerializer(serializers.ModelSerializer):
+    category_name = serializers.CharField(source='category.category_name', read_only=True)
+    
     class Meta:
         model = Course
-        fields = '__all__'
+        fields = [
+            'id', 'category', 'category_name', 'course_name', 'description', 
+            'video_url', 'video_duration', 'points_per_question', 
+            'required_correct_answers', 'display_order', 'created_at'
+        ]
 
-# serializer dla opcji odpowiedzi
+# serializer dla opcji odpowiedzi (closed questions)
 class AnswerOptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = AnswerOption
-        fields = ['id', 'option_text', 'is_correct']
+        fields = ['id', 'option_text', 'is_correct', 'display_order', 'question_id']
 
-# serializer dla pytań
+# Serializer dla opcji dopasowania (match questions)
+class MatchOptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MatchOption
+        fields = ['id', 'question', 'left_text', 'right_text', 'display_order', 'question_id']
+
+# Serializer dla pytań (z opcjami)
 class QuestionSerializer(serializers.ModelSerializer):
     options = AnswerOptionSerializer(many=True, read_only=True)
+    match_options = MatchOptionSerializer(many=True, read_only=True)
+    difficulty_level_name = serializers.CharField(source='difficulty_level.level_name', read_only=True)
     
     class Meta:
         model = Question
-        fields = ['id', 'question_text', 'question_type', 'points', 'options']
+        fields = [
+            'id', 'course', 'difficulty_level', 'difficulty_level_name',
+            'question_type', 'question_text', 'correct_answer', 
+            'points', 'explanation', 'options', 'match_options', 'created_at'
+        ]
 
-# serializer dla postępu użytkownika
+# Serializer dla postępu użytkownika
 class UserCourseProgressSerializer(serializers.ModelSerializer):
+    course_name = serializers.CharField(source='course.course_name', read_only=True)
+    difficulty_level_name = serializers.CharField(source='current_difficulty_level.level_name', read_only=True)
+    
     class Meta:
         model = UserCourseProgress
-        fields = '__all__'
+        fields = [
+            'id', 'user', 'course', 'course_name', 'is_completed',
+            'current_difficulty_level', 'difficulty_level_name',
+            'correct_answers_count', 'total_attempts', 'points_earned',
+            'video_watched', 'started_at', 'completed_at'
+        ]
+        read_only_fields = ['user', 'started_at']

@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:aplikacjamatematyka/features/quiz/viewmodel/quiz_page_first_type_viewmodel.dart';
 import '../widgets/buttons/answer_button_first_type.dart';
 import '../widgets/appbars/appbar_quiz_widget.dart';
-import 'package:aplikacjamatematyka/features/quiz/data/questions.dart';
 
 class QuizFirstTypePage extends StatelessWidget {
   const QuizFirstTypePage({super.key});
@@ -23,7 +22,9 @@ class QuizFirstTypePage extends StatelessWidget {
           return Scaffold(
             backgroundColor: Colors.white,
             appBar: QuizAppBar(
-              progress: vm.currentQuestionIndex / questions.length,
+              progress: vm.allQuestions.isEmpty 
+                  ? 0.0 
+                  : vm.currentQuestionIndex / vm.allQuestions.length,
               isFinished: vm.isQuizFinished,
             ),
             body: Column(

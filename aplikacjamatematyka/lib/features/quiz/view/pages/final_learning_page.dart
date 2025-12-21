@@ -5,12 +5,19 @@ import '../widgets/appbars/appbar_quiz_widget.dart';
 import 'package:aplikacjamatematyka/core/data/notifiers.dart';
 import 'package:aplikacjamatematyka/features/quiz/view/widgets/quiz_types/quiz_first_type_widget.dart';
 import 'package:aplikacjamatematyka/features/quiz/view/widgets/quiz_types/quiz_second_type_widget.dart';
-
 import 'package:aplikacjamatematyka/features/quiz/view/widgets/quiz_types/quiz_third_type_widget.dart';
 
-
-class FinalLearningPage extends StatelessWidget {
+class FinalLearningPage extends StatefulWidget {
   const FinalLearningPage({super.key});
+
+  @override
+  State<FinalLearningPage> createState() => _FinalLearningPageState();
+}
+
+class _FinalLearningPageState extends State<FinalLearningPage> {
+  // GlobalKeys dla widgetów
+  final GlobalKey<QuizFirstTypeWidgetState> _firstTypeKey = GlobalKey();
+  final GlobalKey<QuizSecondTypeWidgetState> _secondTypeKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -109,7 +116,7 @@ class FinalLearningPage extends StatelessWidget {
                 
                 // Główna treść - dynamiczny widget pytania
                 Expanded(
-                  child: _buildQuestionWidget(context, vm),
+                  child: _buildQuestionWidget(vm),
                 ),
                 
                 // Przycisk "Dalej"
@@ -207,160 +214,41 @@ class FinalLearningPage extends StatelessWidget {
 
   // ========== DYNAMICZNY WIDGET PYTANIA ==========
   
-  Widget _buildQuestionWidget(BuildContext context, FinalLearningViewModel vm) {
-  final question = vm.currentQuestion;
-  
-  if (question == null) {
-    return const Center(child: Text('Brak pytania'));
-  }
-
-  switch (question.questionType) {
-    case 'closed':
-      return QuizFirstTypeWidget(
-        question: question,
-        onAnswerSubmitted: (isCorrect) => vm.onAnswerSubmitted(isCorrect),
-      );
+  Widget _buildQuestionWidget(FinalLearningViewModel vm) {
+    final question = vm.currentQuestion;
     
-    case 'yesno':
-    case 'enter':
-      return QuizSecondTypeWidget(
-        question: question,
-        onAnswerSubmitted: (isCorrect) => vm.onAnswerSubmitted(isCorrect),
-      );
-    
-    case 'match':
-      return QuizThirdTypeWidget(
-        question: question,
-        onAnswerSubmitted: (isCorrect) => vm.onAnswerSubmitted(isCorrect),
-      );
-    
-    default:
-      return Center(child: Text('Nieznany typ: ${question.questionType}'));
-  }
-}
+    if (question == null) {
+      return const Center(child: Text('Brak pytania'));
+    }
 
-  // ========== PLACEHOLDERY (ZAMIENIMY NA PRAWDZIWE WIDGETY) ==========
-  
-  Widget _buildClosedQuestionPlaceholder(dynamic question) {
-    return Center(
-      child: Container(
-        margin: const EdgeInsets.all(35),
-        padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          color: Colors.blue.shade50,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Colors.blue.shade200),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Icon(Icons.quiz, size: 48, color: Colors.blue),
-            const SizedBox(height: 16),
-            const Text(
-              'PYTANIE ZAMKNIĘTE',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.blue,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              question.questionText,
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 16),
-            ),
-            const SizedBox(height: 16),
-            const Text(
-              '🔨 Tu będzie QuizFirstTypeWidget',
-              style: TextStyle(fontSize: 12, color: Colors.grey),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildOpenQuestionPlaceholder(dynamic question) {
-    return Center(
-      child: Container(
-        margin: const EdgeInsets.all(35),
-        padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          color: Colors.orange.shade50,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Colors.orange.shade200),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Icon(Icons.edit, size: 48, color: Colors.orange),
-            const SizedBox(height: 16),
-            Text(
-              question.questionType == 'yesno' ? 'TAK/NIE' : 'WPISZ ODPOWIEDŹ',
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.orange,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              question.questionText,
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 16),
-            ),
-            const SizedBox(height: 16),
-            const Text(
-              '🔨 Tu będzie QuizSecondTypeWidget',
-              style: TextStyle(fontSize: 12, color: Colors.grey),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildMatchQuestionPlaceholder(dynamic question) {
-    return Center(
-      child: Container(
-        margin: const EdgeInsets.all(35),
-        padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          color: Colors.purple.shade50,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Colors.purple.shade200),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Icon(Icons.swap_horiz, size: 48, color: Colors.purple),
-            const SizedBox(height: 16),
-            const Text(
-              'DOPASUJ PARY',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.purple,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              question.questionText.isNotEmpty 
-                  ? question.questionText 
-                  : 'Dopasuj poniższe elementy',
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 16),
-            ),
-            const SizedBox(height: 16),
-            const Text(
-              '🔨 Tu będzie QuizThirdTypeWidget',
-              style: TextStyle(fontSize: 12, color: Colors.grey),
-            ),
-          ],
-        ),
-      ),
-    );
+    switch (question.questionType) {
+      case 'closed':
+        return QuizFirstTypeWidget(
+          key: _firstTypeKey,
+          question: question,
+          onAnswerSubmitted: (isCorrect) => vm.onAnswerSubmitted(isCorrect),
+          onAnswerSelected: () => vm.onAnswerSelected(),
+        );
+      
+      case 'yesno':
+      case 'enter':
+        return QuizSecondTypeWidget(
+          key: _secondTypeKey,
+          question: question,
+          onAnswerSubmitted: (isCorrect) => vm.onAnswerSubmitted(isCorrect),
+          onAnswerSelected: () => vm.onAnswerSelected(),
+        );
+      
+      case 'match':
+        return QuizThirdTypeWidget(
+          key: ValueKey(question.id),
+          question: question,
+          onAnswerSubmitted: (isCorrect) => vm.onAnswerSubmitted(isCorrect),
+        );
+      
+      default:
+        return Center(child: Text('Nieznany typ: ${question.questionType}'));
+    }
   }
 
   // ========== PRZYCISK DALEJ ==========
@@ -371,9 +259,11 @@ class FinalLearningPage extends StatelessWidget {
       child: SizedBox(
         width: double.infinity,
         child: ElevatedButton(
-          onPressed: vm.isAnswerSubmitted ? () => vm.moveToNextQuestion() : null,
+          onPressed: (vm.canSubmitAnswer && !vm.isAnswerSubmitted) 
+              ? () => _handleNextButton(vm)
+              : (vm.isAnswerSubmitted ? () => vm.moveToNextQuestion() : null),
           style: ElevatedButton.styleFrom(
-            backgroundColor: vm.isAnswerSubmitted
+            backgroundColor: (vm.canSubmitAnswer || vm.isAnswerSubmitted)
                 ? const Color.fromARGB(255, 6, 197, 70)
                 : Colors.grey,
             padding: const EdgeInsets.symmetric(vertical: 16),
@@ -381,9 +271,9 @@ class FinalLearningPage extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
             ),
           ),
-          child: const Text(
-            "Dalej",
-            style: TextStyle(
+          child: Text(
+            vm.isAnswerSubmitted ? "Następne pytanie" : "Sprawdź",
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 16,
             ),
@@ -391,5 +281,23 @@ class FinalLearningPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _handleNextButton(FinalLearningViewModel vm) {
+    final question = vm.currentQuestion;
+    if (question == null) return;
+
+    // Wywołaj walidację przez GlobalKey
+    bool validated = false;
+    
+    if (question.questionType == 'closed') {
+      validated = _firstTypeKey.currentState?.validateAndSubmit() ?? false;
+    } else if (question.questionType == 'yesno' || question.questionType == 'enter') {
+      validated = _secondTypeKey.currentState?.validateAndSubmit() ?? false;
+    }
+    
+    if (validated) {
+      print('✅ Answer validated and submitted');
+    }
   }
 }

@@ -5,21 +5,22 @@ import '../buttons/answer_button_first_type.dart';
 class QuizFirstTypeWidget extends StatefulWidget {
   final QuestionModel question;
   final Function(bool isCorrect) onAnswerSubmitted;
+  final VoidCallback? onAnswerSelected; // Nowy callback dla ViewModelu
 
   const QuizFirstTypeWidget({
     super.key,
     required this.question,
     required this.onAnswerSubmitted,
+    this.onAnswerSelected,
   });
 
   @override
-  State<QuizFirstTypeWidget> createState() => _QuizFirstTypeWidgetState();
+  State<QuizFirstTypeWidget> createState() => QuizFirstTypeWidgetState();
 }
 
-class _QuizFirstTypeWidgetState extends State<QuizFirstTypeWidget> {
+class QuizFirstTypeWidgetState extends State<QuizFirstTypeWidget> {
   String? selectedAnswer;
   List<String> shuffledAnswers = [];
-  bool hasSubmitted = false;
 
   @override
   void initState() {
@@ -30,10 +31,8 @@ class _QuizFirstTypeWidgetState extends State<QuizFirstTypeWidget> {
   @override
   void didUpdateWidget(QuizFirstTypeWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
-    // Jeśli pytanie się zmieniło, zresetuj stan
     if (oldWidget.question.id != widget.question.id) {
       selectedAnswer = null;
-      hasSubmitted = false;
       _shuffleAnswers();
     }
   }
@@ -46,15 +45,15 @@ class _QuizFirstTypeWidgetState extends State<QuizFirstTypeWidget> {
   }
 
   void _selectAnswer(String answer) {
-    if (hasSubmitted) return;
     setState(() {
       selectedAnswer = answer;
     });
-    _submitAnswer();
+    widget.onAnswerSelected?.call(); // Powiadom ViewModel że coś wybrano
   }
 
-  void _submitAnswer() {
-    if (hasSubmitted || selectedAnswer == null) return;
+  // Ta metoda będzie wywołana z zewnątrz (przez ViewModel) gdy user kliknie "Dalej"
+  bool validateAndSubmit() {
+    if (selectedAnswer == null) return false;
 
     final correctOption = widget.question.options.firstWhere(
       (option) => option.isCorrect,
@@ -63,14 +62,10 @@ class _QuizFirstTypeWidgetState extends State<QuizFirstTypeWidget> {
 
     bool isCorrect = selectedAnswer == correctOption.optionText;
     
-    setState(() {
-      hasSubmitted = true;
-    });
-
     print('📝 First Type Answer: ${isCorrect ? "✅" : "❌"}');
     
-    // Callback do ViewModelu
     widget.onAnswerSubmitted(isCorrect);
+    return true;
   }
 
   @override
@@ -82,7 +77,6 @@ class _QuizFirstTypeWidgetState extends State<QuizFirstTypeWidget> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Treść pytania
             Text(
               widget.question.questionText,
               textAlign: TextAlign.center,
@@ -94,7 +88,6 @@ class _QuizFirstTypeWidgetState extends State<QuizFirstTypeWidget> {
             ),
             const SizedBox(height: 30),
             
-            // Przyciski odpowiedzi
             ...shuffledAnswers.map((answer) => Padding(
               padding: const EdgeInsets.only(bottom: 12),
               child: AnswerButtonFirstType(

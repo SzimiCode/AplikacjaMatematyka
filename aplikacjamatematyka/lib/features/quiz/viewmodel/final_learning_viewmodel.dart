@@ -30,6 +30,7 @@ class FinalLearningViewModel extends ChangeNotifier {
   // Stan obecnego pytania (dla różnych typów)
   dynamic currentAnswerData; // Może być String, bool, Map dla match
   bool isAnswerSubmitted = false;
+  bool canSubmitAnswer = false; // NOWE: czy można kliknąć "Sprawdź"
 
   FinalLearningViewModel() {
     _initializeLearning();
@@ -143,6 +144,7 @@ class FinalLearningViewModel extends ChangeNotifier {
     if (nextQuestion != null) {
       print('📝 Loaded question ${questionNumber}: ${nextQuestion.questionType} - ${nextQuestion.difficultyLevelName}');
       isAnswerSubmitted = false;
+      canSubmitAnswer = false; // Reset
       currentAnswerData = null;
       notifyListeners();
     }
@@ -197,10 +199,18 @@ class FinalLearningViewModel extends ChangeNotifier {
 
   // ========== OBSŁUGA ODPOWIEDZI ==========
   
+  // NOWA METODA: Wywołana gdy user wybierze odpowiedź (ale jeszcze nie kliknie "Sprawdź")
+  void onAnswerSelected() {
+    canSubmitAnswer = true;
+    notifyListeners();
+  }
+  
+  // ZMODYFIKOWANA: Wywołana gdy user kliknie "Sprawdź" i odpowiedź zostanie zwalidowana
   void onAnswerSubmitted(bool isCorrect) {
     if (isAnswerSubmitted) return;
     
     isAnswerSubmitted = true;
+    canSubmitAnswer = false; // Reset
     totalAnswered++;
     
     print('📊 Answer submitted: ${isCorrect ? "✅ Correct" : "❌ Wrong"}');
@@ -237,9 +247,11 @@ class FinalLearningViewModel extends ChangeNotifier {
     // Hard jest najwyższy
   }
 
+  // ZMODYFIKOWANA: Przejście do następnego pytania
   void moveToNextQuestion() {
     questionNumber++;
     currentQuestionIndex++;
+    canSubmitAnswer = false; // Reset dla następnego pytania
     
     if (!isLearningFinished) {
       _loadNextQuestion();
@@ -278,6 +290,7 @@ class FinalLearningViewModel extends ChangeNotifier {
     totalAnswered = 0;
     fireReward = 0;
     isAnswerSubmitted = false;
+    canSubmitAnswer = false;
     currentAnswerData = null;
     
     await _initializeLearning();

@@ -174,7 +174,7 @@ class QuizSecondTypeWidgetState extends State<QuizSecondTypeWidget> { // ✅ BEZ
                       onPressed: () => selectYesNoAnswer(false),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: answerController.text == 'false'
-                            ? const Color.fromARGB(255, 6, 197, 70)
+                            ? const Color.fromARGB(255, 241, 7, 7)
                             : Colors.grey.shade200,
                         foregroundColor: answerController.text == 'false'
                             ? Colors.white

@@ -191,7 +191,7 @@ class FinalTestPage extends StatelessWidget {
         return QuizFirstTypeWidget(
           key: ValueKey(question.id),
           question: question,
-          onAnswerSelected: (isCorrect) => vm.onAnswerSelected(isCorrect),
+          onAnswerSubmitted: (isCorrect) => vm.onAnswerSubmitted(isCorrect),
         );
       
       case 'yesno':
@@ -199,14 +199,14 @@ class FinalTestPage extends StatelessWidget {
         return QuizSecondTypeWidget(
           key: ValueKey(question.id),
           question: question,
-          onAnswerSelected: (isCorrect) => vm.onAnswerSelected(isCorrect),
+          onAnswerSubmitted: (isCorrect) => vm.onAnswerSubmitted(isCorrect),
         );
       
       case 'match':
         return QuizThirdTypeWidget(
           key: ValueKey(question.id),
           question: question,
-          onAnswerSelected: (isCorrect) => vm.onAnswerSelected(isCorrect),
+          onAnswerSubmitted: (isCorrect) => vm.onAnswerSubmitted(isCorrect),
         );
       
       default:

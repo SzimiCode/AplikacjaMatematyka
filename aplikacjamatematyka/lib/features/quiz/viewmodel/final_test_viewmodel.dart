@@ -123,17 +123,19 @@ class FinalTestViewModel extends ChangeNotifier {
 
   // ========== OBSŁUGA ODPOWIEDZI ==========
   
-  void onAnswerSelected(bool isCorrect) {
-    if (isAnswerSelected) return;
+  // Wywołane przez widget pytania gdy user odpowie
+  void onAnswerSubmitted(bool isCorrect) {
+    if (isAnswerSelected) return; // Już odpowiedziano na to pytanie
     
     isAnswerSelected = true;
     lastAnswerCorrect = isCorrect;
     
-    print('📊 Answer selected: ${isCorrect ? "✅ Correct" : "❌ Wrong"}');
+    print('📊 Answer submitted: ${isCorrect ? "✅ Correct" : "❌ Wrong"}');
     
-    notifyListeners();
+    notifyListeners(); // Aktywuj przycisk "Dalej"
   }
   
+  // Wywołane gdy user kliknie "Dalej"
   void submitAndContinue() {
     if (!isAnswerSelected || lastAnswerCorrect == null) return;
     

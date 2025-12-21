@@ -302,4 +302,10 @@ class QuizPageThirdTypeViewModel extends ChangeNotifier {
     totalAnswers = 0;
     await _initializeQuiz();
   }
+
+void goToFinishQuiz(){
+    selectedPageNotifier.value = 12;
+  }
+
+
 }

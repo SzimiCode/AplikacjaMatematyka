@@ -232,6 +232,12 @@ class QuizPageSecondTypeViewModel extends ChangeNotifier {
     await _initializeQuiz();
   }
 
+
+  void goToFinishQuiz(){
+    selectedPageNotifier.value = 12;
+  }
+
+
   @override
   void dispose() {
     answerController.dispose();

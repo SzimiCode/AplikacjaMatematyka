@@ -392,41 +392,6 @@ class QuizSecondTypePage extends StatelessWidget {
                   ),
                 ),
                 
-                // Punktacja
-                Container(
-                  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 35),
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade100,
-                    border: Border(
-                      top: BorderSide(color: Colors.grey.shade300),
-                    ),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(Icons.star, color: Colors.amber, size: 20),
-                      const SizedBox(width: 8),
-                      Text(
-                        'Wynik: ${vm.correctAnswersCount}/${vm.totalAnswers}',
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      if (vm.totalAnswers > 0) ...[
-                        const SizedBox(width: 12),
-                        Text(
-                          '(${vm.scorePercentage.toStringAsFixed(0)}%)',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey.shade600,
-                          ),
-                        ),
-                      ],
-                    ],
-                  ),
-                ),
-                
                 // Przycisk "Dalej"
                 Padding(
                   padding: const EdgeInsets.fromLTRB(35, 12, 35, 35),

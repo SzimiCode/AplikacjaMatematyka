@@ -319,44 +319,7 @@ class QuizThirdTypePage extends StatelessWidget {
                     ),
                   ),
                 ),
-                
-                // Punktacja
-                Container(
-                  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 35),
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade100,
-                    border: Border(
-                      top: BorderSide(color: Colors.grey.shade300),
-                    ),
-                  ),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Icon(Icons.star, color: Colors.amber, size: 20),
-                          const SizedBox(width: 8),
-                          Text(
-                            'Punkty: ${vm.correctAnswersCount.toStringAsFixed(1)}',
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        'Pozostało par: ${vm.remainingPairsInCurrentQuestion}',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey.shade600,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                
+
                 // Przycisk "Dalej"
                 Padding(
                   padding: const EdgeInsets.fromLTRB(35, 12, 35, 35),

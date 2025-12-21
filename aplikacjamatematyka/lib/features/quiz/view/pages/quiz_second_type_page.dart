@@ -77,8 +77,19 @@ class QuizSecondTypePage extends StatelessWidget {
           }
 
           // Stan ukończenia quizu
-          if (vm.isQuizFinished) {
-            vm.goToFinishQuiz();
+         if (vm.isQuizFinished) {
+            // Wywołaj nawigację PO zakończeniu budowania widgetu
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              vm.goToFinishQuiz();
+            });
+            
+            // Zwróć prosty ekran ładowania podczas przekierowania
+            return const Scaffold(
+              backgroundColor: Colors.white,
+              body: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
           }
 
           // Stan normalny - quiz w trakcie

@@ -31,7 +31,7 @@ class ContentLessonWidget extends StatelessWidget {
               icon: Icons.menu_book,
               asset: 'assets/images/treasurechest.png',
               onTap: () {
-                selectedPageNotifier.value = 9;
+                selectedPageNotifier.value = 13;
               },
             ),
 

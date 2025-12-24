@@ -32,18 +32,22 @@ class CalculatorPage extends StatelessWidget {
                       children: [
                         Text(
                           viewModel.expression,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 48,
                             fontWeight: FontWeight.w700,
-                            color: Pallete.blackColor,
+                            color: viewModel.hasError
+                                ? Pallete.redColor
+                                : Pallete.blackColor,
                           ),
                         ),
                         const SizedBox(height: 10),
                         Text(
                           viewModel.result,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 28,
-                            color: Pallete.greyColor,
+                            color: viewModel.hasError
+                                ? Pallete.redColor
+                                : Pallete.greyColor,
                           ),
                         ),
                       ],
@@ -64,7 +68,7 @@ class CalculatorPage extends StatelessWidget {
                         _buildButton(context, "AC", color: Pallete.errorColor),
                         _buildButton(context, "()", color: Pallete.cyanColor),
                         _buildButton(context, "%", color: Pallete.cyanColor),
-                        _buildButton(context, "/", color: Pallete.cyanColor),
+                        _buildButton(context, "÷", color: Pallete.cyanColor),
 
                         _buildButton(
                           context,
@@ -81,7 +85,7 @@ class CalculatorPage extends StatelessWidget {
                           "9",
                           color: Pallete.lightpurpleColor,
                         ),
-                        _buildButton(context, "x", color: Pallete.cyanColor),
+                        _buildButton(context, "×", color: Pallete.cyanColor),
 
                         _buildButton(
                           context,
@@ -124,7 +128,7 @@ class CalculatorPage extends StatelessWidget {
                         ),
                         _buildButton(
                           context,
-                          ".",
+                          ",",
                           color: Pallete.lightpurpleColor,
                         ),
                         _buildButton(

@@ -7,8 +7,17 @@ import 'package:aplikacjamatematyka/features/quiz/view/widgets/quiz_types/quiz_f
 import 'package:aplikacjamatematyka/features/quiz/view/widgets/quiz_types/quiz_second_type_widget.dart';
 import 'package:aplikacjamatematyka/features/quiz/view/widgets/quiz_types/quiz_third_type_widget.dart';
 
-class FinalTestPage extends StatelessWidget {
+class FinalTestPage extends StatefulWidget {
   const FinalTestPage({super.key});
+
+  @override
+  State<FinalTestPage> createState() => _FinalTestPageState();
+}
+
+class _FinalTestPageState extends State<FinalTestPage> {
+  // GlobalKeys - DOKŁADNIE JAK W LEARNING
+  final GlobalKey<QuizFirstTypeWidgetState> _firstTypeKey = GlobalKey();
+  final GlobalKey<QuizSecondTypeWidgetState> _secondTypeKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -119,7 +128,7 @@ class FinalTestPage extends StatelessWidget {
     );
   }
 
-  // ========== HEADER Z NUMEREM PYTANIA ==========
+  // ========== HEADER ==========
   
   Widget _buildTestHeader(FinalTestViewModel vm) {
     return Container(
@@ -177,7 +186,7 @@ class FinalTestPage extends StatelessWidget {
     );
   }
 
-  // ========== DYNAMICZNY WIDGET PYTANIA ==========
+  // ========== WIDGET PYTANIA ==========
   
   Widget _buildQuestionWidget(FinalTestViewModel vm) {
     final question = vm.currentQuestion;
@@ -186,20 +195,23 @@ class FinalTestPage extends StatelessWidget {
       return const Center(child: Text('Brak pytania'));
     }
 
+    // DOKŁADNIE JAK W LEARNING
     switch (question.questionType) {
       case 'closed':
         return QuizFirstTypeWidget(
-          key: ValueKey(question.id),
+          key: _firstTypeKey,
           question: question,
           onAnswerSubmitted: (isCorrect) => vm.onAnswerSubmitted(isCorrect),
+          onAnswerSelected: () => vm.onAnswerSelected(),
         );
       
       case 'yesno':
       case 'enter':
         return QuizSecondTypeWidget(
-          key: ValueKey(question.id),
+          key: _secondTypeKey,
           question: question,
           onAnswerSubmitted: (isCorrect) => vm.onAnswerSubmitted(isCorrect),
+          onAnswerSelected: () => vm.onAnswerSelected(),
         );
       
       case 'match':
@@ -214,7 +226,7 @@ class FinalTestPage extends StatelessWidget {
     }
   }
 
-  // ========== PRZYCISK DALEJ ==========
+  // ========== PRZYCISK - DOKŁADNIE JAK W LEARNING ==========
   
   Widget _buildNextButton(FinalTestViewModel vm) {
     return Padding(
@@ -222,9 +234,11 @@ class FinalTestPage extends StatelessWidget {
       child: SizedBox(
         width: double.infinity,
         child: ElevatedButton(
-          onPressed: vm.isAnswerSelected ? () => vm.submitAndContinue() : null,
+          onPressed: (vm.canSubmitAnswer && !vm.isAnswerSubmitted) 
+              ? () => _handleNextButton(vm)
+              : (vm.isAnswerSubmitted ? () => vm.moveToNextQuestion() : null),
           style: ElevatedButton.styleFrom(
-            backgroundColor: vm.isAnswerSelected
+            backgroundColor: (vm.canSubmitAnswer || vm.isAnswerSubmitted)
                 ? const Color.fromARGB(255, 6, 197, 70)
                 : Colors.grey,
             padding: const EdgeInsets.symmetric(vertical: 16),
@@ -232,9 +246,9 @@ class FinalTestPage extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
             ),
           ),
-          child: const Text(
-            "Dalej",
-            style: TextStyle(
+          child: Text(
+            vm.isAnswerSubmitted ? "Następne pytanie" : "Sprawdź",
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 16,
             ),
@@ -242,5 +256,24 @@ class FinalTestPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  // DOKŁADNIE JAK W LEARNING
+  void _handleNextButton(FinalTestViewModel vm) {
+    final question = vm.currentQuestion;
+    if (question == null) return;
+
+    // Wywołaj walidację przez GlobalKey
+    bool validated = false;
+    
+    if (question.questionType == 'closed') {
+      validated = _firstTypeKey.currentState?.validateAndSubmit() ?? false;
+    } else if (question.questionType == 'yesno' || question.questionType == 'enter') {
+      validated = _secondTypeKey.currentState?.validateAndSubmit() ?? false;
+    }
+    
+    if (validated) {
+      print('✅ Answer validated and submitted');
+    }
   }
 }

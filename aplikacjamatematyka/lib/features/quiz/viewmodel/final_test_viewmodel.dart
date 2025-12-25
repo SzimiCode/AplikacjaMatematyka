@@ -20,9 +20,9 @@ class FinalTestViewModel extends ChangeNotifier {
   int correctAnswersCount = 0;
   int totalAnswered = 0;
   
-  // Stan odpowiedzi
-  bool isAnswerSelected = false;
-  bool? lastAnswerCorrect;
+  // Stan odpowiedzi - DOKŁADNIE JAK W LEARNING
+  bool isAnswerSubmitted = false;
+  bool canSubmitAnswer = false;
 
   FinalTestViewModel() {
     _initializeTest();
@@ -121,36 +121,38 @@ class FinalTestViewModel extends ChangeNotifier {
   
   bool get hasPassed => correctAnswersCount >= requiredToPass;
 
-  // ========== OBSŁUGA ODPOWIEDZI ==========
+  // ========== OBSŁUGA ODPOWIEDZI - DOKŁADNIE JAK W LEARNING ==========
   
-  // Wywołane przez widget pytania gdy user odpowie
+  // Wywołana gdy user wybierze odpowiedź (ale jeszcze nie kliknie "Sprawdź")
+  void onAnswerSelected() {
+    canSubmitAnswer = true;
+    notifyListeners();
+  }
+  
+  // Wywołana gdy user kliknie "Sprawdź" i odpowiedź zostanie zwalidowana
   void onAnswerSubmitted(bool isCorrect) {
-    if (isAnswerSelected) return; // Już odpowiedziano na to pytanie
+    if (isAnswerSubmitted) return;
     
-    isAnswerSelected = true;
-    lastAnswerCorrect = isCorrect;
+    isAnswerSubmitted = true;
+    canSubmitAnswer = false;
+    totalAnswered++;
     
     print('📊 Answer submitted: ${isCorrect ? "✅ Correct" : "❌ Wrong"}');
     
-    notifyListeners(); // Aktywuj przycisk "Dalej"
-  }
-  
-  // Wywołane gdy user kliknie "Dalej"
-  void submitAndContinue() {
-    if (!isAnswerSelected || lastAnswerCorrect == null) return;
-    
-    totalAnswered++;
-    
-    if (lastAnswerCorrect!) {
+    if (isCorrect) {
       correctAnswersCount++;
     }
     
     print('   Current score: $correctAnswersCount/$totalAnswered');
     
-    // Przejdź do następnego pytania
+    notifyListeners();
+  }
+
+  // Przejście do następnego pytania - DOKŁADNIE JAK W LEARNING
+  void moveToNextQuestion() {
     currentQuestionIndex++;
-    isAnswerSelected = false;
-    lastAnswerCorrect = null;
+    canSubmitAnswer = false;
+    isAnswerSubmitted = false;
     
     if (isTestFinished) {
       print('🎉 Test finished! Score: $correctAnswersCount/$totalQuestions');
@@ -163,11 +165,11 @@ class FinalTestViewModel extends ChangeNotifier {
   // ========== NAWIGACJA ==========
   
   void goToPassedPage() {
-    selectedPageNotifier.value = 13; // passed_test_page
+    selectedPageNotifier.value = 12; // passed_test_page
   }
 
   void goToNotPassedPage() {
-    selectedPageNotifier.value = 14; // not_passed_test_page
+    selectedPageNotifier.value = 13; // not_passed_test_page
   }
 
   // ========== RESTART ==========
@@ -176,8 +178,8 @@ class FinalTestViewModel extends ChangeNotifier {
     currentQuestionIndex = 0;
     correctAnswersCount = 0;
     totalAnswered = 0;
-    isAnswerSelected = false;
-    lastAnswerCorrect = null;
+    isAnswerSubmitted = false;
+    canSubmitAnswer = false;
     
     await _initializeTest();
   }

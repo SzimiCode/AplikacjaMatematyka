@@ -12,6 +12,7 @@ class QuizThirdTypeWidget extends StatefulWidget {
     super.key,
     required this.question,
     required this.onAnswerSubmitted,
+    
   });
 
   @override

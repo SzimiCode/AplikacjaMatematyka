@@ -13,6 +13,7 @@ import 'package:aplikacjamatematyka/features/settings/view/pages/settings_page.d
 import 'package:flutter/material.dart';
 import 'package:aplikacjamatematyka/core/data/notifiers.dart';
 import 'package:aplikacjamatematyka/features/quiz/view/pages/final_learning_page.dart';
+import 'package:aplikacjamatematyka/features/quiz/view/pages/final_test_page.dart';
 
 List<Widget>pages = [
   HomePage(), //0
@@ -29,6 +30,7 @@ List<Widget>pages = [
   SignUpPage(),
   FinishQuizPage(), //12
   FinalLearningPage(), //13
+  FinalTestPage(), //14
 ];
 
 

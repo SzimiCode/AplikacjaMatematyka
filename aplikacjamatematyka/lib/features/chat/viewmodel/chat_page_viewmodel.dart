@@ -3,13 +3,31 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gemini/flutter_gemini.dart';
 
 class ChatPageViewmodel extends ChangeNotifier {
+  final String systemPrompt = """
+  Odpowiadaj zawsze po polsku, naturalnie i poprawnie.
+  Jesteś smokiem Mat i pomagasz dzieciom w nauce matematyki (klasy 1 8).
+  Nie wspominaj o tym w każdej wiadomości.
+
+  Nie używaj LaTeX-a ani znaków specjalnych typu dollar.
+  Nie używaj HTML (&times;, &nbsp; itd.).
+  Używaj tylko czystego tekstu.
+
+  Działania matematyczne zapisuj jak w zeszycie:
+  2+2*2=6
+
+  Tłumacz krok po kroku, prostym językiem.
+  """;
   final Gemini gemini = Gemini.instance;
 
   List<ChatMessage> messages = [];
   bool isTyping = false;
 
   final ChatUser currentUser = ChatUser(id: "0", firstName: "User");
-  final ChatUser geminiUser = ChatUser(id: "1", firstName: "Mat");
+  final ChatUser geminiUser = ChatUser(
+    id: "1",
+    firstName: "Mat",
+    profileImage: "assets/images/smok2_circle.png",
+  );
 
   ChatPageViewmodel() {
     _initializeChat();
@@ -19,52 +37,64 @@ class ChatPageViewmodel extends ChangeNotifier {
     final welcomeMessage = ChatMessage(
       user: geminiUser,
       createdAt: DateTime.now(),
-      text: "Cześć! 🐉 Z tej strony smok Mat. W czym mógłbym ci dzisiaj pomóc?",
+      text: "Z tej strony smok Mat🐉. W czym mógłbym ci dzisiaj pomóc?",
     );
     messages = [welcomeMessage];
     notifyListeners();
   }
 
   void sendMessage(ChatMessage chatMessage) {
-    messages = [chatMessage, ...messages];
+    messages.insert(0, chatMessage);
     isTyping = true;
     notifyListeners();
 
-    final question =
-      "Odpowiadaj zawsze po polsku, naturalnie i poprawnie. "
-      "Jesteś smokiem Mat i pomagasz dzieciom w matematyce, ale nie wspominaj o tym w każdej wiadomości. "
-      "Nie używaj nigdy LaTeX-a ani znaków  specjalnych typu dolar"
-      "Nie używaj HTML typu &times;, &amp;, &nbsp;. "
-      "Używaj tylko czystego tekstu, bez specjalnych symboli. "
-      "Działania matematyczne zapisuj jak w zeszycie, np.: 2+2*2=6. "
-      "Oto pytanie użytkownika: ${chatMessage.text}";
+    final history = messages
+        .where((m) => m.text.isNotEmpty)
+        .take(6)
+        .map(
+          (m) =>
+              "${m.user.id == currentUser.id ? "Użytkownik" : "Mat"}: ${m.text}",
+        )
+        .toList()
+        .reversed
+        .join("\n");
 
-    ChatMessage aiMessage = ChatMessage(
+    final question =
+        """
+$systemPrompt
+
+Historia rozmowy:
+$history
+
+Nowe pytanie:
+${chatMessage.text}
+""";
+
+    final aiMessage = ChatMessage(
       user: geminiUser,
       createdAt: DateTime.now(),
       text: "",
     );
 
-    messages = [aiMessage, ...messages];
+    messages.insert(0, aiMessage);
     notifyListeners();
 
     gemini
         .streamGenerateContent(question)
         .listen(
           (event) {
-            final responseChunk =
+            final chunk =
                 event.content?.parts
                     ?.whereType<TextPart>()
                     .map((p) => p.text)
                     .join(" ") ??
                 "";
 
-            aiMessage.text += responseChunk;
+            aiMessage.text += chunk;
             messages[0] = aiMessage;
             notifyListeners();
           },
-          onError: (e) {
-            debugPrint("Błąd Gemini: $e");
+          onError: (_) {
             isTyping = false;
             notifyListeners();
           },

@@ -32,7 +32,6 @@ class CalculatorPageViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Czyszczenie całego działania
   void _clearAll() {
     _expression = '';
     _result = '';
@@ -40,23 +39,19 @@ class CalculatorPageViewModel extends ChangeNotifier {
     _openBrackets = 0;
   }
 
-  /// Usunięcie ostatniego znaku
   void _backspace() {
     if (_expression.isNotEmpty) {
       String last = _expression[_expression.length - 1];
 
-      if (last == '(') _openBrackets--;
+      if (last == '(' && _openBrackets > 0) _openBrackets--;
       if (last == ')') _openBrackets++;
 
       _expression = _expression.substring(0, _expression.length - 1);
     }
   }
 
-  /// Dodawanie wartości do działania
   void _appendValue(String value) {
-    // 🚫 BLOKADA DŁUGOŚCI
     if (_expression.length >= maxExpressionLength) {
-      // pozwalamy tylko na ZAMIANY operatorów (np. + → -)
       if (_expression.isNotEmpty &&
           _isOperator(_expression[_expression.length - 1]) &&
           _isOperator(value)) {
@@ -67,36 +62,30 @@ class CalculatorPageViewModel extends ChangeNotifier {
 
     String current = _currentNumber();
 
-    // 🚫 usuwamy 0 TYLKO gdy po nim idzie cyfra
     if (current == '0' && _isDigit(value)) {
       _expression = _expression.substring(0, _expression.length - 1) + value;
       return;
     }
 
-    // limit 4 procentow
     if (value == '%' && _countTrailingPercents() >= 3) {
       return;
     }
-    // BLOKADA operatorów na początku (poza minusem)
     if (_expression.isEmpty) {
-      if (['+', '×', '/', '%'].contains(value)) {
+      if (['+', '×', '÷', '%'].contains(value)) {
         return;
       }
     }
 
-    // Jeśli zaczynamy od przecinka → 0,
     if (_expression.isEmpty && value == ',') {
       _expression = '0,';
       return;
     }
 
-    // Jeśli ostatni znak to przecinek i klikamy operator LUB % → domykamy 0
     if (_expression.endsWith(',') &&
         (_isOperator(value) || _isPercent(value))) {
       _expression += '0';
     }
 
-    // 🔁 Zamiana operatora na operator (blokada ++, xx, //, %%)
     if (_expression.isNotEmpty &&
         _isOperator(_expression[_expression.length - 1]) &&
         _isOperator(value)) {
@@ -107,16 +96,12 @@ class CalculatorPageViewModel extends ChangeNotifier {
     _expression += value;
   }
 
-  /// ✅ Obsługa przecinka (polska notacja)
   void _addComma() {
-    // Pobieramy ostatnią liczbę (po operatorze)
-    final parts = _expression.split(RegExp(r'[+\-x/%()]'));
+    final parts = _expression.split(RegExp(r'[+\-×÷%()]'));
     final lastPart = parts.isNotEmpty ? parts.last : '';
 
-    // Nie pozwalamy na dwa przecinki w jednej liczbie
     if (lastPart.contains(',')) return;
 
-    // Jeśli puste lub operator przed – dodajemy 0,
     if (_expression.isEmpty || _isLastCharOperator()) {
       _expression += '0,';
     } else {
@@ -135,7 +120,6 @@ class CalculatorPageViewModel extends ChangeNotifier {
 
       double value = double.parse(number.replaceAll(',', '.'));
 
-      // każde % to /100
       for (int i = 0; i < percents.length; i++) {
         value /= 100;
       }
@@ -164,22 +148,18 @@ class CalculatorPageViewModel extends ChangeNotifier {
     }
 
     String last = _expression[_expression.length - 1];
-
-    // Jeśli ostatni znak to operator lub '(' → otwieramy
     if (_isOperator(last) || last == '(') {
       _expression += '(';
       _openBrackets++;
       return;
     }
 
-    // Jeśli możemy zamknąć nawias
     if (_openBrackets > 0 && !_isOperator(last)) {
       _expression += ')';
       _openBrackets--;
       return;
     }
 
-    // Fallback – otwieramy
     _expression += '(';
     _openBrackets++;
   }
@@ -187,14 +167,14 @@ class CalculatorPageViewModel extends ChangeNotifier {
   String _currentNumber() {
     if (_expression.isEmpty) return '';
 
-    final parts = _expression.split(RegExp(r'[+\-x/%()]'));
+    final parts = _expression.split(RegExp(r'[+\-×÷%()]'));
 
     return parts.last;
   }
 
   bool _isLastCharOperator() {
     if (_expression.isEmpty) return false;
-    return '+-x÷'.contains(_expression[_expression.length - 1]);
+    return '+-×÷'.contains(_expression[_expression.length - 1]);
   }
 
   bool _isOperator(String value) {
@@ -232,11 +212,9 @@ class CalculatorPageViewModel extends ChangeNotifier {
     _hasError = true;
   }
 
-  /// Obliczenie wyniku
   void _calculateResult() {
     try {
       String exp = _expression;
-
       exp = _trimTrailingOperators(exp);
 
       if (exp.isEmpty) {
@@ -248,11 +226,7 @@ class CalculatorPageViewModel extends ChangeNotifier {
         exp += ')';
         _openBrackets--;
       }
-
-      // Zamiana procentów
       exp = _handlePercent(exp);
-
-      // Zamiana notacji
       exp = exp.replaceAll(',', '.').replaceAll('×', '*').replaceAll('÷', '/');
 
       ShuntingYardParser parser = ShuntingYardParser();

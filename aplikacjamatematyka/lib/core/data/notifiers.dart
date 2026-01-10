@@ -4,7 +4,7 @@ import 'package:aplikacjamatematyka/features/quiz/model/category_model.dart';
 import 'package:aplikacjamatematyka/features/quiz/model/course_model.dart';
 
 // ========== EXISTING NOTIFIERS ==========
-ValueNotifier<int> selectedPageNotifier = ValueNotifier(12);
+ValueNotifier<int> selectedPageNotifier = ValueNotifier(0);
 ValueNotifier<bool> isDarkModifier = ValueNotifier(false);
 ValueNotifier<String> tempLessonName = ValueNotifier("");
 

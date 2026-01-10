@@ -129,11 +129,9 @@ class FinalLearningViewModel extends ChangeNotifier {
     
     if (nextQuestion == null && currentQuestionIndex < allQuestions.length) {
       nextQuestion = allQuestions[currentQuestionIndex];
-      print('⚠️ No $difficultyName question found, using any available');
     }
     
     if (nextQuestion != null) {
-      print('📝 Loaded question ${questionNumber}: ${nextQuestion.questionType} - ${nextQuestion.difficultyLevelName}');
       isAnswerSubmitted = false;
       canSubmitAnswer = false; 
       currentAnswerData = null;
@@ -152,7 +150,7 @@ class FinalLearningViewModel extends ChangeNotifier {
     }
   }
 
-  // ========== GETTERY ==========
+
   
   QuestionModel? get currentQuestion {
     if (allQuestions.isEmpty || currentQuestionIndex >= allQuestions.length) {
@@ -171,31 +169,25 @@ class FinalLearningViewModel extends ChangeNotifier {
   }
 
   bool get isLearningFinished {
-    // NOWA LOGIKA: Sprawdź czy użytkownik zaliczył wszystkie 3 poziomy (3+3+3=9 pytań)
     if (_hasCompletedAllLevels()) {
       print('🎉 All levels completed! Early finish at question $questionNumber');
       return true;
     }
     
-    // Sprawdź czy osiągnięto maksymalną liczbę pytań
     if (questionNumber > maxQuestions) {
-      // Jeśli trzeba bonus pytań (jest streak na Hard)
       if (currentDifficulty == DifficultyLevel.hard && streakCount > 0) {
-        return false; // Kontynuuj bonusowe
+        return false; 
       }
       return true;
     }
     return false;
   }
   
-  // POPRAWIONA METODA: Sprawdza czy użytkownik zaliczył wszystkie 3 poziomy
   bool _hasCompletedAllLevels() {
-    // Użytkownik musi mieć po 3 poprawne odpowiedzi na każdym poziomie
     bool hasAllCorrect = correctAnswersAtEasy >= 3 &&
                          correctAnswersAtMedium >= 3 &&
                          correctAnswersAtHard >= 3;
     
-    print('🔍 Checking completion: E=$correctAnswersAtEasy, M=$correctAnswersAtMedium, H=$correctAnswersAtHard | Complete: $hasAllCorrect');
     
     return hasAllCorrect;
   }
@@ -206,7 +198,7 @@ class FinalLearningViewModel extends ChangeNotifier {
            currentDifficulty == DifficultyLevel.hard;
   }
 
-  // ========== OBSŁUGA ODPOWIEDZI ==========
+
   
   void onAnswerSelected() {
     canSubmitAnswer = true;
@@ -220,15 +212,11 @@ class FinalLearningViewModel extends ChangeNotifier {
     canSubmitAnswer = false; 
     totalAnswered++;
     
-    print('📊 Answer submitted: ${isCorrect ? "✅ Correct" : "❌ Wrong"}');
-    print('   Streak before: $streakCount');
-    print('   Current difficulty: ${_getDifficultyName()}');
-    
     if (isCorrect) {
       totalCorrect++;
       streakCount++;
       
-      // WAŻNE: Zlicz poprawne odpowiedzi per poziom PRZED levelUp
+   
       _incrementCorrectAnswerCounter();
       
       if (streakCount >= 3) {
@@ -239,13 +227,11 @@ class FinalLearningViewModel extends ChangeNotifier {
       streakCount = 0;
     }
     
-    print('   Streak after: $streakCount');
-    print('   Correct per level: E=$correctAnswersAtEasy, M=$correctAnswersAtMedium, H=$correctAnswersAtHard');
+
     
     notifyListeners();
   }
   
-  // NOWA METODA: Zlicza poprawne odpowiedzi na obecnym poziomie
   void _incrementCorrectAnswerCounter() {
     switch (currentDifficulty) {
       case DifficultyLevel.easy:
@@ -263,10 +249,8 @@ class FinalLearningViewModel extends ChangeNotifier {
   void _levelUp() {
     if (currentDifficulty == DifficultyLevel.easy) {
       currentDifficulty = DifficultyLevel.medium;
-      print('🎉 Level UP! → MEDIUM');
     } else if (currentDifficulty == DifficultyLevel.medium) {
       currentDifficulty = DifficultyLevel.hard;
-      print('🎉 Level UP! → HARD');
     }
   }
 
@@ -296,11 +280,9 @@ class FinalLearningViewModel extends ChangeNotifier {
         fireReward = 3;
         break;
     }
-    
-    print('🔥 Fire reward: $fireReward (level: ${_getDifficultyName()})');
   }
 
-  // ========== RESTART ==========
+
   
   Future<void> restartLearning() async {
     currentDifficulty = DifficultyLevel.easy;

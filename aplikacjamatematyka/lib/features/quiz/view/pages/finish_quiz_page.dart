@@ -143,6 +143,7 @@ class _FinishQuizPageState extends State<FinishQuizPage> {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () {
+                      widget.viewModel.onClaimButtonPressed();
                     },
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size(200, 58),

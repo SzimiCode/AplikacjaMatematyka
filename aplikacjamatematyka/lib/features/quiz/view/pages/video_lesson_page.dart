@@ -161,9 +161,7 @@ class _VideoLessonViewState extends State<VideoLessonView> {
                                   iconSize: 40,
                                   color: Colors.white,
                                   icon: const Icon(Icons.arrow_back),
-                                  onTap: () {
-                                    selectedPageNotifier.value = 15;
-                                  },
+                                  onPressed: () => Navigator.of(context).pop(),
                                 ),
                               ),
 

@@ -14,10 +14,11 @@ import 'package:flutter/material.dart';
 import 'package:aplikacjamatematyka/core/data/notifiers.dart';
 import 'package:aplikacjamatematyka/features/quiz/view/pages/final_learning_page.dart';
 import 'package:aplikacjamatematyka/features/quiz/view/pages/final_test_page.dart';
+import 'package:aplikacjamatematyka/features/quiz/view/pages/video_lesson_page.dart';
 
-List<Widget>pages = [
+List<Widget> pages = [
   HomePage(), //0
-  ChooseLessonPage(),//1
+  ChooseLessonPage(), //1
   ChatPage(), //2
   CalculatorPage(),
   SettingsPage(), //4
@@ -31,8 +32,8 @@ List<Widget>pages = [
   FinishQuizPage(), //12
   FinalLearningPage(), //13
   FinalTestPage(), //14
+  VideoLessonView(), //15
 ];
-
 
 class WidgetTree extends StatelessWidget {
   const WidgetTree({super.key});
@@ -40,9 +41,12 @@ class WidgetTree extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ValueListenableBuilder(valueListenable: selectedPageNotifier, builder: (context, value, child) {
-              return pages.elementAt(value);
-      },),
+      body: ValueListenableBuilder(
+        valueListenable: selectedPageNotifier,
+        builder: (context, value, child) {
+          return pages.elementAt(value);
+        },
+      ),
     );
   }
 }

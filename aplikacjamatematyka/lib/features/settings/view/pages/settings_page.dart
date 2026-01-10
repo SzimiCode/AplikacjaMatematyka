@@ -15,14 +15,8 @@ class SettingsPage extends StatelessWidget {
         children: [
           ListTile(
             title: const Text('Szymon Molitorys'),
-            subtitle: const Text('Zmień swoje dane'),
-            leading: CircleAvatar(
-              backgroundImage: NetworkImage('https://via.placeholder.com/150'),  
-            ),
-            trailing: const Icon(Icons.arrow_forward_ios),
-            onTap: () {
-          
-            },
+
+      
           ),
           const Divider(),
 
@@ -46,6 +40,23 @@ class SettingsPage extends StatelessWidget {
               },
             ),
           ),
+          ListTile(
+                title: const Text('Licencje'),
+                trailing: const Icon(Icons.description),
+                onTap: () {
+                  showLicensePage(
+                    context: context,
+                    applicationName: 'Aplikacja Matematyka',
+                    applicationVersion: '1.0.0',
+                    applicationIcon: const Icon(Icons.calculate),
+                    applicationLegalese: '© 2026 Szymon Molitorys, Jakub Stępień, Mateusz Roździński\n'
+                        'Wszelkie prawa zastrzeżone.\n\n'
+                        'Aplikacja oraz jej kod źródłowy są chronione prawem autorskim. '
+                        'Wykorzystane biblioteki open-source podlegają ich własnym licencjom.',
+                  );
+                },
+              ),
+
           ListTile(
             title: const Text('Logout'),
             trailing: const Icon(Icons.exit_to_app),

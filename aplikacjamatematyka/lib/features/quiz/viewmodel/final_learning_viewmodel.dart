@@ -27,10 +27,15 @@ class FinalLearningViewModel extends ChangeNotifier {
   int totalAnswered = 0;
   int fireReward = 0; // Ile ogni dostanie na końcu
   
+  // NOWE: Liczniki pytań per poziom (tylko poprawne odpowiedzi)
+  int correctAnswersAtEasy = 0;
+  int correctAnswersAtMedium = 0;
+  int correctAnswersAtHard = 0;
+  
   // Stan obecnego pytania (dla różnych typów)
   dynamic currentAnswerData; // Może być String, bool, Map dla match
   bool isAnswerSubmitted = false;
-  bool canSubmitAnswer = false; // NOWE: czy można kliknąć "Sprawdź"
+  bool canSubmitAnswer = false;
 
   FinalLearningViewModel() {
     _initializeLearning();
@@ -124,11 +129,9 @@ class FinalLearningViewModel extends ChangeNotifier {
     
     if (nextQuestion == null && currentQuestionIndex < allQuestions.length) {
       nextQuestion = allQuestions[currentQuestionIndex];
-      print('⚠️ No $difficultyName question found, using any available');
     }
     
     if (nextQuestion != null) {
-      print('📝 Loaded question ${questionNumber}: ${nextQuestion.questionType} - ${nextQuestion.difficultyLevelName}');
       isAnswerSubmitted = false;
       canSubmitAnswer = false; 
       currentAnswerData = null;
@@ -147,7 +150,7 @@ class FinalLearningViewModel extends ChangeNotifier {
     }
   }
 
-  // ========== GETTERY ==========
+
   
   QuestionModel? get currentQuestion {
     if (allQuestions.isEmpty || currentQuestionIndex >= allQuestions.length) {
@@ -166,15 +169,27 @@ class FinalLearningViewModel extends ChangeNotifier {
   }
 
   bool get isLearningFinished {
-    // Sprawdź czy osiągnięto maksymalną liczbę pytań
+    if (_hasCompletedAllLevels()) {
+      print('🎉 All levels completed! Early finish at question $questionNumber');
+      return true;
+    }
+    
     if (questionNumber > maxQuestions) {
-      // Jeśli trzeba bonus pytań (jest streak na Hard)
       if (currentDifficulty == DifficultyLevel.hard && streakCount > 0) {
-        return false; // Kontynuuj bonusowe
+        return false; 
       }
       return true;
     }
     return false;
+  }
+  
+  bool _hasCompletedAllLevels() {
+    bool hasAllCorrect = correctAnswersAtEasy >= 3 &&
+                         correctAnswersAtMedium >= 3 &&
+                         correctAnswersAtHard >= 3;
+    
+    
+    return hasAllCorrect;
   }
 
   bool get needsBonusQuestion {
@@ -183,7 +198,7 @@ class FinalLearningViewModel extends ChangeNotifier {
            currentDifficulty == DifficultyLevel.hard;
   }
 
-  // ========== OBSŁUGA ODPOWIEDZI ==========
+
   
   void onAnswerSelected() {
     canSubmitAnswer = true;
@@ -197,12 +212,12 @@ class FinalLearningViewModel extends ChangeNotifier {
     canSubmitAnswer = false; 
     totalAnswered++;
     
-    print('📊 Answer submitted: ${isCorrect ? "✅ Correct" : "❌ Wrong"}');
-    print('   Streak before: $streakCount');
-    
     if (isCorrect) {
       totalCorrect++;
       streakCount++;
+      
+   
+      _incrementCorrectAnswerCounter();
       
       if (streakCount >= 3) {
         _levelUp();
@@ -212,19 +227,30 @@ class FinalLearningViewModel extends ChangeNotifier {
       streakCount = 0;
     }
     
-    print('   Streak after: $streakCount');
-    print('   Current difficulty: ${_getDifficultyName()}');
+
     
     notifyListeners();
+  }
+  
+  void _incrementCorrectAnswerCounter() {
+    switch (currentDifficulty) {
+      case DifficultyLevel.easy:
+        correctAnswersAtEasy++;
+        break;
+      case DifficultyLevel.medium:
+        correctAnswersAtMedium++;
+        break;
+      case DifficultyLevel.hard:
+        correctAnswersAtHard++;
+        break;
+    }
   }
 
   void _levelUp() {
     if (currentDifficulty == DifficultyLevel.easy) {
       currentDifficulty = DifficultyLevel.medium;
-      print('🎉 Level UP! → MEDIUM');
     } else if (currentDifficulty == DifficultyLevel.medium) {
       currentDifficulty = DifficultyLevel.hard;
-      print('🎉 Level UP! → HARD');
     }
   }
 
@@ -254,11 +280,9 @@ class FinalLearningViewModel extends ChangeNotifier {
         fireReward = 3;
         break;
     }
-    
-    print('🔥 Fire reward: $fireReward (level: ${_getDifficultyName()})');
   }
 
-  // ========== RESTART ==========
+
   
   Future<void> restartLearning() async {
     currentDifficulty = DifficultyLevel.easy;
@@ -271,6 +295,9 @@ class FinalLearningViewModel extends ChangeNotifier {
     isAnswerSubmitted = false;
     canSubmitAnswer = false;
     currentAnswerData = null;
+    correctAnswersAtEasy = 0;
+    correctAnswersAtMedium = 0;
+    correctAnswersAtHard = 0;
     
     await _initializeLearning();
   }

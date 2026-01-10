@@ -74,26 +74,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                   ),
-                  Row(
-                    children: [
-                      IconButton(
-                        onPressed: viewModel.goToSettingsButtonPressed,
-                        icon: Image.asset(
-                          'assets/images/book1.png',
-                          height: 35,
-                          width: 35,
-                        ),
-                      ),
-                      IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.menu,
-                          color: Pallete.purpleColor,
-                          size: 35,
-                        ),
-                      ),
-                    ],
-                  ),
+                  
                 ],
               ),
               const SizedBox(height: 20),

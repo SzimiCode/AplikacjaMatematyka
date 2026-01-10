@@ -21,7 +21,7 @@ class ContentLessonWidget extends StatelessWidget {
               icon: Icons.camera_alt,
               asset: 'assets/images/knight.png',
               onTap: () {
-                selectedPageNotifier.value = 8;
+                selectedPageNotifier.value = 15;
               },
             ),
 

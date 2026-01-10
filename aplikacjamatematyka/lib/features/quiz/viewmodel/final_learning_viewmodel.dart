@@ -55,7 +55,6 @@ class FinalLearningViewModel extends ChangeNotifier {
 
       print('📚 Fetching questions for learning mode: ${selectedCourse.courseName}');
       
-      // Pobierz pytania WSZYSTKICH typów
       final closedQuestions = await _repository.getQuestions(
         courseId: selectedCourse.id,
         questionType: 'closed',
@@ -76,7 +75,6 @@ class FinalLearningViewModel extends ChangeNotifier {
         questionType: 'match',
       );
 
-      // Połącz wszystkie pytania
       allQuestions = [
         ...closedQuestions,
         ...yesnoQuestions,
@@ -90,23 +88,14 @@ class FinalLearningViewModel extends ChangeNotifier {
         notifyListeners();
         return;
       }
-
-      print('✅ Loaded ${allQuestions.length} total questions');
-      print('   - Closed: ${closedQuestions.length}');
-      print('   - YesNo: ${yesnoQuestions.length}');
-      print('   - Enter: ${enterQuestions.length}');
-      print('   - Match: ${matchQuestions.length}');
       
-      // Pomieszaj pytania
       allQuestions.shuffle();
       
-      // Załaduj pierwsze pytanie (Easy)
       _loadNextQuestion();
       
       isLoading = false;
       notifyListeners();
     } catch (e) {
-      print('❌ Error loading questions: $e');
       errorMessage = 'Błąd podczas ładowania pytań: $e';
       isLoading = false;
       notifyListeners();
@@ -118,10 +107,8 @@ class FinalLearningViewModel extends ChangeNotifier {
   void _loadNextQuestion() {
     if (isLearningFinished) return;
     
-    // Znajdź pytanie odpowiednie dla obecnego poziomu trudności
     final difficultyName = _getDifficultyName();
     
-    // Szukaj pytania z odpowiednim poziomem trudności
     QuestionModel? nextQuestion;
     int searchIndex = currentQuestionIndex;
     
@@ -135,7 +122,6 @@ class FinalLearningViewModel extends ChangeNotifier {
       searchIndex++;
     }
     
-    // Jeśli nie znaleziono pytania tego poziomu, weź jakiekolwiek
     if (nextQuestion == null && currentQuestionIndex < allQuestions.length) {
       nextQuestion = allQuestions[currentQuestionIndex];
       print('⚠️ No $difficultyName question found, using any available');
@@ -144,7 +130,7 @@ class FinalLearningViewModel extends ChangeNotifier {
     if (nextQuestion != null) {
       print('📝 Loaded question ${questionNumber}: ${nextQuestion.questionType} - ${nextQuestion.difficultyLevelName}');
       isAnswerSubmitted = false;
-      canSubmitAnswer = false; // Reset
+      canSubmitAnswer = false; 
       currentAnswerData = null;
       notifyListeners();
     }
@@ -199,18 +185,16 @@ class FinalLearningViewModel extends ChangeNotifier {
 
   // ========== OBSŁUGA ODPOWIEDZI ==========
   
-  // NOWA METODA: Wywołana gdy user wybierze odpowiedź (ale jeszcze nie kliknie "Sprawdź")
   void onAnswerSelected() {
     canSubmitAnswer = true;
     notifyListeners();
   }
   
-  // ZMODYFIKOWANA: Wywołana gdy user kliknie "Sprawdź" i odpowiedź zostanie zwalidowana
   void onAnswerSubmitted(bool isCorrect) {
     if (isAnswerSubmitted) return;
     
     isAnswerSubmitted = true;
-    canSubmitAnswer = false; // Reset
+    canSubmitAnswer = false; 
     totalAnswered++;
     
     print('📊 Answer submitted: ${isCorrect ? "✅ Correct" : "❌ Wrong"}');
@@ -220,13 +204,11 @@ class FinalLearningViewModel extends ChangeNotifier {
       totalCorrect++;
       streakCount++;
       
-      // Sprawdź czy awans na wyższy poziom
       if (streakCount >= 3) {
         _levelUp();
         streakCount = 0;
       }
     } else {
-      // Reset kropek przy błędzie
       streakCount = 0;
     }
     
@@ -244,14 +226,12 @@ class FinalLearningViewModel extends ChangeNotifier {
       currentDifficulty = DifficultyLevel.hard;
       print('🎉 Level UP! → HARD');
     }
-    // Hard jest najwyższy
   }
 
-  // ZMODYFIKOWANA: Przejście do następnego pytania
   void moveToNextQuestion() {
     questionNumber++;
     currentQuestionIndex++;
-    canSubmitAnswer = false; // Reset dla następnego pytania
+    canSubmitAnswer = false; 
     
     if (!isLearningFinished) {
       _loadNextQuestion();
@@ -263,7 +243,6 @@ class FinalLearningViewModel extends ChangeNotifier {
   }
 
   void _calculateFireReward() {
-    // Nagroda zależy od najwyższego osiągniętego poziomu
     switch (currentDifficulty) {
       case DifficultyLevel.easy:
         fireReward = 1;

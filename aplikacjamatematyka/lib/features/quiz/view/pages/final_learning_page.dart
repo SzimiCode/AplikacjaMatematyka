@@ -15,7 +15,7 @@ class FinalLearningPage extends StatefulWidget {
 }
 
 class _FinalLearningPageState extends State<FinalLearningPage> {
-  // GlobalKeys dla widgetów
+
   final GlobalKey<QuizFirstTypeWidgetState> _firstTypeKey = GlobalKey();
   final GlobalKey<QuizSecondTypeWidgetState> _secondTypeKey = GlobalKey();
 
@@ -25,7 +25,7 @@ class _FinalLearningPageState extends State<FinalLearningPage> {
       create: (_) => FinalLearningViewModel(),
       child: Consumer<FinalLearningViewModel>(
         builder: (context, vm, child) {
-          // Stan ładowania
+    
           if (vm.isLoading) {
             return Scaffold(
               backgroundColor: Colors.white,
@@ -39,7 +39,7 @@ class _FinalLearningPageState extends State<FinalLearningPage> {
             );
           }
 
-          // Stan błędu
+
           if (vm.errorMessage != null) {
             return Scaffold(
               backgroundColor: Colors.white,
@@ -88,7 +88,6 @@ class _FinalLearningPageState extends State<FinalLearningPage> {
             );
           }
 
-          // Stan ukończenia
           if (vm.isLearningFinished) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
               vm.goToFinishPage();
@@ -102,7 +101,6 @@ class _FinalLearningPageState extends State<FinalLearningPage> {
             );
           }
 
-          // Stan normalny - nauka w trakcie
           return Scaffold(
             backgroundColor: Colors.white,
             appBar: QuizAppBar(
@@ -160,7 +158,7 @@ class _FinalLearningPageState extends State<FinalLearningPage> {
       ),
       child: Column(
         children: [
-          // Etykieta poziomu
+
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
             decoration: BoxDecoration(
@@ -180,7 +178,7 @@ class _FinalLearningPageState extends State<FinalLearningPage> {
           
           const SizedBox(height: 12),
           
-          // 3 kropki progresji
+
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: List.generate(3, (index) {
@@ -198,8 +196,7 @@ class _FinalLearningPageState extends State<FinalLearningPage> {
           ),
           
           const SizedBox(height: 8),
-          
-          // Numer pytania
+     
           Text(
             'Pytanie ${vm.questionNumber}${vm.needsBonusQuestion ? " (BONUS)" : ""} / ${vm.maxQuestions}',
             style: TextStyle(
@@ -287,7 +284,6 @@ class _FinalLearningPageState extends State<FinalLearningPage> {
     final question = vm.currentQuestion;
     if (question == null) return;
 
-    // Wywołaj walidację przez GlobalKey
     bool validated = false;
     
     if (question.questionType == 'closed') {

@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 
-# Manager do tworzenia użytkowników
+# menedzer do tworzenia użytkowników
 class UserManager(BaseUserManager):
     def create_user(self, email, nick, password=None, **extra_fields):
         if not email:

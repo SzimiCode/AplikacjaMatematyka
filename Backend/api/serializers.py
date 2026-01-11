@@ -66,14 +66,22 @@ class DifficultyLevelSerializer(serializers.ModelSerializer):
 # Serializer dla kursu (z informacją o kategorii)
 class CourseSerializer(serializers.ModelSerializer):
     category_name = serializers.CharField(source='category.category_name', read_only=True)
+    full_video_url = serializers.SerializerMethodField()
     
     class Meta:
         model = Course
         fields = [
             'id', 'category', 'category_name', 'course_name', 'description', 
-            'video_url', 'video_duration', 'points_per_question', 
+            'video_url', 'full_video_url', 'points_per_question', 
             'required_correct_answers', 'display_order', 'created_at'
         ]
+    
+    def get_full_video_url(self, obj):
+        """Zwraca pełny URL do wideo"""
+        request = self.context.get('request')
+        if request and obj.video_url:
+            return obj.get_full_video_url(request)
+        return None
 
 # Serializer dla opcji odpowiedzi (closed questions)
 class AnswerOptionSerializer(serializers.ModelSerializer):

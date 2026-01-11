@@ -3,6 +3,7 @@ import 'package:aplikacjamatematyka/features/quiz/model/class_model.dart';
 import 'package:aplikacjamatematyka/features/quiz/model/category_model.dart';
 import 'package:aplikacjamatematyka/features/quiz/model/course_model.dart';
 
+
 // ========== EXISTING NOTIFIERS ==========
 ValueNotifier<int> selectedPageNotifier = ValueNotifier(0);
 ValueNotifier<bool> isDarkModifier = ValueNotifier(false);

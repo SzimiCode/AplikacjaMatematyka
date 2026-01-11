@@ -1,51 +1,88 @@
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
+import 'package:aplikacjamatematyka/core/data/notifiers.dart';
 
 class VideoLessonViewModel extends ChangeNotifier {
   late VideoPlayerController _controller;
   bool _initialized = false;
-
-  bool showControls = true; // 🔹 kontrola widoczności kontrolek
-
+  bool _loading = true;
+  String? _error;
+  bool showControls = true;
+  
   VideoPlayerController get controller => _controller;
   bool get isInitialized => _initialized;
+  bool get isLoading => _loading;
+  String? get error => _error;
 
-  /// Inicjalizacja na sztywno dla 1film.mp4
+  /// 🔹 Inicjalizacja - pobiera kurs z globalnego notifiera
   Future<void> initialize() async {
-    _controller = VideoPlayerController.asset('assets/videos/1film.mp4');
-
-    await _controller.initialize();
-    _controller.setVolume(1.0);
-    _controller.play();
-
-    // 🔹 Listener do odbudowy UI przy zmianach odtwarzacza
-    _controller.addListener(() {
-      notifyListeners();
-    });
-
-    _initialized = true;
+    _loading = true;
+    _error = null;
     notifyListeners();
+
+    try {
+      // 🔹 Pobierz kurs z globalnego notifiera
+      final course = selectedCourseNotifier.value;
+      
+      if (course == null) {
+        throw Exception('Nie wybrano kursu');
+      }
+      
+      final videoUrl = course.fullVideoUrl;
+      
+      if (videoUrl == null || videoUrl.isEmpty) {
+        throw Exception('Brak URL wideo dla kursu: ${course.courseName}');
+      }
+
+      print('🎬 VideoVM: Loading video from: $videoUrl');
+
+      // 🔹 Inicjalizuj kontroler z URL z sieci
+      _controller = VideoPlayerController.networkUrl(Uri.parse(videoUrl));
+      
+      await _controller.initialize();
+      _controller.setVolume(1.0);
+      _controller.play();
+
+      // 🔹 Listener do odbudowy UI przy zmianach odtwarzacza
+      _controller.addListener(() {
+        notifyListeners();
+      });
+
+      _initialized = true;
+      _loading = false;
+      print('✅ VideoVM: Video initialized successfully for course: ${course.courseName}');
+      notifyListeners();
+      
+    } catch (e) {
+      _error = 'Błąd ładowania wideo: $e';
+      _loading = false;
+      _initialized = false;
+      print('❌ VideoVM Error: $_error');
+      notifyListeners();
+    }
   }
 
   void playPause() {
+    if (!_initialized) return;
     _controller.value.isPlaying ? _controller.pause() : _controller.play();
     notifyListeners();
   }
 
   void seekTo(Duration position) {
+    if (!_initialized) return;
     _controller.seekTo(position);
   }
 
   void skipForward(int seconds) {
+    if (!_initialized) return;
     final newPos = _controller.value.position + Duration(seconds: seconds);
     _controller.seekTo(
-      newPos <= _controller.value.duration
-          ? newPos
-          : _controller.value.duration,
+      newPos <= _controller.value.duration ? newPos : _controller.value.duration,
     );
   }
 
   void skipBackward(int seconds) {
+    if (!_initialized) return;
     final newPos = _controller.value.position - Duration(seconds: seconds);
     _controller.seekTo(newPos >= Duration.zero ? newPos : Duration.zero);
   }
@@ -56,8 +93,10 @@ class VideoLessonViewModel extends ChangeNotifier {
   }
 
   void disposeController() {
-    _controller.removeListener(() {});
-    _controller.dispose();
+    if (_initialized) {
+      _controller.removeListener(() {});
+      _controller.dispose();
+    }
   }
 
   @override

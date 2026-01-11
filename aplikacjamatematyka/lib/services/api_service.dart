@@ -121,7 +121,6 @@ class ApiService {
 
   // ========== CLASS, CATEGORY, COURSE ENDPOINTS ==========
 
-  // Pobierz wszystkie klasy (1-4, 5-8)
   Future<List<dynamic>?> fetchClasses() async {
     try {
       print('🌐 API: Fetching classes from $baseUrl/api/classes/');
@@ -142,7 +141,6 @@ class ApiService {
     }
   }
 
-  // Pobierz kategorie dla danej klasy
   Future<List<dynamic>?> fetchCategories({int? classId}) async {
     try {
       String url = '$baseUrl/api/categories/';
@@ -161,7 +159,6 @@ class ApiService {
     }
   }
 
-  // Pobierz kursy dla danej kategorii
   Future<List<dynamic>?> fetchCourses({int? categoryId}) async {
     try {
       String url = '$baseUrl/api/courses/';
@@ -180,16 +177,27 @@ class ApiService {
     }
   }
 
-  // Pobierz szczegóły kursu
+  // 🔹 NOWY ENDPOINT - Pobierz szczegóły kursu z pełnym URL wideo
   Future<Map<String, dynamic>?> fetchCourseDetail(int courseId) async {
     try {
-      final response = await http.get(Uri.parse('$baseUrl/api/courses/$courseId/'));
+      print('🌐 API: Fetching course detail for ID: $courseId');
+      final response = await http.get(
+        Uri.parse('$baseUrl/api/courses/$courseId/'),
+      );
+      
+      print('📡 API Response status: ${response.statusCode}');
+      print('📡 API Response body: ${response.body}');
+      
       if (response.statusCode == 200) {
-        return json.decode(response.body);
+        final data = json.decode(response.body);
+        print('✅ API: Successfully fetched course detail');
+        print('🎬 Video URL: ${data['full_video_url']}');
+        return data;
       }
+      print('❌ API: Status code not 200');
       return null;
     } catch (e) {
-      print('Error fetching course detail: $e');
+      print('❌ API Error fetching course detail: $e');
       return null;
     }
   }

@@ -68,8 +68,7 @@ class Course(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='courses')
     course_name = models.CharField(max_length=100)
     description = models.TextField(blank=True)
-    video_url = models.URLField(blank=True)
-    video_duration = models.PositiveIntegerField(default=0)
+    video_url = models.CharField(max_length=255, blank=True)
     points_per_question = models.IntegerField(default=1)
     required_correct_answers = models.PositiveIntegerField(default=5)
     display_order = models.PositiveIntegerField(default=0)
@@ -77,6 +76,13 @@ class Course(models.Model):
     
     def __str__(self):
         return self.course_name
+    
+    def get_full_video_url(self, request):
+        """Zwraca pełny URL do pliku wideo"""
+        if self.video_url:
+            # Tworzy URL typu: http://127.0.0.1:8000/static/videos/1film.mp4
+            return request.build_absolute_uri(f'/static/{self.video_url}')
+        return None
 
 # poziom trudności pytań (łatwy, średni, trudny)
 class DifficultyLevel(models.Model):

@@ -5,7 +5,7 @@ class CourseModel {
   final String courseName;
   final String description;
   final String videoUrl;
-  final int videoDuration;
+  final String? fullVideoUrl;
   final int pointsPerQuestion;
   final int requiredCorrectAnswers;
   final int displayOrder;
@@ -18,7 +18,7 @@ class CourseModel {
     required this.courseName,
     required this.description,
     required this.videoUrl,
-    required this.videoDuration,
+    this.fullVideoUrl,
     required this.pointsPerQuestion,
     required this.requiredCorrectAnswers,
     required this.displayOrder,
@@ -33,7 +33,7 @@ class CourseModel {
       courseName: json['course_name'] ?? '',
       description: json['description'] ?? '',
       videoUrl: json['video_url'] ?? '',
-      videoDuration: json['video_duration'] ?? 0,
+      fullVideoUrl: json['full_video_url'],
       pointsPerQuestion: json['points_per_question'] ?? 1,
       requiredCorrectAnswers: json['required_correct_answers'] ?? 5,
       displayOrder: json['display_order'] ?? 0,
@@ -49,7 +49,7 @@ class CourseModel {
       'course_name': courseName,
       'description': description,
       'video_url': videoUrl,
-      'video_duration': videoDuration,
+      'full_video_url': fullVideoUrl,
       'points_per_question': pointsPerQuestion,
       'required_correct_answers': requiredCorrectAnswers,
       'display_order': displayOrder,

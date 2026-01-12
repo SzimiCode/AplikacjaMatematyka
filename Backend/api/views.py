@@ -334,17 +334,17 @@ class QuestionViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         queryset = Question.objects.all()
         
-        # Filtrowanie po kursie
+        # filtrowanie po kursie
         course_id = self.request.query_params.get('course_id', None)
         if course_id:
             queryset = queryset.filter(course_id=course_id)
         
-        # Filtrowanie po typie pytania
+        # filtrowanie po typie pytania
         question_type = self.request.query_params.get('type', None)
         if question_type:
             queryset = queryset.filter(question_type=question_type)
         
-        # Filtrowanie po poziomie trudności
+        # filtrowanie po poziomie trudności
         difficulty_id = self.request.query_params.get('difficulty', None)
         if difficulty_id:
             queryset = queryset.filter(difficulty_level_id=difficulty_id)

@@ -11,25 +11,14 @@ class ChooseLessonPageViewmodel {
   
   List<ClassModel> availableClasses = [];
   
-  // 🔥 Mapa ogni dla kursów
   Map<int, CourseProgressModel> courseProgress = {};
 
   Future<void> initialize() async {
-    print('🔥 INITIALIZE START');
-    
     availableClasses = await _repository.getClasses();
-    print('📚 Pobrano klas: ${availableClasses.length}');
-    
-    for (var c in availableClasses) {
-      print('  - ${c.className} (ID: ${c.id})');
-    }
     
     if (availableClasses.isNotEmpty) {
       selectedClassNotifier.value = availableClasses.first;
-      print('✅ Wybrano klasę: ${availableClasses.first.className}');
       await loadCategories();
-    } else {
-      print('❌ BRAK KLAS W BAZIE!');
     }
   }
 
@@ -48,9 +37,7 @@ class ChooseLessonPageViewmodel {
 
   Future<void> loadCategories() async {
     if (selectedClassNotifier.value == null) return;
-    
-    print('🔥 LOAD CATEGORIES for class: ${selectedClassNotifier.value!.className}');
-    
+        
     isLoadingCategories.value = true;
     errorMessage.value = null;
     
@@ -59,22 +46,13 @@ class ChooseLessonPageViewmodel {
         selectedClassNotifier.value!.id
       );
       
-      print('📂 Pobrano kategorii: ${categories.length}');
-      for (var cat in categories) {
-        print('  - ${cat.categoryName} (ID: ${cat.id})');
-      }
-      
       categoriesNotifier.value = categories;
       
       if (categories.isNotEmpty) {
         selectedCategoryNotifier.value = categories.first;
-        print('✅ Wybrano kategorię: ${categories.first.categoryName}');
         await loadCourses();
-      } else {
-        print('❌ BRAK KATEGORII dla tej klasy!');
       }
     } catch (e) {
-      print('❌ BŁĄD loadCategories: $e');
       errorMessage.value = 'Błąd ładowania kategorii: $e';
       categoriesNotifier.value = [];
     } finally {
@@ -90,8 +68,6 @@ class ChooseLessonPageViewmodel {
   Future<void> loadCourses() async {
     if (selectedCategoryNotifier.value == null) return;
     
-    print('🔥 LOAD COURSES for category: ${selectedCategoryNotifier.value!.categoryName}');
-    
     isLoadingCourses.value = true;
     errorMessage.value = null;
     
@@ -100,17 +76,10 @@ class ChooseLessonPageViewmodel {
         selectedCategoryNotifier.value!.id
       );
       
-      print('📚 Pobrano kursów: ${courses.length}');
-      for (var course in courses) {
-        print('  - ${course.courseName} (ID: ${course.id})');
-      }
-      
       coursesNotifier.value = courses;
       
-      // 🔥 Pobierz ognie dla każdego kursu
       await _loadCourseProgress();
     } catch (e) {
-      print('❌ BŁĄD loadCourses: $e');
       errorMessage.value = 'Błąd ładowania kursów: $e';
       coursesNotifier.value = [];
     } finally {
@@ -118,25 +87,21 @@ class ChooseLessonPageViewmodel {
     }
   }
 
-  // 🔥 Pobierz postęp (ognie) dla wszystkich kursów
   Future<void> _loadCourseProgress() async {
     for (final course in coursesNotifier.value) {
       try {
         final progress = await _repository.getCourseProgress(course.id);
         if (progress != null) {
           courseProgress[course.id] = progress;
-          print('🔥 Course ${course.id}: ${progress.firesEarned} fires');
         } else {
           courseProgress[course.id] = CourseProgressModel.empty();
         }
       } catch (e) {
-        print('❌ Error loading progress for course ${course.id}: $e');
         courseProgress[course.id] = CourseProgressModel.empty();
       }
     }
   }
 
-  // 🔥 Pobierz liczbę ogni dla kursu
   int getFiresForCourse(int courseId) {
     return courseProgress[courseId]?.firesEarned ?? 0;
   }
@@ -147,9 +112,6 @@ class ChooseLessonPageViewmodel {
       
       selectedCourseNotifier.value = selectedCourse;
       tempLessonName.value = selectedCourse.courseName;
-      
-      print('🎯 Selected course: ${selectedCourse.courseName}');
-      print('🎯 Course ID: ${selectedCourse.id}');
       
       selectedPageNotifier.value = 6;
     }

@@ -19,7 +19,6 @@ class CourseRepository {
       
       return data.map((json) => ClassModel.fromJson(json)).toList();
     } catch (e) {
-      print('Repository error - getClasses: $e');
       return [];
     }
   }
@@ -32,7 +31,6 @@ class CourseRepository {
       
       return data.map((json) => CategoryModel.fromJson(json)).toList();
     } catch (e) {
-      print('Repository error - getCategories: $e');
       return [];
     }
   }
@@ -45,7 +43,6 @@ class CourseRepository {
       
       return data.map((json) => CourseModel.fromJson(json)).toList();
     } catch (e) {
-      print('Repository error - getCourses: $e');
       return [];
     }
   }
@@ -58,7 +55,6 @@ class CourseRepository {
       
       return CourseModel.fromJson(data);
     } catch (e) {
-      print('Repository error - getCourseDetail: $e');
       return null;
     }
   }
@@ -79,7 +75,6 @@ class CourseRepository {
       
       return data.map((json) => QuestionModel.fromJson(json)).toList();
     } catch (e) {
-      print('Repository error - getQuestions: $e');
       return [];
     }
   }
@@ -99,7 +94,6 @@ class CourseRepository {
       );
       return result;
     } catch (e) {
-      print('Repository error - saveLearningProgress: $e');
       return {'success': false, 'error': e.toString()};
     }
   }
@@ -115,7 +109,6 @@ class CourseRepository {
       );
       return result;
     } catch (e) {
-      print('Repository error - saveQuizProgress: $e');
       return {'success': false, 'error': e.toString()};
     }
   }
@@ -128,7 +121,6 @@ class CourseRepository {
       }
       return null;
     } catch (e) {
-      print('Repository error - getCourseProgress: $e');
       return null;
     }
   }

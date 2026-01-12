@@ -27,7 +27,6 @@ class FinalLearningViewModel extends ChangeNotifier {
   int correctAnswersAtMedium = 0;
   int correctAnswersAtHard = 0;
   
-  // 🔥 NOWE FLAGI: czy użytkownik UKOŃCZYŁ dany poziom (awansował dalej)?
   bool hasCompletedEasy = false;
   bool hasCompletedMedium = false;
   bool hasCompletedHard = false;
@@ -54,8 +53,6 @@ class FinalLearningViewModel extends ChangeNotifier {
         notifyListeners();
         return;
       }
-
-      print('📚 Fetching questions for learning mode: ${selectedCourse.courseName}');
       
       final closedQuestions = await _repository.getQuestions(
         courseId: selectedCourse.id,
@@ -162,7 +159,6 @@ class FinalLearningViewModel extends ChangeNotifier {
 
   bool get isLearningFinished {
     if (_hasCompletedAllLevels()) {
-      print('🎉 All levels completed! Early finish at question $questionNumber');
       return true;
     }
     
@@ -202,7 +198,6 @@ class FinalLearningViewModel extends ChangeNotifier {
       streakCount++;
       _incrementCorrectAnswerCounter();
       
-      // 🔥 KLUCZOWA ZMIANA: Zapisz że poziom został ukończony PRZED awansem
       if (streakCount >= 3) {
         _markLevelAsCompleted();
         _levelUp();
@@ -229,20 +224,16 @@ class FinalLearningViewModel extends ChangeNotifier {
     }
   }
 
-  // 🔥 NOWA METODA: Oznacz poziom jako ukończony
   void _markLevelAsCompleted() {
     switch (currentDifficulty) {
       case DifficultyLevel.easy:
         hasCompletedEasy = true;
-        print('🔥 Completed EASY level! Awarded fire.');
         break;
       case DifficultyLevel.medium:
         hasCompletedMedium = true;
-        print('🔥 Completed MEDIUM level! Awarded fire.');
         break;
       case DifficultyLevel.hard:
         hasCompletedHard = true;
-        print('🔥 Completed HARD level! Awarded fire.');
         break;
     }
   }
@@ -250,10 +241,8 @@ class FinalLearningViewModel extends ChangeNotifier {
   void _levelUp() {
     if (currentDifficulty == DifficultyLevel.easy) {
       currentDifficulty = DifficultyLevel.medium;
-      print('⬆️ Leveled up to MEDIUM');
     } else if (currentDifficulty == DifficultyLevel.medium) {
       currentDifficulty = DifficultyLevel.hard;
-      print('⬆️ Leveled up to HARD');
     }
   }
 
@@ -272,44 +261,27 @@ class FinalLearningViewModel extends ChangeNotifier {
   }
 
   void _calculateFireReward() {
-    // Zlicz ile poziomów ukończono
     int completedLevels = 0;
     if (hasCompletedEasy) completedLevels++;
     if (hasCompletedMedium) completedLevels++;
     if (hasCompletedHard) completedLevels++;
     
     fireReward = completedLevels;
-    
-    print('🔥 Fire reward calculated: $fireReward fires');
-    print('   Easy completed: $hasCompletedEasy');
-    print('   Medium completed: $hasCompletedMedium');
-    print('   Hard completed: $hasCompletedHard');
   }
 
-  // 🔥 ZAPISZ POSTĘP NA BACKENDZIE - ZMIENIONA LOGIKA
   Future<void> saveLearningProgressToBackend() async {
     final selectedCourse = selectedCourseNotifier.value;
     if (selectedCourse == null) return;
 
-    print('🔥 Saving learning progress to backend...');
-    print('   Easy completed: $hasCompletedEasy');
-    print('   Medium completed: $hasCompletedMedium');
-    print('   Hard completed: $hasCompletedHard');
-
     final result = await _repository.saveLearningProgress(
       courseId: selectedCourse.id,
-      fireEasy: hasCompletedEasy,    // 🔥 ZMIENIONE: zamiast correctAnswersAtEasy >= 3
-      fireMedium: hasCompletedMedium, // 🔥 ZMIENIONE: zamiast correctAnswersAtMedium >= 3
-      fireHard: hasCompletedHard,     // 🔥 ZMIENIONE: zamiast correctAnswersAtHard >= 3
+      fireEasy: hasCompletedEasy,
+      fireMedium: hasCompletedMedium,
+      fireHard: hasCompletedHard,  
     );
 
     if (result['success']) {
       final data = result['data'];
-      print('✅ Progress saved!');
-      print('   Fires added: ${data['fires_added']}');
-      print('   Total points: ${data['total_points']}');
-    } else {
-      print('❌ Error saving progress: ${result['error']}');
     }
   }
 

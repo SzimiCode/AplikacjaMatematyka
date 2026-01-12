@@ -80,7 +80,6 @@ class Course(models.Model):
     def get_full_video_url(self, request):
         """Zwraca pełny URL do pliku wideo"""
         if self.video_url:
-            # Tworzy URL typu: http://127.0.0.1:8000/static/videos/1film.mp4
             return request.build_absolute_uri(f'/static/{self.video_url}')
         return None
 

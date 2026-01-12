@@ -66,14 +66,22 @@ class DifficultyLevelSerializer(serializers.ModelSerializer):
 # Serializer dla kursu (z informacją o kategorii)
 class CourseSerializer(serializers.ModelSerializer):
     category_name = serializers.CharField(source='category.category_name', read_only=True)
+    full_video_url = serializers.SerializerMethodField()
     
     class Meta:
         model = Course
         fields = [
             'id', 'category', 'category_name', 'course_name', 'description', 
-            'video_url', 'video_duration', 'points_per_question', 
+            'video_url', 'full_video_url', 'points_per_question', 
             'required_correct_answers', 'display_order', 'created_at'
         ]
+    
+    def get_full_video_url(self, obj):
+        """Zwraca pełny URL do wideo"""
+        request = self.context.get('request')
+        if request and obj.video_url:
+            return obj.get_full_video_url(request)
+        return None
 
 # Serializer dla opcji odpowiedzi (closed questions)
 class AnswerOptionSerializer(serializers.ModelSerializer):
@@ -112,6 +120,19 @@ class UserCourseProgressSerializer(serializers.ModelSerializer):
             'id', 'user', 'course', 'course_name', 'is_completed',
             'current_difficulty_level', 'difficulty_level_name',
             'correct_answers_count', 'total_attempts', 'points_earned',
-            'video_watched', 'started_at', 'completed_at'
+            'video_watched', 'started_at', 'completed_at',
+            # 🔥 NOWE POLA
+            'fires_earned', 'fire_easy', 'fire_medium', 'fire_hard', 'fire_quiz'
         ]
-        read_only_fields = ['user', 'started_at']
+        read_only_fields = ['user', 'started_at', 'fires_earned']
+
+class SaveLearningProgressSerializer(serializers.Serializer):
+    course_id = serializers.IntegerField(required=True)
+    fire_easy = serializers.BooleanField(required=False, default=False)
+    fire_medium = serializers.BooleanField(required=False, default=False)
+    fire_hard = serializers.BooleanField(required=False, default=False)
+
+
+class SaveQuizProgressSerializer(serializers.Serializer):
+    course_id = serializers.IntegerField(required=True)
+    passed = serializers.BooleanField(required=True)

@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:aplikacjamatematyka/features/quiz/viewmodel/choose_lesson_page_viewmodel.dart';
 import 'package:aplikacjamatematyka/core/data/notifiers.dart';
+import 'package:aplikacjamatematyka/services/api_service.dart';
 
 class ChooseLessonPage extends StatefulWidget {
   ChooseLessonPage({super.key});
@@ -15,12 +16,25 @@ class ChooseLessonPage extends StatefulWidget {
 }
 
 class _ChooseLessonPageState extends State<ChooseLessonPage> {
-  
+  int totalPoints = 0;
+
   @override
   void initState() {
     super.initState();
     // Inicjalizacja - pobierz klasy i kategorie
     widget.viewModel.initialize();
+
+    _loadUserPoints();
+  }
+
+  Future<void> _loadUserPoints() async {
+    final apiService = ApiService();
+    final result = await apiService.getUserProfile();
+    if (result['success']) {
+      setState(() {
+        totalPoints = result['data']['total_points'] ?? 0;
+      });
+    }
   }
 
   @override
@@ -34,6 +48,7 @@ class _ChooseLessonPageState extends State<ChooseLessonPage> {
         onCategorySelected: (category) {
           widget.viewModel.selectCategory(category);
         },
+        totalPoints: totalPoints,
       ),
       body: Padding(
         padding: const EdgeInsets.only(top: 20.0),
@@ -153,12 +168,13 @@ class _ChooseLessonPageState extends State<ChooseLessonPage> {
                         itemCount: courses.length,
                         itemBuilder: (context, index) {
                           final course = courses[index];
-                          
+                          final fireCount = widget.viewModel.getFiresForCourse(course.id);
+
                           return LessonCard(
                             number: index + 1,
                             title: course.courseName,
                             color: _getColor(index),
-                            flameCounter: Random().nextInt(5) + 1,
+                            flameCounter: fireCount,
                             onTap: () => widget.viewModel.onLessonButtonPressed(index),
                           );
                         },

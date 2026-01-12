@@ -78,7 +78,7 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
               const SizedBox(height: 20),
-              // OGNIE - pokazują total_points
+
               Row(
                 children: [
                   Image.asset('assets/images/fire1.png', height: 55, width: 55),
@@ -86,7 +86,7 @@ class _HomePageState extends State<HomePage> {
                   Padding(
                     padding: const EdgeInsets.only(top: 19.0),
                     child: Text(
-                      '${viewModel.totalPoints}',  // ZMIENIONE - wyświetla total_points
+                      '${viewModel.totalPoints}', 
                       style: const TextStyle(
                         color: Pallete.redColor,
                         fontSize: 35,
@@ -142,7 +142,7 @@ class _HomePageState extends State<HomePage> {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(10),
                     child: LinearProgressIndicator(
-                      value: viewModel.levelProgress,  // ZMIENIONE - używa gettera
+                      value: viewModel.levelProgress,  
                       backgroundColor: Colors.grey.shade300,
                       valueColor: const AlwaysStoppedAnimation<Color>(
                         Pallete.greenColor,

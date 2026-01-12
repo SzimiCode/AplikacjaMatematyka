@@ -21,13 +21,6 @@ class SettingsPage extends StatelessWidget {
           const Divider(),
 
           ListTile(
-            title: const Text('Edytuj Profil'),
-            trailing: const Icon(Icons.arrow_forward_ios),
-            onTap: () {
-              
-            },
-          ),
-          ListTile(
             title: const Text('Dark Mode'),
            trailing:  ValueListenableBuilder(
             valueListenable: isDarkModifier,

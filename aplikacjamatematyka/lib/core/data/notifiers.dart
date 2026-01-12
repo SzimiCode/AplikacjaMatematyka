@@ -4,12 +4,13 @@ import 'package:aplikacjamatematyka/features/quiz/model/category_model.dart';
 import 'package:aplikacjamatematyka/features/quiz/model/course_model.dart';
 
 
-// ========== EXISTING NOTIFIERS ==========
+// Aktualny ekran
 ValueNotifier<int> selectedPageNotifier = ValueNotifier(7);
-ValueNotifier<bool> isDarkModifier = ValueNotifier(false);
-ValueNotifier<String> tempLessonName = ValueNotifier("");
 
-// ========== NEW NOTIFIERS FOR COURSE SELECTION ==========
+// Wybrany tryb ciemeności 
+ValueNotifier<bool> isDarkModifier = ValueNotifier(false);
+
+ValueNotifier<String> tempLessonName = ValueNotifier("");
 
 // Wybrana klasa (1-4 lub 5-8)
 ValueNotifier<ClassModel?> selectedClassNotifier = ValueNotifier(null);

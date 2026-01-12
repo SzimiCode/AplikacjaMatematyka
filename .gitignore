@@ -2,3 +2,4 @@ Backend/venv/
 
 __pycache__/
 *.pyc
+Backend/mathdragon_db.sqlite3

@@ -1,4 +1,3 @@
-// lib/core/api/api_service.dart
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -6,8 +5,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 class ApiService {
   final String baseUrl = "http://127.0.0.1:8000";
 
-  // ========== TOKEN MANAGEMENT ==========
-  
   Future<void> saveToken(String token) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('access_token', token);
@@ -30,8 +27,6 @@ class ApiService {
       if (token != null) 'Authorization': 'Bearer $token',
     };
   }
-
-  // ========== AUTH ENDPOINTS ==========
 
   Future<Map<String, dynamic>> register({
     required String email,
@@ -119,77 +114,63 @@ class ApiService {
     await removeToken();
   }
 
-  // ========== CLASS, CATEGORY, COURSE ENDPOINTS ==========
-
-  // Pobierz wszystkie klasy (1-4, 5-8)
   Future<List<dynamic>?> fetchClasses() async {
     try {
-      print('🌐 API: Fetching classes from $baseUrl/api/classes/');
       final response = await http.get(Uri.parse('$baseUrl/api/classes/'));
-      print('📡 API Response status: ${response.statusCode}');
-      print('📡 API Response body: ${response.body}');
-      
+
       if (response.statusCode == 200) {
         final decoded = json.decode(response.body);
-        print('✅ API: Successfully decoded ${decoded.length} classes');
         return decoded;
       }
-      print('❌ API: Status code not 200');
       return null;
     } catch (e) {
-      print('❌ API Error fetching classes: $e');
       return null;
     }
   }
 
-  // Pobierz kategorie dla danej klasy
   Future<List<dynamic>?> fetchCategories({int? classId}) async {
     try {
       String url = '$baseUrl/api/categories/';
       if (classId != null) {
         url += '?class_id=$classId';
       }
-      
       final response = await http.get(Uri.parse(url));
       if (response.statusCode == 200) {
         return json.decode(response.body);
       }
       return null;
     } catch (e) {
-      print('Error fetching categories: $e');
       return null;
     }
   }
 
-  // Pobierz kursy dla danej kategorii
   Future<List<dynamic>?> fetchCourses({int? categoryId}) async {
     try {
       String url = '$baseUrl/api/courses/';
       if (categoryId != null) {
         url += '?category_id=$categoryId';
       }
-      
       final response = await http.get(Uri.parse(url));
       if (response.statusCode == 200) {
         return json.decode(response.body);
       }
       return null;
     } catch (e) {
-      print('Error fetching courses: $e');
       return null;
     }
   }
 
-  // Pobierz szczegóły kursu
   Future<Map<String, dynamic>?> fetchCourseDetail(int courseId) async {
     try {
-      final response = await http.get(Uri.parse('$baseUrl/api/courses/$courseId/'));
+      final response = await http.get(
+        Uri.parse('$baseUrl/api/courses/$courseId/'),
+      );
       if (response.statusCode == 200) {
-        return json.decode(response.body);
+        final data = json.decode(response.body);
+        return data;
       }
       return null;
     } catch (e) {
-      print('Error fetching course detail: $e');
       return null;
     }
   }
@@ -201,25 +182,19 @@ class ApiService {
   }) async {
     try {
       String url = '$baseUrl/api/courses/$courseId/questions/';
-      
       List<String> params = [];
       if (questionType != null) params.add('type=$questionType');
       if (difficultyId != null) params.add('difficulty=$difficultyId');
-      
       if (params.isNotEmpty) url += '?${params.join('&')}';
-      
       final response = await http.get(Uri.parse(url));
       if (response.statusCode == 200) {
         return json.decode(response.body);
       }
       return null;
     } catch (e) {
-      print('Error fetching questions: $e');
       return null;
     }
   }
-
-  // ========== EXISTING ENDPOINTS ==========
 
   Future<Map<String, dynamic>?> fetchRandomQuestion() async {
     try {
@@ -270,6 +245,107 @@ class ApiService {
       return null;
     } catch (e) {
       return null;
+    }
+  }
+
+  Future<Map<String, dynamic>> saveLearningProgress({
+    required int courseId,
+    bool fireEasy = false,
+    bool fireMedium = false,
+    bool fireHard = false,
+  }) async {
+    try {
+      final headers = await getHeaders();
+      
+      final response = await http.post(
+        Uri.parse('$baseUrl/api/learning/save/'),
+        headers: headers,
+        body: jsonEncode({
+          'course_id': courseId,
+          'fire_easy': fireEasy,
+          'fire_medium': fireMedium,
+          'fire_hard': fireHard,
+        }),
+      );
+
+      final data = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        return {'success': true, 'data': data};
+      } else {
+        return {'success': false, 'error': data};
+      }
+    } catch (e) {
+      return {'success': false, 'error': 'Błąd połączenia: $e'};
+    }
+  }
+
+  Future<Map<String, dynamic>> saveQuizProgress({
+    required int courseId,
+    required bool passed,
+  }) async {
+    try {
+      final headers = await getHeaders();
+      
+      final response = await http.post(
+        Uri.parse('$baseUrl/api/quiz/save/'),
+        headers: headers,
+        body: jsonEncode({
+          'course_id': courseId,
+          'passed': passed,
+        }),
+      );
+
+      final data = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        return {'success': true, 'data': data};
+      } else {
+        return {'success': false, 'error': data};
+      }
+    } catch (e) {
+      return {'success': false, 'error': 'Błąd połączenia: $e'};
+    }
+  }
+
+  Future<Map<String, dynamic>> getCourseProgress(int courseId) async {
+    try {
+      final headers = await getHeaders();
+      
+      final response = await http.get(
+        Uri.parse('$baseUrl/api/course-progress/$courseId/'),
+        headers: headers,
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        return {'success': true, 'data': data};
+      } else {
+        final data = jsonDecode(response.body);
+        return {'success': false, 'error': data};
+      }
+    } catch (e) {
+      return {'success': false, 'error': 'Błąd połączenia: $e'};
+    }
+  }
+
+  Future<Map<String, dynamic>> resetUserProgress() async {
+    try {
+      final headers = await getHeaders();
+      final response = await http.post(
+        Uri.parse('$baseUrl/api/progress-reset/'),
+        headers: headers,
+      );
+
+      final data = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        return {'success': true, 'data': data};
+      } else {
+        return {'success': false, 'error': data};
+      }
+    } catch (e) {
+      return {'success': false, 'error': 'Błąd połączenia: $e'};
     }
   }
 }

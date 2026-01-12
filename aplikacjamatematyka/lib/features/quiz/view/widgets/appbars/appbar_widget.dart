@@ -1,4 +1,3 @@
-// lib/features/quiz/view/widgets/appbars/appbar_widget.dart
 import 'package:flutter/material.dart';
 import 'package:aplikacjamatematyka/core/theme/app_pallete.dart';
 import 'package:aplikacjamatematyka/features/quiz/view/widgets/buttons/topic_picker_button.dart';
@@ -8,11 +7,13 @@ import 'package:aplikacjamatematyka/features/quiz/model/category_model.dart';
 class AppbarWidget extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback onClassToggle;
   final Function(CategoryModel)? onCategorySelected;
-  
+  final int totalPoints;
+
   const AppbarWidget({
     super.key,
     required this.onClassToggle,
     this.onCategorySelected,
+    this.totalPoints = 0,
   });
 
   @override
@@ -26,7 +27,6 @@ class AppbarWidget extends StatelessWidget implements PreferredSizeWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            // PRZYCISK PRZEŁĄCZANIA KLAS (1-4 ⟷ 5-8)
             ValueListenableBuilder(
               valueListenable: selectedClassNotifier,
               builder: (context, selectedClass, child) {
@@ -47,23 +47,15 @@ class AppbarWidget extends StatelessWidget implements PreferredSizeWidget {
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  child: Text(
-                    selectedClass?.className ?? "Klasy 1–4"
-                  ),
+                  child: Text(selectedClass?.className ?? "Klasy 1–4"),
                 );
               },
             ),
-            
             SizedBox(width: 8),
-            
-            // WYBÓR KATEGORII
             TopicPickerButton(
               onCategorySelected: onCategorySelected,
             ),
-            
             SizedBox(width: 6),
-            
-            // PUNKTY / STREAK
             Container(
               width: 90,
               height: 43,
@@ -75,7 +67,7 @@ class AppbarWidget extends StatelessWidget implements PreferredSizeWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    '5',
+                    '$totalPoints',
                     style: TextStyle(
                       color: Pallete.whiteColor,
                       fontSize: 25,

@@ -44,4 +44,46 @@ class SettingsViewModel extends ChangeNotifier {
   void onBackButtonPressed() {
     selectedPageNotifier.value = 0;
   }
+
+  Future<void> resetProgress(BuildContext context) async {
+    try {
+      final result = await _apiService.resetUserProgress();
+      
+      if (result['success']) {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Postęp został zresetowany! Usunięto ${result['data']['deleted_courses']} kursów.'),
+              backgroundColor: Colors.green,
+              duration: Duration(seconds: 3),
+            ),
+          );
+          
+          // Wróć do strony głównej
+          selectedPageNotifier.value = 0;
+        }
+      } else {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Błąd: ${result['error']}'),
+              backgroundColor: Colors.red,
+              duration: Duration(seconds: 3),
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Błąd połączenia: $e'),
+            backgroundColor: Colors.red,
+            duration: Duration(seconds: 3),
+          ),
+        );
+      }
+    }
+    notifyListeners();
+  }
 }

@@ -5,7 +5,7 @@ import 'package:video_player/video_player.dart' show VideoPlayer;
 import 'package:aplikacjamatematyka/features/quiz/viewmodel/video_lesson_page_viewmodel.dart';
 
 class VideoLessonView extends StatefulWidget {
-  const VideoLessonView({super.key});
+  const VideoLessonView({super.key});  // 🔹 Bez parametrów!
 
   @override
   State<VideoLessonView> createState() => _VideoLessonViewState();
@@ -19,7 +19,7 @@ class _VideoLessonViewState extends State<VideoLessonView> {
     super.initState();
 
     _vm = VideoLessonViewModel();
-    _vm.initialize();
+    _vm.initialize();  // 🔹 Bez parametrów!
 
     // 🔹 landscape full screen
     SystemChrome.setPreferredOrientations([
@@ -53,6 +53,44 @@ class _VideoLessonViewState extends State<VideoLessonView> {
         backgroundColor: Colors.black,
         body: Consumer<VideoLessonViewModel>(
           builder: (context, vm, _) {
+            // 🔹 Pokaż loader podczas ładowania
+            if (vm.isLoading) {
+              return const Center(
+                child: CircularProgressIndicator(color: Colors.white),
+              );
+            }
+
+            // 🔹 Pokaż błąd jeśli wystąpił
+            if (vm.error != null) {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      Icons.error_outline,
+                      color: Colors.red,
+                      size: 64,
+                    ),
+                    const SizedBox(height: 16),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 32),
+                      child: Text(
+                        vm.error!,
+                        style: const TextStyle(color: Colors.white, fontSize: 16),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    ElevatedButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: const Text('Powrót'),
+                    ),
+                  ],
+                ),
+              );
+            }
+
+            // 🔹 Pokaż wideo gdy załadowane
             if (!vm.isInitialized) {
               return const Center(
                 child: CircularProgressIndicator(color: Colors.white),
@@ -66,7 +104,7 @@ class _VideoLessonViewState extends State<VideoLessonView> {
             return WillPopScope(
               onWillPop: () async => false,
               child: GestureDetector(
-                onTap: vm.toggleControls, // 🔹 pokaz/ukryj kontrolki
+                onTap: vm.toggleControls,
                 child: Stack(
                   children: [
                     // 🎬 VIDEO

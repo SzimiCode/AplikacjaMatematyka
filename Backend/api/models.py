@@ -68,8 +68,7 @@ class Course(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='courses')
     course_name = models.CharField(max_length=100)
     description = models.TextField(blank=True)
-    video_url = models.URLField(blank=True)
-    video_duration = models.PositiveIntegerField(default=0)
+    video_url = models.CharField(max_length=255, blank=True)
     points_per_question = models.IntegerField(default=1)
     required_correct_answers = models.PositiveIntegerField(default=5)
     display_order = models.PositiveIntegerField(default=0)
@@ -77,6 +76,12 @@ class Course(models.Model):
     
     def __str__(self):
         return self.course_name
+    
+    def get_full_video_url(self, request):
+        """Zwraca pełny URL do pliku wideo"""
+        if self.video_url:
+            return request.build_absolute_uri(f'/static/{self.video_url}')
+        return None
 
 # poziom trudności pytań (łatwy, średni, trudny)
 class DifficultyLevel(models.Model):
@@ -136,6 +141,24 @@ class UserCourseProgress(models.Model):
     video_watched = models.BooleanField(default=False)
     started_at = models.DateTimeField(auto_now_add=True)
     completed_at = models.DateTimeField(null=True, blank=True)
+    fires_earned = models.IntegerField(default=0)
+    fire_easy = models.BooleanField(default=False)
+    fire_medium = models.BooleanField(default=False)
+    fire_hard = models.BooleanField(default=False)
+    fire_quiz = models.BooleanField(default=False)
+
+    class Meta:
+        unique_together = ['user', 'course']
+
+    def update_fires_earned(self):
+        """Aktualizuje sumę ogni na podstawie zdobytych ogni"""
+        self.fires_earned = sum([
+            self.fire_easy,
+            self.fire_medium,
+            self.fire_hard,
+            self.fire_quiz,
+        ])
+        self.save()    
 
 # odpowiedź użytkownika na pytanie
 class UserAnswer(models.Model):

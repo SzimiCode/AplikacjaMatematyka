@@ -6,7 +6,7 @@ class HomePageViewModel extends ChangeNotifier {
   final ApiService _apiService = ApiService();
   
   String userName = 'Ładowanie...';
-  String dragonName = 'Smoczek';
+  String dragonName = 'Smok Mat';
   int totalPoints = 0;
   int userLevel = 1;
   int pointsInCurrentLevel = 0;  // Ile punktów w obecnym poziomie
@@ -27,10 +27,10 @@ class HomePageViewModel extends ChangeNotifier {
       if (result['success']) {
         final userData = result['data'];
         userName = userData['nick'] ?? 'User';
-        dragonName = userData['dragon_name'] ?? 'Smoczek';
+        dragonName = 'Smok Mat';
         totalPoints = userData['total_points'] ?? 0;
         
-        // OBLICZ POZIOM I POSTĘP
+        
         _calculateLevel();
       } else {
         userName = 'Błąd';
@@ -62,7 +62,6 @@ class HomePageViewModel extends ChangeNotifier {
     }
   }
   
-  // Progress (0.0 - 1.0) dla progress bara
   double get levelProgress {
     return pointsInCurrentLevel / pointsToNextLevel;
   }

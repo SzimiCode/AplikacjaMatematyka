@@ -8,32 +8,31 @@ enum DifficultyLevel { easy, medium, hard }
 class FinalLearningViewModel extends ChangeNotifier {
   final CourseRepository _repository = CourseRepository();
   
-  // Poziom trudności i progresja
   DifficultyLevel currentDifficulty = DifficultyLevel.easy;
-  int streakCount = 0; // Kropki: 0-3
+  int streakCount = 0;
   
-  // Pytania
   List<QuestionModel> allQuestions = [];
   int currentQuestionIndex = 0;
   int questionNumber = 1;
   int maxQuestions = 10;
   
-  // Stany
   bool isLoading = true;
   String? errorMessage;
   
-  // Statystyki
   int totalCorrect = 0;
   int totalAnswered = 0;
-  int fireReward = 0; // Ile ogni dostanie na końcu
+  int fireReward = 0;
   
-  // NOWE: Liczniki pytań per poziom (tylko poprawne odpowiedzi)
   int correctAnswersAtEasy = 0;
   int correctAnswersAtMedium = 0;
   int correctAnswersAtHard = 0;
   
-  // Stan obecnego pytania (dla różnych typów)
-  dynamic currentAnswerData; // Może być String, bool, Map dla match
+  // 🔥 NOWE FLAGI: czy użytkownik UKOŃCZYŁ dany poziom (awansował dalej)?
+  bool hasCompletedEasy = false;
+  bool hasCompletedMedium = false;
+  bool hasCompletedHard = false;
+  
+  dynamic currentAnswerData;
   bool isAnswerSubmitted = false;
   bool canSubmitAnswer = false;
 
@@ -41,8 +40,6 @@ class FinalLearningViewModel extends ChangeNotifier {
     _initializeLearning();
   }
 
-  // ========== INICJALIZACJA ==========
-  
   Future<void> _initializeLearning() async {
     isLoading = true;
     errorMessage = null;
@@ -95,7 +92,6 @@ class FinalLearningViewModel extends ChangeNotifier {
       }
       
       allQuestions.shuffle();
-      
       _loadNextQuestion();
       
       isLoading = false;
@@ -107,8 +103,6 @@ class FinalLearningViewModel extends ChangeNotifier {
     }
   }
 
-  // ========== ŁADOWANIE PYTAŃ ==========
-  
   void _loadNextQuestion() {
     if (isLearningFinished) return;
     
@@ -133,7 +127,7 @@ class FinalLearningViewModel extends ChangeNotifier {
     
     if (nextQuestion != null) {
       isAnswerSubmitted = false;
-      canSubmitAnswer = false; 
+      canSubmitAnswer = false;
       currentAnswerData = null;
       notifyListeners();
     }
@@ -150,8 +144,6 @@ class FinalLearningViewModel extends ChangeNotifier {
     }
   }
 
-
-  
   QuestionModel? get currentQuestion {
     if (allQuestions.isEmpty || currentQuestionIndex >= allQuestions.length) {
       return null;
@@ -176,7 +168,7 @@ class FinalLearningViewModel extends ChangeNotifier {
     
     if (questionNumber > maxQuestions) {
       if (currentDifficulty == DifficultyLevel.hard && streakCount > 0) {
-        return false; 
+        return false;
       }
       return true;
     }
@@ -184,12 +176,7 @@ class FinalLearningViewModel extends ChangeNotifier {
   }
   
   bool _hasCompletedAllLevels() {
-    bool hasAllCorrect = correctAnswersAtEasy >= 3 &&
-                         correctAnswersAtMedium >= 3 &&
-                         correctAnswersAtHard >= 3;
-    
-    
-    return hasAllCorrect;
+    return hasCompletedEasy && hasCompletedMedium && hasCompletedHard;
   }
 
   bool get needsBonusQuestion {
@@ -198,8 +185,6 @@ class FinalLearningViewModel extends ChangeNotifier {
            currentDifficulty == DifficultyLevel.hard;
   }
 
-
-  
   void onAnswerSelected() {
     canSubmitAnswer = true;
     notifyListeners();
@@ -209,25 +194,23 @@ class FinalLearningViewModel extends ChangeNotifier {
     if (isAnswerSubmitted) return;
     
     isAnswerSubmitted = true;
-    canSubmitAnswer = false; 
+    canSubmitAnswer = false;
     totalAnswered++;
     
     if (isCorrect) {
       totalCorrect++;
       streakCount++;
-      
-   
       _incrementCorrectAnswerCounter();
       
+      // 🔥 KLUCZOWA ZMIANA: Zapisz że poziom został ukończony PRZED awansem
       if (streakCount >= 3) {
+        _markLevelAsCompleted();
         _levelUp();
         streakCount = 0;
       }
     } else {
       streakCount = 0;
     }
-    
-
     
     notifyListeners();
   }
@@ -246,18 +229,38 @@ class FinalLearningViewModel extends ChangeNotifier {
     }
   }
 
+  // 🔥 NOWA METODA: Oznacz poziom jako ukończony
+  void _markLevelAsCompleted() {
+    switch (currentDifficulty) {
+      case DifficultyLevel.easy:
+        hasCompletedEasy = true;
+        print('🔥 Completed EASY level! Awarded fire.');
+        break;
+      case DifficultyLevel.medium:
+        hasCompletedMedium = true;
+        print('🔥 Completed MEDIUM level! Awarded fire.');
+        break;
+      case DifficultyLevel.hard:
+        hasCompletedHard = true;
+        print('🔥 Completed HARD level! Awarded fire.');
+        break;
+    }
+  }
+
   void _levelUp() {
     if (currentDifficulty == DifficultyLevel.easy) {
       currentDifficulty = DifficultyLevel.medium;
+      print('⬆️ Leveled up to MEDIUM');
     } else if (currentDifficulty == DifficultyLevel.medium) {
       currentDifficulty = DifficultyLevel.hard;
+      print('⬆️ Leveled up to HARD');
     }
   }
 
   void moveToNextQuestion() {
     questionNumber++;
     currentQuestionIndex++;
-    canSubmitAnswer = false; 
+    canSubmitAnswer = false;
     
     if (!isLearningFinished) {
       _loadNextQuestion();
@@ -269,21 +272,47 @@ class FinalLearningViewModel extends ChangeNotifier {
   }
 
   void _calculateFireReward() {
-    switch (currentDifficulty) {
-      case DifficultyLevel.easy:
-        fireReward = 1;
-        break;
-      case DifficultyLevel.medium:
-        fireReward = 2;
-        break;
-      case DifficultyLevel.hard:
-        fireReward = 3;
-        break;
+    // Zlicz ile poziomów ukończono
+    int completedLevels = 0;
+    if (hasCompletedEasy) completedLevels++;
+    if (hasCompletedMedium) completedLevels++;
+    if (hasCompletedHard) completedLevels++;
+    
+    fireReward = completedLevels;
+    
+    print('🔥 Fire reward calculated: $fireReward fires');
+    print('   Easy completed: $hasCompletedEasy');
+    print('   Medium completed: $hasCompletedMedium');
+    print('   Hard completed: $hasCompletedHard');
+  }
+
+  // 🔥 ZAPISZ POSTĘP NA BACKENDZIE - ZMIENIONA LOGIKA
+  Future<void> saveLearningProgressToBackend() async {
+    final selectedCourse = selectedCourseNotifier.value;
+    if (selectedCourse == null) return;
+
+    print('🔥 Saving learning progress to backend...');
+    print('   Easy completed: $hasCompletedEasy');
+    print('   Medium completed: $hasCompletedMedium');
+    print('   Hard completed: $hasCompletedHard');
+
+    final result = await _repository.saveLearningProgress(
+      courseId: selectedCourse.id,
+      fireEasy: hasCompletedEasy,    // 🔥 ZMIENIONE: zamiast correctAnswersAtEasy >= 3
+      fireMedium: hasCompletedMedium, // 🔥 ZMIENIONE: zamiast correctAnswersAtMedium >= 3
+      fireHard: hasCompletedHard,     // 🔥 ZMIENIONE: zamiast correctAnswersAtHard >= 3
+    );
+
+    if (result['success']) {
+      final data = result['data'];
+      print('✅ Progress saved!');
+      print('   Fires added: ${data['fires_added']}');
+      print('   Total points: ${data['total_points']}');
+    } else {
+      print('❌ Error saving progress: ${result['error']}');
     }
   }
 
-
-  
   Future<void> restartLearning() async {
     currentDifficulty = DifficultyLevel.easy;
     streakCount = 0;
@@ -298,11 +327,15 @@ class FinalLearningViewModel extends ChangeNotifier {
     correctAnswersAtEasy = 0;
     correctAnswersAtMedium = 0;
     correctAnswersAtHard = 0;
+    hasCompletedEasy = false;
+    hasCompletedMedium = false;
+    hasCompletedHard = false;
     
     await _initializeLearning();
   }
 
   void goToFinishPage() {
+    saveLearningProgressToBackend();
     selectedPageNotifier.value = 12;
   }
 

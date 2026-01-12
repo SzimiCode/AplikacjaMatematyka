@@ -5,7 +5,9 @@ from .views import (
     CourseViewSet, QuestionViewSet, AnswerOptionViewSet, 
     UserCourseProgressViewSet, get_question, ping,
     register, login, get_user_profile,
-    ClassViewSet, CategoryViewSet, MatchOptionViewSet, DifficultyLevelViewSet
+    ClassViewSet, CategoryViewSet, MatchOptionViewSet, DifficultyLevelViewSet,
+    save_learning_progress, save_quiz_progress, get_course_progress,
+    reset_user_progress
 )
 
 router = routers.DefaultRouter()
@@ -43,5 +45,11 @@ urlpatterns = [
     # /api/match-options/ - opcje dopasowania
     # /api/difficulty-levels/ - poziomy trudności
     # /api/progress/ - postęp użytkownika (wymaga autentykacji)
-    path('', include(router.urls)),
+
+    path('progress-reset/', reset_user_progress, name='reset_user_progress'),
+    path('learning/save/', save_learning_progress, name='save_learning_progress'),
+    path('quiz/save/', save_quiz_progress, name='save_quiz_progress'),
+    path('course-progress/<int:course_id>/', get_course_progress, name='get_course_progress'),
+
+    path('', include(router.urls)),    
 ]

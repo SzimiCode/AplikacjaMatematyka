@@ -1,23 +1,22 @@
-// lib/features/quiz/viewmodel/choose_lesson_page_viewmodel.dart
 import 'package:aplikacjamatematyka/core/data/notifiers.dart';
 import 'package:aplikacjamatematyka/features/quiz/model/class_model.dart';
 import 'package:aplikacjamatematyka/features/quiz/model/category_model.dart';
 import 'package:aplikacjamatematyka/features/quiz/model/course_model.dart';
+import 'package:aplikacjamatematyka/features/quiz/model/course_progress_model.dart';
 import 'package:aplikacjamatematyka/features/quiz/repository/course_repository.dart';
 import 'package:flutter/material.dart';
 
 class ChooseLessonPageViewmodel {
   final CourseRepository _repository = CourseRepository();
   
-  // Lista dostępnych klas (będzie pobrana z API przy inicjalizacji)
   List<ClassModel> availableClasses = [];
-
-  // ========== INITIALIZATION ==========
   
+  // 🔥 Mapa ogni dla kursów
+  Map<int, CourseProgressModel> courseProgress = {};
+
   Future<void> initialize() async {
     print('🔥 INITIALIZE START');
     
-    // Pobierz wszystkie klasy z API
     availableClasses = await _repository.getClasses();
     print('📚 Pobrano klas: ${availableClasses.length}');
     
@@ -25,7 +24,6 @@ class ChooseLessonPageViewmodel {
       print('  - ${c.className} (ID: ${c.id})');
     }
     
-    // Jeśli są klasy, ustaw pierwszą jako domyślną (np. "Klasy 1-4")
     if (availableClasses.isNotEmpty) {
       selectedClassNotifier.value = availableClasses.first;
       print('✅ Wybrano klasę: ${availableClasses.first.className}');
@@ -35,27 +33,19 @@ class ChooseLessonPageViewmodel {
     }
   }
 
-  // ========== CLASS TOGGLE ==========
-  
   void toggleClass() {
     if (availableClasses.isEmpty) return;
     
-    // Przełącz między klasami (1-4 ⟷ 5-8)
     final currentIndex = availableClasses.indexOf(selectedClassNotifier.value!);
     final nextIndex = (currentIndex + 1) % availableClasses.length;
     
     selectedClassNotifier.value = availableClasses[nextIndex];
-    
-    // Reset kategorii i kursów
     selectedCategoryNotifier.value = null;
     coursesNotifier.value = [];
     
-    // Załaduj kategorie dla nowej klasy
     loadCategories();
   }
 
-  // ========== LOAD CATEGORIES ==========
-  
   Future<void> loadCategories() async {
     if (selectedClassNotifier.value == null) return;
     
@@ -76,7 +66,6 @@ class ChooseLessonPageViewmodel {
       
       categoriesNotifier.value = categories;
       
-      // Jeśli są kategorie, ustaw pierwszą jako domyślną
       if (categories.isNotEmpty) {
         selectedCategoryNotifier.value = categories.first;
         print('✅ Wybrano kategorię: ${categories.first.categoryName}');
@@ -93,15 +82,11 @@ class ChooseLessonPageViewmodel {
     }
   }
 
-  // ========== SELECT CATEGORY ==========
-  
   Future<void> selectCategory(CategoryModel category) async {
     selectedCategoryNotifier.value = category;
     await loadCourses();
   }
 
-  // ========== LOAD COURSES ==========
-  
   Future<void> loadCourses() async {
     if (selectedCategoryNotifier.value == null) return;
     
@@ -121,6 +106,9 @@ class ChooseLessonPageViewmodel {
       }
       
       coursesNotifier.value = courses;
+      
+      // 🔥 Pobierz ognie dla każdego kursu
+      await _loadCourseProgress();
     } catch (e) {
       print('❌ BŁĄD loadCourses: $e');
       errorMessage.value = 'Błąd ładowania kursów: $e';
@@ -130,22 +118,39 @@ class ChooseLessonPageViewmodel {
     }
   }
 
-  // ========== LESSON BUTTON PRESSED ==========
-  
+  // 🔥 Pobierz postęp (ognie) dla wszystkich kursów
+  Future<void> _loadCourseProgress() async {
+    for (final course in coursesNotifier.value) {
+      try {
+        final progress = await _repository.getCourseProgress(course.id);
+        if (progress != null) {
+          courseProgress[course.id] = progress;
+          print('🔥 Course ${course.id}: ${progress.firesEarned} fires');
+        } else {
+          courseProgress[course.id] = CourseProgressModel.empty();
+        }
+      } catch (e) {
+        print('❌ Error loading progress for course ${course.id}: $e');
+        courseProgress[course.id] = CourseProgressModel.empty();
+      }
+    }
+  }
+
+  // 🔥 Pobierz liczbę ogni dla kursu
+  int getFiresForCourse(int courseId) {
+    return courseProgress[courseId]?.firesEarned ?? 0;
+  }
+
   void onLessonButtonPressed(int index) {
     if (index >= 0 && index < coursesNotifier.value.length) {
       final selectedCourse = coursesNotifier.value[index];
       
-      // Zapisz wybrany kurs
       selectedCourseNotifier.value = selectedCourse;
-      
-      // Zapisz nazwę kursu (dla kompatybilności z istniejącym kodem)
       tempLessonName.value = selectedCourse.courseName;
       
       print('🎯 Selected course: ${selectedCourse.courseName}');
       print('🎯 Course ID: ${selectedCourse.id}');
       
-
       selectedPageNotifier.value = 6;
     }
   }

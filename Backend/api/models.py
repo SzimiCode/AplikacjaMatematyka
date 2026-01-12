@@ -142,6 +142,24 @@ class UserCourseProgress(models.Model):
     video_watched = models.BooleanField(default=False)
     started_at = models.DateTimeField(auto_now_add=True)
     completed_at = models.DateTimeField(null=True, blank=True)
+    fires_earned = models.IntegerField(default=0)
+    fire_easy = models.BooleanField(default=False)
+    fire_medium = models.BooleanField(default=False)
+    fire_hard = models.BooleanField(default=False)
+    fire_quiz = models.BooleanField(default=False)
+
+    class Meta:
+        unique_together = ['user', 'course']
+
+    def update_fires_earned(self):
+        """Aktualizuje sumę ogni na podstawie zdobytych ogni"""
+        self.fires_earned = sum([
+            self.fire_easy,
+            self.fire_medium,
+            self.fire_hard,
+            self.fire_quiz,
+        ])
+        self.save()    
 
 # odpowiedź użytkownika na pytanie
 class UserAnswer(models.Model):

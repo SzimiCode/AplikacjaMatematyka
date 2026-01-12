@@ -3,6 +3,7 @@ import 'package:aplikacjamatematyka/features/quiz/model/class_model.dart';
 import 'package:aplikacjamatematyka/features/quiz/model/category_model.dart';
 import 'package:aplikacjamatematyka/features/quiz/model/course_model.dart';
 import 'package:aplikacjamatematyka/features/quiz/model/question_model.dart';
+import 'package:aplikacjamatematyka/features/quiz/model/course_progress_model.dart';
 
 class CourseRepository {
   final ApiService _apiService;
@@ -80,6 +81,55 @@ class CourseRepository {
     } catch (e) {
       print('Repository error - getQuestions: $e');
       return [];
+    }
+  }
+
+  Future<Map<String, dynamic>> saveLearningProgress({
+  required int courseId,
+  bool fireEasy = false,
+  bool fireMedium = false,
+  bool fireHard = false,
+  }) async {
+    try {
+      final result = await _apiService.saveLearningProgress(
+        courseId: courseId,
+        fireEasy: fireEasy,
+        fireMedium: fireMedium,
+        fireHard: fireHard,
+      );
+      return result;
+    } catch (e) {
+      print('Repository error - saveLearningProgress: $e');
+      return {'success': false, 'error': e.toString()};
+    }
+  }
+
+  Future<Map<String, dynamic>> saveQuizProgress({
+    required int courseId,
+    required bool passed,
+  }) async {
+    try {
+      final result = await _apiService.saveQuizProgress(
+        courseId: courseId,
+        passed: passed,
+      );
+      return result;
+    } catch (e) {
+      print('Repository error - saveQuizProgress: $e');
+      return {'success': false, 'error': e.toString()};
+    }
+  }
+
+  Future<CourseProgressModel?> getCourseProgress(int courseId) async {
+    try {
+      final result = await _apiService.getCourseProgress(courseId);
+      if (result['success']) {
+        return CourseProgressModel.fromJson(result['data']);
+      }
+      return null;
+    } catch (e) {
+      print('Repository error - getCourseProgress: $e');
+      return null;
     }
   }
 }

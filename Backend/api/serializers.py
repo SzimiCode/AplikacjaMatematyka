@@ -120,6 +120,19 @@ class UserCourseProgressSerializer(serializers.ModelSerializer):
             'id', 'user', 'course', 'course_name', 'is_completed',
             'current_difficulty_level', 'difficulty_level_name',
             'correct_answers_count', 'total_attempts', 'points_earned',
-            'video_watched', 'started_at', 'completed_at'
+            'video_watched', 'started_at', 'completed_at',
+            # 🔥 NOWE POLA
+            'fires_earned', 'fire_easy', 'fire_medium', 'fire_hard', 'fire_quiz'
         ]
-        read_only_fields = ['user', 'started_at']
+        read_only_fields = ['user', 'started_at', 'fires_earned']
+
+class SaveLearningProgressSerializer(serializers.Serializer):
+    course_id = serializers.IntegerField(required=True)
+    fire_easy = serializers.BooleanField(required=False, default=False)
+    fire_medium = serializers.BooleanField(required=False, default=False)
+    fire_hard = serializers.BooleanField(required=False, default=False)
+
+
+class SaveQuizProgressSerializer(serializers.Serializer):
+    course_id = serializers.IntegerField(required=True)
+    passed = serializers.BooleanField(required=True)

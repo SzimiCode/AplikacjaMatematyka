@@ -14,7 +14,8 @@ from .models import (
 from .serializers import (
     CourseSerializer, QuestionSerializer, AnswerOptionSerializer,
     UserCourseProgressSerializer, RegisterSerializer, UserSerializer, LoginSerializer,
-    MatchOptionSerializer, ClassSerializer, CategorySerializer, DifficultyLevelSerializer
+    MatchOptionSerializer, ClassSerializer, CategorySerializer, DifficultyLevelSerializer,
+    SaveLearningProgressSerializer, SaveQuizProgressSerializer
 )
 
 # ========== AUTHENTICATION ENDPOINTS ==========
@@ -103,6 +104,152 @@ def ping(request):
     """Endpoint do sprawdzenia czy API działa"""
     return Response({"status": "ok", "message": "Django API działa"})
 
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def save_learning_progress(request):
+    """Zapisuje postęp użytkownika w trybie nauki"""
+    serializer = SaveLearningProgressSerializer(data=request.data)
+    
+    if not serializer.is_valid():
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    course_id = serializer.validated_data['course_id']
+    fire_easy = serializer.validated_data.get('fire_easy', False)
+    fire_medium = serializer.validated_data.get('fire_medium', False)
+    fire_hard = serializer.validated_data.get('fire_hard', False)
+    
+    try:
+        course = Course.objects.get(id=course_id)
+    except Course.DoesNotExist:
+        return Response({'error': 'Kurs nie istnieje'}, status=status.HTTP_404_NOT_FOUND)
+    
+    progress, created = UserCourseProgress.objects.get_or_create(
+        user=request.user,
+        course=course
+    )
+    
+    if fire_easy and not progress.fire_easy:
+        progress.fire_easy = True
+    if fire_medium and not progress.fire_medium:
+        progress.fire_medium = True
+    if fire_hard and not progress.fire_hard:
+        progress.fire_hard = True
+    
+    old_fires = progress.fires_earned
+    progress.update_fires_earned()
+    new_fires = progress.fires_earned
+    fires_added = new_fires - old_fires
+    
+    if fires_added > 0:
+        request.user.total_points += fires_added
+        request.user.save()
+    
+    return Response({
+        'message': 'Postęp zapisany!',
+        'progress': UserCourseProgressSerializer(progress).data,
+        'fires_added': fires_added,
+        'total_points': request.user.total_points
+    }, status=status.HTTP_200_OK)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def save_quiz_progress(request):
+    """Zapisuje postęp użytkownika w quizie"""
+    serializer = SaveQuizProgressSerializer(data=request.data)
+    
+    if not serializer.is_valid():
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    course_id = serializer.validated_data['course_id']
+    passed = serializer.validated_data['passed']
+    
+    try:
+        course = Course.objects.get(id=course_id)
+    except Course.DoesNotExist:
+        return Response({'error': 'Kurs nie istnieje'}, status=status.HTTP_404_NOT_FOUND)
+    
+    progress, created = UserCourseProgress.objects.get_or_create(
+        user=request.user,
+        course=course
+    )
+    
+    if passed and not progress.fire_quiz:
+        progress.fire_quiz = True
+        
+        old_fires = progress.fires_earned
+        progress.update_fires_earned()
+        new_fires = progress.fires_earned
+        fires_added = new_fires - old_fires
+        
+        if fires_added > 0:
+            request.user.total_points += fires_added
+            request.user.save()
+        
+        return Response({
+            'message': 'Gratulacje! Zdobyłeś ogień za quiz!',
+            'progress': UserCourseProgressSerializer(progress).data,
+            'fires_added': fires_added,
+            'total_points': request.user.total_points
+        }, status=status.HTTP_200_OK)
+    
+    elif not passed:
+        return Response({
+            'message': 'Spróbuj ponownie!',
+            'progress': UserCourseProgressSerializer(progress).data
+        }, status=status.HTTP_200_OK)
+    
+    else:
+        return Response({
+            'message': 'Już masz ogień za ten quiz!',
+            'progress': UserCourseProgressSerializer(progress).data
+        }, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_course_progress(request, course_id):
+    """Zwraca postęp użytkownika dla danego kursu"""
+    try:
+        course = Course.objects.get(id=course_id)
+    except Course.DoesNotExist:
+        return Response({'error': 'Kurs nie istnieje'}, status=status.HTTP_404_NOT_FOUND)
+    
+    try:
+        progress = UserCourseProgress.objects.get(user=request.user, course=course)
+        serializer = UserCourseProgressSerializer(progress)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    except UserCourseProgress.DoesNotExist:
+        return Response({
+            'fires_earned': 0,
+            'fire_easy': False,
+            'fire_medium': False,
+            'fire_hard': False,
+            'fire_quiz': False,
+        }, status=status.HTTP_200_OK)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def reset_user_progress(request):
+    """Resetuje cały postęp użytkownika - usuwa wszystkie UserCourseProgress"""
+    try:
+        # Usuń wszystkie rekordy postępu użytkownika
+        deleted_count = UserCourseProgress.objects.filter(user=request.user).delete()[0]
+        
+        # Zresetuj total_points użytkownika do 0
+        request.user.total_points = 0
+        request.user.save()
+        
+        return Response({
+            'message': 'Postęp został zresetowany',
+            'deleted_courses': deleted_count,
+            'total_points': 0
+        }, status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response({
+            'error': f'Błąd podczas resetowania postępu: {str(e)}'
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 # ========== VIEWSETS ==========
 
@@ -233,9 +380,9 @@ class UserCourseProgressViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     
     def get_queryset(self):
-        # Zwraca tylko postęp zalogowanego użytkownika
+        # zwraca tylko postęp zalogowanego użytkownika
         return UserCourseProgress.objects.filter(user=self.request.user)
     
     def perform_create(self, serializer):
-        # Automatycznie przypisuje zalogowanego użytkownika
+        # automatycznie przypisuje zalogowanego użytkownika
         serializer.save(user=self.request.user)

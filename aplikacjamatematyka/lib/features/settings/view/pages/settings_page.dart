@@ -40,6 +40,48 @@ class SettingsPage extends StatelessWidget {
               },
             ),
           ),
+          const Divider(),
+          ListTile(
+            title: const Text(
+              'Zresetuj postęp',
+              style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+            ),
+            subtitle: const Text(
+              'Usuń wszystkie zdobyte ognie i postęp w kursach',
+              style: TextStyle(fontSize: 12),
+            ),
+            trailing: const Icon(Icons.delete_forever, color: Colors.red),
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: const Text('Resetowanie postępu'),
+                  content: const Text(
+                    'Czy na pewno chcesz zresetować cały postęp?\n\n',
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text('Anuluj'),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        viewModel.resetProgress(context);
+                      },
+                      child: const Text(
+                        'Resetuj postęp',
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
           ListTile(
                 title: const Text('Licencje'),
                 trailing: const Icon(Icons.description),

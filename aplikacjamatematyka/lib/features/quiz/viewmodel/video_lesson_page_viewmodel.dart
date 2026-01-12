@@ -14,14 +14,12 @@ class VideoLessonViewModel extends ChangeNotifier {
   bool get isLoading => _loading;
   String? get error => _error;
 
-  /// 🔹 Inicjalizacja - pobiera kurs z globalnego notifiera
   Future<void> initialize() async {
     _loading = true;
     _error = null;
     notifyListeners();
 
     try {
-      // 🔹 Pobierz kurs z globalnego notifiera
       final course = selectedCourseNotifier.value;
       
       if (course == null) {
@@ -34,30 +32,26 @@ class VideoLessonViewModel extends ChangeNotifier {
         throw Exception('Brak URL wideo dla kursu: ${course.courseName}');
       }
 
-      print('🎬 VideoVM: Loading video from: $videoUrl');
 
-      // 🔹 Inicjalizuj kontroler z URL z sieci
+
       _controller = VideoPlayerController.networkUrl(Uri.parse(videoUrl));
       
       await _controller.initialize();
       _controller.setVolume(1.0);
       _controller.play();
 
-      // 🔹 Listener do odbudowy UI przy zmianach odtwarzacza
       _controller.addListener(() {
         notifyListeners();
       });
 
       _initialized = true;
       _loading = false;
-      print('✅ VideoVM: Video initialized successfully for course: ${course.courseName}');
       notifyListeners();
       
     } catch (e) {
       _error = 'Błąd ładowania wideo: $e';
       _loading = false;
       _initialized = false;
-      print('❌ VideoVM Error: $_error');
       notifyListeners();
     }
   }
@@ -103,5 +97,9 @@ class VideoLessonViewModel extends ChangeNotifier {
   void dispose() {
     disposeController();
     super.dispose();
+  }
+
+  void getBackToMenu(){
+    selectedPageNotifier.value = 0;
   }
 }

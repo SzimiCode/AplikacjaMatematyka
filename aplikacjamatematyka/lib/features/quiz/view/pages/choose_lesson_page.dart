@@ -1,7 +1,6 @@
 import 'package:aplikacjamatematyka/features/home/view/widgets/navbar_widget.dart';
 import 'package:aplikacjamatematyka/features/quiz/view/widgets/appbars/appbar_widget.dart';
 import 'package:aplikacjamatematyka/features/quiz/view/widgets/contents/lesson_card_widget.dart';
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:aplikacjamatematyka/features/quiz/viewmodel/choose_lesson_page_viewmodel.dart';
 import 'package:aplikacjamatematyka/core/data/notifiers.dart';

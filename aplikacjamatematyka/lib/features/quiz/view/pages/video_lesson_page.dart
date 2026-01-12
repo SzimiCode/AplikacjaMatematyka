@@ -199,7 +199,9 @@ class _VideoLessonViewState extends State<VideoLessonView> {
                                   iconSize: 40,
                                   color: Colors.white,
                                   icon: const Icon(Icons.arrow_back),
-                                  onPressed: () => Navigator.of(context).pop(),
+                                  onPressed: () {
+                                    _vm.getBackToMenu();
+                                  },
                                 ),
                               ),
 

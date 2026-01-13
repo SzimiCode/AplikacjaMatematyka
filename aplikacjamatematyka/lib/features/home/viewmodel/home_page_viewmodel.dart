@@ -9,8 +9,8 @@ class HomePageViewModel extends ChangeNotifier {
   String dragonName = 'Smok Mat';
   int totalPoints = 0;
   int userLevel = 1;
-  int pointsInCurrentLevel = 0;  // Ile punktów w obecnym poziomie
-  int pointsToNextLevel = 5;     // Ile trzeba do następnego poziomu
+  int pointsInCurrentLevel = 0;  
+  int pointsToNextLevel = 5;     
   bool isLoading = true;
   
   // STAŁA - ile punktów na 1 poziom
@@ -44,20 +44,16 @@ class HomePageViewModel extends ChangeNotifier {
     }
   }
   
-  // Oblicz poziom na podstawie total_points
   void _calculateLevel() {
     if (totalPoints == 0) {
       userLevel = 1;
       pointsInCurrentLevel = 0;
       pointsToNextLevel = POINTS_PER_LEVEL;
     } else {
-      // Poziom = (total_points ÷ 5) + 1
       userLevel = (totalPoints ~/ POINTS_PER_LEVEL) + 1;
       
-      // Punkty w obecnym poziomie = total_points % 5
       pointsInCurrentLevel = totalPoints % POINTS_PER_LEVEL;
       
-      // Zawsze 5 punktów do następnego poziomu
       pointsToNextLevel = POINTS_PER_LEVEL;
     }
   }

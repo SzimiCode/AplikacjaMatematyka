@@ -15,7 +15,6 @@ class FinalTestPage extends StatefulWidget {
 }
 
 class _FinalTestPageState extends State<FinalTestPage> {
-  // GlobalKeys - DOKŁADNIE JAK W LEARNING
   final GlobalKey<QuizFirstTypeWidgetState> _firstTypeKey = GlobalKey();
   final GlobalKey<QuizSecondTypeWidgetState> _secondTypeKey = GlobalKey();
 
@@ -25,7 +24,6 @@ class _FinalTestPageState extends State<FinalTestPage> {
       create: (_) => FinalTestViewModel(),
       child: Consumer<FinalTestViewModel>(
         builder: (context, vm, child) {
-          // Stan ładowania
           if (vm.isLoading) {
             return Scaffold(
               backgroundColor: Colors.white,
@@ -39,7 +37,6 @@ class _FinalTestPageState extends State<FinalTestPage> {
             );
           }
 
-          // Stan błędu
           if (vm.errorMessage != null) {
             return Scaffold(
               backgroundColor: Colors.white,
@@ -88,7 +85,6 @@ class _FinalTestPageState extends State<FinalTestPage> {
             );
           }
 
-          // Stan ukończenia testu
           if (vm.isTestFinished) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
               if (vm.hasPassed) {
@@ -106,7 +102,6 @@ class _FinalTestPageState extends State<FinalTestPage> {
             );
           }
 
-          // Stan normalny - test w trakcie
           return Scaffold(
             backgroundColor: Colors.white,
             appBar: QuizAppBar(
@@ -128,7 +123,6 @@ class _FinalTestPageState extends State<FinalTestPage> {
     );
   }
 
-  // ========== HEADER ==========
   
   Widget _buildTestHeader(FinalTestViewModel vm) {
     return Container(
@@ -141,7 +135,6 @@ class _FinalTestPageState extends State<FinalTestPage> {
       ),
       child: Column(
         children: [
-          // Etykieta "TEST"
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
             decoration: BoxDecoration(
@@ -161,7 +154,6 @@ class _FinalTestPageState extends State<FinalTestPage> {
           
           const SizedBox(height: 12),
           
-          // Numer pytania
           Text(
             'Pytanie ${vm.currentQuestionNumber} / ${vm.totalQuestions}',
             style: TextStyle(
@@ -173,7 +165,6 @@ class _FinalTestPageState extends State<FinalTestPage> {
           
           const SizedBox(height: 8),
           
-          // Aktualny wynik
           Text(
             'Wynik: ${vm.correctAnswersCount}/${vm.totalAnswered}',
             style: TextStyle(
@@ -186,7 +177,6 @@ class _FinalTestPageState extends State<FinalTestPage> {
     );
   }
 
-  // ========== WIDGET PYTANIA ==========
   
   Widget _buildQuestionWidget(FinalTestViewModel vm) {
     final question = vm.currentQuestion;
@@ -195,7 +185,6 @@ class _FinalTestPageState extends State<FinalTestPage> {
       return const Center(child: Text('Brak pytania'));
     }
 
-    // DOKŁADNIE JAK W LEARNING
     switch (question.questionType) {
       case 'closed':
         return QuizFirstTypeWidget(
@@ -226,7 +215,6 @@ class _FinalTestPageState extends State<FinalTestPage> {
     }
   }
 
-  // ========== PRZYCISK - DOKŁADNIE JAK W LEARNING ==========
   
   Widget _buildNextButton(FinalTestViewModel vm) {
     return Padding(
@@ -258,12 +246,10 @@ class _FinalTestPageState extends State<FinalTestPage> {
     );
   }
 
-  // DOKŁADNIE JAK W LEARNING
   void _handleNextButton(FinalTestViewModel vm) {
     final question = vm.currentQuestion;
     if (question == null) return;
 
-    // Wywołaj walidację przez GlobalKey
     bool validated = false;
     
     if (question.questionType == 'closed') {
@@ -273,7 +259,7 @@ class _FinalTestPageState extends State<FinalTestPage> {
     }
     
     if (validated) {
-      print('✅ Answer validated and submitted');
+      
     }
   }
 }

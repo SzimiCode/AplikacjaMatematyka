@@ -109,15 +109,12 @@ class _FinalLearningPageState extends State<FinalLearningPage> {
             ),
             body: Column(
               children: [
-                // Etykieta poziomu trudności + kropki
                 _buildDifficultyHeader(vm),
                 
-                // Główna treść - dynamiczny widget pytania
                 Expanded(
                   child: _buildQuestionWidget(vm),
                 ),
                 
-                // Przycisk "Dalej"
                 _buildNextButton(vm),
               ],
             ),
@@ -127,7 +124,6 @@ class _FinalLearningPageState extends State<FinalLearningPage> {
     );
   }
 
-  // ========== HEADER Z POZIOMEM I KROPKAMI ==========
   
   Widget _buildDifficultyHeader(FinalLearningViewModel vm) {
     String difficultyText;
@@ -209,7 +205,6 @@ class _FinalLearningPageState extends State<FinalLearningPage> {
     );
   }
 
-  // ========== DYNAMICZNY WIDGET PYTANIA ==========
   
   Widget _buildQuestionWidget(FinalLearningViewModel vm) {
     final question = vm.currentQuestion;
@@ -248,7 +243,6 @@ class _FinalLearningPageState extends State<FinalLearningPage> {
     }
   }
 
-  // ========== PRZYCISK DALEJ ==========
   
   Widget _buildNextButton(FinalLearningViewModel vm) {
     return Padding(
@@ -293,7 +287,6 @@ class _FinalLearningPageState extends State<FinalLearningPage> {
     }
     
     if (validated) {
-      print('✅ Answer validated and submitted');
     }
   }
 }

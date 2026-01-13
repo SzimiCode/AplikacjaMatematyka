@@ -14,7 +14,6 @@ class QuizThirdTypePage extends StatelessWidget {
       create: (_) => QuizPageThirdTypeViewModel(),
       child: Consumer<QuizPageThirdTypeViewModel>(
         builder: (context, vm, child) {
-          // Stan ładowania
           if (vm.isLoading) {
             return Scaffold(
               backgroundColor: Colors.white,
@@ -28,11 +27,10 @@ class QuizThirdTypePage extends StatelessWidget {
             );
           }
 
-          // Stan błędu
           if (vm.errorMessage != null) {
             return Scaffold(
               backgroundColor: Colors.white,
-              appBar: QuizAppBar(  // ✅ UŻYWAJ TEGO SAMEGO AppBar co w działającym quizie
+              appBar: QuizAppBar(  
                 progress: 0.0,
                 isFinished: false,
               ),
@@ -56,7 +54,7 @@ class QuizThirdTypePage extends StatelessWidget {
                       const SizedBox(height: 24),
                       ElevatedButton(
                         onPressed: () {
-                          selectedPageNotifier.value = 6;  // ✅ LUB jakakolwiek strona poprzednia
+                          selectedPageNotifier.value = 6;  
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color.fromARGB(255, 6, 197, 70),
@@ -77,14 +75,11 @@ class QuizThirdTypePage extends StatelessWidget {
             );
           }
 
-           // Stan ukończenia quizu
          if (vm.isQuizFinished) {
-            // Wywołaj nawigację PO zakończeniu budowania widgetu
             WidgetsBinding.instance.addPostFrameCallback((_) {
               vm.goToFinishQuiz();
             });
             
-            // Zwróć prosty ekran ładowania podczas przekierowania
             return const Scaffold(
               backgroundColor: Colors.white,
               body: Center(
@@ -93,7 +88,6 @@ class QuizThirdTypePage extends StatelessWidget {
             );
           }
 
-          // Stan normalny - quiz w trakcie
           return Scaffold(
             backgroundColor: Colors.white,
             appBar: QuizAppBar(
@@ -110,7 +104,6 @@ class QuizThirdTypePage extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          // Numer pytania
                           Text(
                             'Pytanie ${vm.currentQuestionIndex + 1} / ${vm.allQuestions.length}',
                             textAlign: TextAlign.center,
@@ -121,7 +114,6 @@ class QuizThirdTypePage extends StatelessWidget {
                           ),
                           const SizedBox(height: 8),
                           
-                          // Instrukcja
                           Container(
                             padding: const EdgeInsets.symmetric(
                               horizontal: 12,
@@ -142,7 +134,6 @@ class QuizThirdTypePage extends StatelessWidget {
                           ),
                           const SizedBox(height: 20),
                           
-                          // Treść pytania (jeśli jest)
                           if (vm.allQuestions[vm.currentQuestionIndex].questionText.isNotEmpty) ...[
                             Text(
                               vm.allQuestions[vm.currentQuestionIndex].questionText,
@@ -156,11 +147,9 @@ class QuizThirdTypePage extends StatelessWidget {
                             const SizedBox(height: 20),
                           ],
                           
-                          // Kolumny dopasowania
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              // Lewa kolumna
                               Expanded(
                                 child: Column(
                                   children: vm.leftColumn.asMap().entries.map((entry) {
@@ -188,7 +177,6 @@ class QuizThirdTypePage extends StatelessWidget {
 
                               const SizedBox(width: 20),
 
-                              // Prawa kolumna
                               Expanded(
                                 child: Column(
                                   children: vm.rightColumn.asMap().entries.map((entry) {
@@ -221,7 +209,6 @@ class QuizThirdTypePage extends StatelessWidget {
                   ),
                 ),
 
-                // Przycisk "Dalej"
                 Padding(
                   padding: const EdgeInsets.fromLTRB(35, 12, 35, 35),
                   child: SizedBox(

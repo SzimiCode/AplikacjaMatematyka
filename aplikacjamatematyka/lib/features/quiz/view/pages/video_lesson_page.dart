@@ -53,14 +53,12 @@ class _VideoLessonViewState extends State<VideoLessonView> {
         backgroundColor: Colors.black,
         body: Consumer<VideoLessonViewModel>(
           builder: (context, vm, _) {
-            // 🔹 Pokaż loader podczas ładowania
             if (vm.isLoading) {
               return const Center(
                 child: CircularProgressIndicator(color: Colors.white),
               );
             }
 
-            // 🔹 Pokaż błąd jeśli wystąpił
             if (vm.error != null) {
               return Center(
                 child: Column(
@@ -90,7 +88,6 @@ class _VideoLessonViewState extends State<VideoLessonView> {
               );
             }
 
-            // 🔹 Pokaż wideo gdy załadowane
             if (!vm.isInitialized) {
               return const Center(
                 child: CircularProgressIndicator(color: Colors.white),
@@ -107,7 +104,6 @@ class _VideoLessonViewState extends State<VideoLessonView> {
                 onTap: vm.toggleControls,
                 child: Stack(
                   children: [
-                    // 🎬 VIDEO
                     Center(
                       child: AspectRatio(
                         aspectRatio: controller.value.aspectRatio,
@@ -115,7 +111,6 @@ class _VideoLessonViewState extends State<VideoLessonView> {
                       ),
                     ),
 
-                    // 🎛 KONTROLKI
                     if (vm.showControls)
                       Positioned.fill(
                         child: Container(
@@ -123,7 +118,6 @@ class _VideoLessonViewState extends State<VideoLessonView> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              // Slider postępu
                               Slider(
                                 min: 0,
                                 max: duration.inSeconds.toDouble(),
@@ -161,7 +155,6 @@ class _VideoLessonViewState extends State<VideoLessonView> {
 
                               const SizedBox(height: 8),
 
-                              // Przyciski cofnięcia 10s, play/pause, przewinięcia 10s
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -192,7 +185,6 @@ class _VideoLessonViewState extends State<VideoLessonView> {
 
                               const SizedBox(height: 8),
 
-                              // Przycisk powrotu
                               Align(
                                 alignment: Alignment.bottomLeft,
                                 child: IconButton(

@@ -33,7 +33,6 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   Future<void> _handleRegister() async {
-    // Walidacja formularza
     if (!_formKey.currentState!.validate()) {
       return;
     }
@@ -44,7 +43,6 @@ class _SignUpPageState extends State<SignUpPage> {
     });
 
     try {
-      // Generuj nick z emaila (przed @)
       final nick = _emailController.text.split('@')[0];
 
       final result = await _apiService.register(
@@ -59,7 +57,6 @@ class _SignUpPageState extends State<SignUpPage> {
       if (!mounted) return;
 
       if (result['success']) {
-        // Sukces - pokaż wiadomość
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
@@ -69,15 +66,12 @@ class _SignUpPageState extends State<SignUpPage> {
           ),
         );
 
-        // Przejdź do HomePage
         selectedPageNotifier.value = 0;
       } else {
-        // Błąd rejestracji
         final errors = result['error'];
         String errorMsg = 'Błąd rejestracji';
 
         if (errors is Map) {
-          // Wyciągnij pierwsze błędy z każdego pola
           final errorList = <String>[];
           errors.forEach((key, value) {
             if (value is List && value.isNotEmpty) {
@@ -165,7 +159,6 @@ class _SignUpPageState extends State<SignUpPage> {
                     key: _formKey,
                     child: Column(
                       children: [
-                        // Imię i Nazwisko
                         TextFormField(
                           controller: _fullNameController,
                           decoration: InputDecoration(
@@ -184,7 +177,6 @@ class _SignUpPageState extends State<SignUpPage> {
                         ),
                         const SizedBox(height: 15),
 
-                        // Email
                         TextFormField(
                           controller: _emailController,
                           keyboardType: TextInputType.emailAddress,
@@ -207,7 +199,6 @@ class _SignUpPageState extends State<SignUpPage> {
                         ),
                         const SizedBox(height: 15),
 
-                        // Hasło
                         TextFormField(
                           controller: _passwordController,
                           obscureText: true,
@@ -230,7 +221,6 @@ class _SignUpPageState extends State<SignUpPage> {
                         ),
                         const SizedBox(height: 15),
 
-                        // Potwierdź hasło
                         TextFormField(
                           controller: _confirmPasswordController,
                           obscureText: true,
@@ -253,7 +243,6 @@ class _SignUpPageState extends State<SignUpPage> {
                         ),
                         const SizedBox(height: 15),
 
-                        // Error message
                         if (_errorMessage != null)
                           Container(
                             padding: const EdgeInsets.all(10),
@@ -283,7 +272,6 @@ class _SignUpPageState extends State<SignUpPage> {
                           ),
                         const SizedBox(height: 15),
 
-                        // Register button
                         ElevatedButton(
                           onPressed: _isLoading ? null : _handleRegister,
                           style: ElevatedButton.styleFrom(

@@ -12,10 +12,8 @@ class SettingsViewModel extends ChangeNotifier {
 
   Future<void> logout(BuildContext context) async {
     try {
-      // Usuń token z pamięci
       await _apiService.logout();
       
-      // Pokaż wiadomość
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -25,7 +23,6 @@ class SettingsViewModel extends ChangeNotifier {
           ),
         );
         
-        // Przekieruj do strony logowania (index 7)
         selectedPageNotifier.value = 7;
       }
     } catch (e) {
@@ -59,7 +56,6 @@ class SettingsViewModel extends ChangeNotifier {
             ),
           );
           
-          // Wróć do strony głównej
           selectedPageNotifier.value = 0;
         }
       } else {

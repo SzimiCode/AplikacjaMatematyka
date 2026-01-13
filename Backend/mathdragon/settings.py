@@ -9,7 +9,7 @@ SECRET_KEY = 'django-insecure-rsmmlj8atom&8#uebn(euji^*owdbx=$qb^vhna57qhu6q9)-1
 # tryb debugowania - na produkcji dac False!
 DEBUG = True
 
-ALLOWED_HOSTS = []  # na produkcji dodac domene
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '10.0.2.2']
 
 # pozwala wszystkim na dostep do api (potrzebne dla fluttera lokalnie)
 CORS_ALLOW_ALL_ORIGINS = True

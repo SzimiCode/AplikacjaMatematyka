@@ -2,11 +2,14 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Django Server",
+            "name": "Django Server (All Interfaces)",
             "type": "python",
             "request": "launch",
             "program": "${workspaceFolder}/manage.py",
-            "args": ["runserver"],
+            "args": [
+                "runserver",
+                "0.0.0.0:8000"
+            ],
             "django": true,
             "console": "integratedTerminal"
         }

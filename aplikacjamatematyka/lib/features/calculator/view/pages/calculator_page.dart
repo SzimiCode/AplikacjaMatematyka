@@ -14,24 +14,22 @@ class CalculatorPage extends StatelessWidget {
       child: Scaffold(
         body: SafeArea(
           child: Consumer<CalculatorPageViewModel>(
-            builder: (context, viewModel, _) => Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Expanded(
-                  flex: 2,
-                  child: Container(
+            builder: (context, viewModel, _) => SingleChildScrollView(
+              child: Column(
+                children: [
+                  Container(
                     width: double.infinity,
                     padding: const EdgeInsets.symmetric(
                       horizontal: 16,
-                      vertical: 8,
+                      vertical: 24,
                     ),
                     alignment: Alignment.bottomRight,
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
                           viewModel.expression,
+                          textAlign: TextAlign.right,
                           style: TextStyle(
                             fontSize: 48,
                             fontWeight: FontWeight.w700,
@@ -43,6 +41,7 @@ class CalculatorPage extends StatelessWidget {
                         const SizedBox(height: 10),
                         Text(
                           viewModel.result,
+                          textAlign: TextAlign.right,
                           style: TextStyle(
                             fontSize: 28,
                             color: viewModel.hasError
@@ -53,10 +52,8 @@ class CalculatorPage extends StatelessWidget {
                       ],
                     ),
                   ),
-                ),
-                Expanded(
-                  flex: 5,
-                  child: Container(
+
+                  Padding(
                     padding: const EdgeInsets.all(12),
                     child: GridView.count(
                       crossAxisCount: 4,
@@ -144,8 +141,8 @@ class CalculatorPage extends StatelessWidget {
                       ],
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -159,12 +156,13 @@ class CalculatorPage extends StatelessWidget {
       context,
       listen: false,
     );
+
     return ElevatedButton(
       onPressed: () => viewModel.onButtonPressed(text),
       style: ElevatedButton.styleFrom(
         backgroundColor: color ?? Colors.grey.shade300,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        padding: const EdgeInsets.all(0),
+        padding: EdgeInsets.zero,
       ),
       child: Text(
         text,

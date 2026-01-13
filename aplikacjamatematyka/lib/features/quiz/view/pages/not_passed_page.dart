@@ -57,7 +57,7 @@ class NotPassedTestPage extends StatelessWidget {
                 const SizedBox(height: 16),
 
                 Text(
-                  'Niestety, nie udało się osiągnąć wyniku 5/5. Spróbuj ponownie!',
+                  'Niestety, nie udało Ci się. Spróbuj ponownie!',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 16,

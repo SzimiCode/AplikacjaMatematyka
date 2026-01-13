@@ -307,9 +307,17 @@ class FinalLearningViewModel extends ChangeNotifier {
   }
 
   void goToFinishPage() {
-    saveLearningProgressToBackend();
-    selectedPageNotifier.value = 12;
+  saveLearningProgressToBackend();
+
+
+  if (!hasCompletedEasy) {
+    selectedPageNotifier.value = 16; 
+    return;
   }
+
+ 
+  selectedPageNotifier.value = 12;
+}
 
   @override
   void dispose() {

@@ -150,7 +150,7 @@ class FinalTestViewModel extends ChangeNotifier {
   }
 
   void goToNotPassedPage() {
-    selectedPageNotifier.value = 13;
+    selectedPageNotifier.value = 16;
   }
 
   Future<void> restartTest() async {

@@ -21,7 +21,7 @@ router.register(r'difficulty-levels', DifficultyLevelViewSet)
 router.register(r'progress', UserCourseProgressViewSet)
 
 urlpatterns = [
-    # Authentication endpoints
+    # endpointy do rejestracji, logowania, profilu uzytkownika
     path('register/', register, name='register'),
     path('login/', login, name='login'),
     path('user/', get_user_profile, name='user_profile'),
@@ -30,6 +30,7 @@ urlpatterns = [
     path('get-question/', get_question),
     path('ping/', ping),
 
+    # endpointy do zarządzania postępem użytkownika
     path('progress-reset/', reset_user_progress, name='reset_user_progress'),
     path('learning/save/', save_learning_progress, name='save_learning_progress'),
     path('quiz/save/', save_quiz_progress, name='save_quiz_progress'),

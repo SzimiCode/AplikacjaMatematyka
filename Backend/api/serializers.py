@@ -5,7 +5,7 @@ from .models import (
 )
 from django.contrib.auth.password_validation import validate_password
 
-# ========== AUTH SERIALIZERS ==========
+# serializery do rejestracji i logowania uzytkownikow
 
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
@@ -41,15 +41,13 @@ class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField(write_only=True)
 
-# ========== CORE SERIALIZERS ==========
-
-# Serializer dla klasy (1-4)
+# serializer dla klasy (1-4)
 class ClassSerializer(serializers.ModelSerializer):
     class Meta:
         model = Class
         fields = ['id', 'class_name', 'description', 'display_order']
 
-# Serializer dla kategorii (z informacją o klasie)
+# serializer dla kategorii (z informacją o klasie)
 class CategorySerializer(serializers.ModelSerializer):
     class_name = serializers.CharField(source='class_fk.class_name', read_only=True)
     
@@ -57,13 +55,13 @@ class CategorySerializer(serializers.ModelSerializer):
         model = Category
         fields = ['id', 'class_fk', 'class_name', 'category_name', 'description', 'icon_url', 'display_order']
 
-# Serializer dla poziomu trudności
+# serializer dla poziomu trudności
 class DifficultyLevelSerializer(serializers.ModelSerializer):
     class Meta:
         model = DifficultyLevel
         fields = ['id', 'level_name', 'level_code', 'display_order']
 
-# Serializer dla kursu (z informacją o kategorii)
+# serializer dla kursu (z informacją o kategorii)
 class CourseSerializer(serializers.ModelSerializer):
     category_name = serializers.CharField(source='category.category_name', read_only=True)
     full_video_url = serializers.SerializerMethodField()
@@ -83,19 +81,19 @@ class CourseSerializer(serializers.ModelSerializer):
             return obj.get_full_video_url(request)
         return None
 
-# Serializer dla opcji odpowiedzi (closed questions)
+# serializer dla opcji odpowiedzi (closed questions)
 class AnswerOptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = AnswerOption
         fields = ['id', 'option_text', 'is_correct', 'display_order', 'question_id']
 
-# Serializer dla opcji dopasowania (match questions)
+# serializer dla opcji dopasowania (match questions)
 class MatchOptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = MatchOption
         fields = ['id', 'question', 'left_text', 'right_text', 'display_order', 'question_id']
 
-# Serializer dla pytań (z opcjami)
+# serializer dla pytań (z opcjami)
 class QuestionSerializer(serializers.ModelSerializer):
     options = AnswerOptionSerializer(many=True, read_only=True)
     match_options = MatchOptionSerializer(many=True, read_only=True)
@@ -109,7 +107,7 @@ class QuestionSerializer(serializers.ModelSerializer):
             'points', 'explanation', 'options', 'match_options', 'created_at'
         ]
 
-# Serializer dla postępu użytkownika
+# serializezy dla postępu użytkownika
 class UserCourseProgressSerializer(serializers.ModelSerializer):
     course_name = serializers.CharField(source='course.course_name', read_only=True)
     difficulty_level_name = serializers.CharField(source='current_difficulty_level.level_name', read_only=True)
@@ -121,7 +119,6 @@ class UserCourseProgressSerializer(serializers.ModelSerializer):
             'current_difficulty_level', 'difficulty_level_name',
             'correct_answers_count', 'total_attempts', 'points_earned',
             'video_watched', 'started_at', 'completed_at',
-            # 🔥 NOWE POLA
             'fires_earned', 'fire_easy', 'fire_medium', 'fire_hard', 'fire_quiz'
         ]
         read_only_fields = ['user', 'started_at', 'fires_earned']

@@ -92,7 +92,7 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# JWT Configuration
+# JWT
 from datetime import timedelta
 
 REST_FRAMEWORK = {
@@ -109,5 +109,4 @@ SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
 
-# Custom User Model
 AUTH_USER_MODEL = 'api.User'

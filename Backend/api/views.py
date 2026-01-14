@@ -18,17 +18,15 @@ from .serializers import (
     SaveLearningProgressSerializer, SaveQuizProgressSerializer
 )
 
-# ========== AUTHENTICATION ENDPOINTS ==========
-
+# endpointy do rejestracji, logowania i profilu uzytkownika
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def register(request):
-    """Endpoint do rejestracji nowego użytkownika"""
     serializer = RegisterSerializer(data=request.data)
     if serializer.is_valid():
         user = serializer.save()
         
-        # Tworzenie JWT tokenów
+        # tworzenie JWT tokenów
         refresh = RefreshToken.for_user(user)
         
         return Response({
@@ -44,7 +42,6 @@ def register(request):
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def login(request):
-    """Endpoint do logowania użytkownika"""
     serializer = LoginSerializer(data=request.data)
     
     if not serializer.is_valid():
@@ -53,7 +50,7 @@ def login(request):
     email = serializer.validated_data['email']
     password = serializer.validated_data['password']
     
-    # Próba znalezienia użytkownika
+    # próba znalezienia użytkownika
     try:
         user = User.objects.get(email=email)
     except User.DoesNotExist:
@@ -61,13 +58,13 @@ def login(request):
             'error': 'Nieprawidłowy email lub hasło'
         }, status=status.HTTP_401_UNAUTHORIZED)
     
-    # Sprawdzanie hasła
+    # sprawdzanie hasła
     if not user.check_password(password):
         return Response({
             'error': 'Nieprawidłowy email lub hasło'
         }, status=status.HTTP_401_UNAUTHORIZED)
     
-    # Tworzenie JWT tokenów
+    # stworzenie JWT tokenów
     refresh = RefreshToken.for_user(user)
     
     return Response({
@@ -81,16 +78,11 @@ def login(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_user_profile(request):
-    """Endpoint do pobierania profilu zalogowanego użytkownika"""
     serializer = UserSerializer(request.user)
     return Response(serializer.data)
 
-
-# ========== EXISTING ENDPOINTS ==========
-
 @api_view(['GET'])
 def get_question(request):
-    """Endpoint testowy - zwraca losowe pytanie"""
     questions = Question.objects.all()
     if not questions.exists():
         return Response({"error": "Brak pytań"}, status=404)
@@ -101,14 +93,12 @@ def get_question(request):
 
 @api_view(['GET'])
 def ping(request):
-    """Endpoint do sprawdzenia czy API działa"""
     return Response({"status": "ok", "message": "Django API działa"})
 
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def save_learning_progress(request):
-    """Zapisuje postęp użytkownika w trybie nauki"""
     serializer = SaveLearningProgressSerializer(data=request.data)
     
     if not serializer.is_valid():
@@ -156,7 +146,6 @@ def save_learning_progress(request):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def save_quiz_progress(request):
-    """Zapisuje postęp użytkownika w quizie"""
     serializer = SaveQuizProgressSerializer(data=request.data)
     
     if not serializer.is_valid():
@@ -210,7 +199,6 @@ def save_quiz_progress(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_course_progress(request, course_id):
-    """Zwraca postęp użytkownika dla danego kursu"""
     try:
         course = Course.objects.get(id=course_id)
     except Course.DoesNotExist:
@@ -232,7 +220,6 @@ def get_course_progress(request, course_id):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def reset_user_progress(request):
-    """Resetuje cały postęp użytkownika - usuwa wszystkie UserCourseProgress"""
     try:
         # Usuń wszystkie rekordy postępu użytkownika
         deleted_count = UserCourseProgress.objects.filter(user=request.user).delete()[0]
@@ -254,14 +241,12 @@ def reset_user_progress(request):
 # ========== VIEWSETS ==========
 
 class ClassViewSet(viewsets.ReadOnlyModelViewSet):
-    """ViewSet dla klas (1-4)"""
     queryset = Class.objects.all().order_by('display_order')
     serializer_class = ClassSerializer
     permission_classes = [AllowAny]
     
     @action(detail=True, methods=['get'])
     def categories(self, request, pk=None):
-        """Zwraca wszystkie kategorie dla danej klasy"""
         class_obj = self.get_object()
         categories = class_obj.categories.all().order_by('display_order')
         serializer = CategorySerializer(categories, many=True)
@@ -269,14 +254,12 @@ class ClassViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
-    """ViewSet dla kategorii"""
     queryset = Category.objects.all().order_by('display_order')
     serializer_class = CategorySerializer
     permission_classes = [AllowAny]
     
     def get_queryset(self):
         queryset = Category.objects.all().order_by('display_order')
-        # Filtrowanie po klasie jeśli podano parametr
         class_id = self.request.query_params.get('class_id', None)
         if class_id is not None:
             queryset = queryset.filter(class_fk_id=class_id)
@@ -284,7 +267,6 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
     
     @action(detail=True, methods=['get'])
     def courses(self, request, pk=None):
-        """Zwraca wszystkie kursy dla danej kategorii"""
         category = self.get_object()
         courses = category.courses.all().order_by('display_order')
         serializer = CourseSerializer(courses, many=True)
@@ -292,14 +274,12 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class CourseViewSet(viewsets.ModelViewSet):
-    """ViewSet dla kursów"""
     queryset = Course.objects.all().order_by('display_order')
     serializer_class = CourseSerializer
     permission_classes = [AllowAny]
     
     def get_queryset(self):
         queryset = Course.objects.all().order_by('display_order')
-        # Filtrowanie po kategorii jeśli podano parametr
         category_id = self.request.query_params.get('category_id', None)
         if category_id is not None:
             queryset = queryset.filter(category_id=category_id)
@@ -307,16 +287,13 @@ class CourseViewSet(viewsets.ModelViewSet):
     
     @action(detail=True, methods=['get'])
     def questions(self, request, pk=None):
-        """Zwraca wszystkie pytania dla danego kursu"""
         course = self.get_object()
         questions = course.questions.all()
         
-        # Filtrowanie po typie pytania jeśli podano parametr
         question_type = self.request.query_params.get('type', None)
         if question_type:
             questions = questions.filter(question_type=question_type)
         
-        # Filtrowanie po poziomie trudności jeśli podano parametr
         difficulty_id = self.request.query_params.get('difficulty', None)
         if difficulty_id:
             questions = questions.filter(difficulty_level_id=difficulty_id)
@@ -326,7 +303,6 @@ class CourseViewSet(viewsets.ModelViewSet):
 
 
 class QuestionViewSet(viewsets.ModelViewSet):
-    """ViewSet dla pytań"""
     queryset = Question.objects.all()
     serializer_class = QuestionSerializer
     permission_classes = [AllowAny]
@@ -334,17 +310,14 @@ class QuestionViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         queryset = Question.objects.all()
         
-        # filtrowanie po kursie
         course_id = self.request.query_params.get('course_id', None)
         if course_id:
             queryset = queryset.filter(course_id=course_id)
-        
-        # filtrowanie po typie pytania
+
         question_type = self.request.query_params.get('type', None)
         if question_type:
             queryset = queryset.filter(question_type=question_type)
         
-        # filtrowanie po poziomie trudności
         difficulty_id = self.request.query_params.get('difficulty', None)
         if difficulty_id:
             queryset = queryset.filter(difficulty_level_id=difficulty_id)
@@ -353,28 +326,24 @@ class QuestionViewSet(viewsets.ModelViewSet):
 
 
 class AnswerOptionViewSet(viewsets.ModelViewSet):
-    """ViewSet dla opcji odpowiedzi"""
     queryset = AnswerOption.objects.all().order_by('display_order')
     serializer_class = AnswerOptionSerializer
     permission_classes = [AllowAny]
 
 
 class MatchOptionViewSet(viewsets.ModelViewSet):
-    """ViewSet dla opcji dopasowania"""
     queryset = MatchOption.objects.all().order_by('display_order')
     serializer_class = MatchOptionSerializer
     permission_classes = [AllowAny]
 
 
 class DifficultyLevelViewSet(viewsets.ReadOnlyModelViewSet):
-    """ViewSet dla poziomów trudności"""
     queryset = DifficultyLevel.objects.all().order_by('display_order')
     serializer_class = DifficultyLevelSerializer
     permission_classes = [AllowAny]
 
 
 class UserCourseProgressViewSet(viewsets.ModelViewSet):
-    """ViewSet dla postępu użytkownika"""
     queryset = UserCourseProgress.objects.all()
     serializer_class = UserCourseProgressSerializer
     permission_classes = [IsAuthenticated]
